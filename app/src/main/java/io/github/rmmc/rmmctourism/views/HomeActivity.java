@@ -1,4 +1,4 @@
-package io.github.rmmc.rmmctourism;
+package io.github.rmmc.rmmctourism.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.fragments.SpotViewerFragment;
 
 public class HomeActivity extends AppCompatActivity {
