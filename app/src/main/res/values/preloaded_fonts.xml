@@ -4,6 +4,7 @@
         <item>@font/dm_serif_display</item>
         <item>@font/lato</item>
         <item>@font/lato_bold</item>
+        <item>@font/playfair_display</item>
         <item>@font/playfair_display_bold</item>
     </array>
 </resources>
