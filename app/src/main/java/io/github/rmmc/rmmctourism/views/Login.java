@@ -23,6 +23,8 @@ import io.github.rmmc.rmmctourism.util.Validator;
      private Button btnLogin;
      private Button btnRegister;
 
+     private FirebaseAuth userAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ import io.github.rmmc.rmmctourism.util.Validator;
 
         initializeWidgets();
         initializeListeners();
+        initializeFirebaseAuth();
     }
 
     private void initializeWidgets() {
@@ -45,6 +48,14 @@ import io.github.rmmc.rmmctourism.util.Validator;
         btnRegister.setOnClickListener(this::register);
     }
 
+    private void initializeFirebaseAuth(){
+        userAuth = FirebaseAuth.getInstance();
+        if(userAuth.getCurrentUser() != null){
+            Intent goToHome = new Intent(this, HomeActivity.class);
+            startActivity(goToHome);
+        }
+    }
+
     private void login(View view) {
         if (fieldsAreEmpty(tilLoginUsername, tilLoginPassword)) {
             showAlertDialog(
@@ -56,8 +67,24 @@ import io.github.rmmc.rmmctourism.util.Validator;
             return;
         }
 
-        Intent goToHome = new Intent(this, HomeActivity.class);
-        startActivity(goToHome);
+        String username = tilLoginUsername.getEditText().getText().toString();
+        String password = tilLoginUsername.getEditText().getText().toString();
+
+        userAuth.signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener(this , task -> {
+                    if(task.isSuccessful()){
+
+                        Intent goToHome = new Intent(this, HomeActivity.class);
+                        startActivity(goToHome);
+
+                    }else{
+                        showAlertDialog(
+                                this,
+                                "Login Error",
+                                "Username and password is incorrect. Try again."
+                        ).show();
+                    }
+                });
     }
 
     private void register(View view) {
