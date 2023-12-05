@@ -56,11 +56,11 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     }
 
     private void setupDestinations() {
-        destinations.add(new Destination("dasdad"));
-        destinations.add(new Destination("dasdad"));
-        destinations.add(new Destination("dasdad"));
-        destinations.add(new Destination("dasdad"));
-        destinations.add(new Destination("dasdad"));
-        destinations.add(new Destination("dasdad"));
+        destinations.add(new Destination("Breads and Blends", "The best coffee shop in South Cotabato"));
+        destinations.add(new Destination("Koronadal City", "Koronadal City Description."));
+        destinations.add(new Destination("Tupi", "Tupi South Cotabato Description."));
+        destinations.add(new Destination("KCC Mall of Marbel", "The closes mall in Tacurong City"));
+        destinations.add(new Destination("Gaisano Mall of Marble", "The second closest mall in Tacurong"));
+        destinations.add(new Destination("STI College Koronadal", "The best IT school in Koronadal City"));
     }
 }
