@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.adapter.SpotViewerAdapter;
-import io.github.rmmc.rmmctourism.model.TouristSpotModel;
+import io.github.rmmc.rmmctourism.adapter.DestinationAdapter;
+import io.github.rmmc.rmmctourism.model.Destination;
 
 
 public class SpotViewerFragment extends Fragment {
@@ -36,16 +36,16 @@ public class SpotViewerFragment extends Fragment {
         rvSpotViewer = view.findViewById(R.id.rv_spot_viewer);
 
 
-        List<TouristSpotModel> list = new ArrayList<>();
+        List<Destination> list = new ArrayList<>();
 
-        list.add(new TouristSpotModel("dasdad"));
-        list.add(new TouristSpotModel("dasdad"));
-        list.add(new TouristSpotModel("dasdad"));
-        list.add(new TouristSpotModel("dasdad"));
-        list.add(new TouristSpotModel("dasdad"));list.add(new TouristSpotModel("dasdad"));
+        list.add(new Destination("dasdad"));
+        list.add(new Destination("dasdad"));
+        list.add(new Destination("dasdad"));
+        list.add(new Destination("dasdad"));
+        list.add(new Destination("dasdad"));list.add(new Destination("dasdad"));
 
 
-        SpotViewerAdapter adapter = new SpotViewerAdapter(getContext(), list);
+        DestinationAdapter adapter = new DestinationAdapter(getContext(), list);
 
         rvSpotViewer.setAdapter(adapter);
         rvSpotViewer.setLayoutManager(new LinearLayoutManager(getContext()));
