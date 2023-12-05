@@ -8,7 +8,7 @@ public class UserRepository {
 
     private FirebaseFirestore instance;
     public UserRepository(){
-        instance = FirebaseFirestore.getInstance();
+        this.instance = FirebaseFirestore.getInstance();
     }
 
     public void addUser(){

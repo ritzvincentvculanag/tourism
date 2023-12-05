@@ -68,7 +68,7 @@ import io.github.rmmc.rmmctourism.util.Validator;
         }
 
         String username = tilLoginUsername.getEditText().getText().toString();
-        String password = tilLoginUsername.getEditText().getText().toString();
+        String password = tilLoginPassword.getEditText().getText().toString();
 
         userAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this , task -> {
@@ -81,7 +81,7 @@ import io.github.rmmc.rmmctourism.util.Validator;
                         showAlertDialog(
                                 this,
                                 "Login Error",
-                                "Username and password is incorrect. Try again."
+                                "Username and password is incorrect. Try again." + username + password
                         ).show();
                     }
                 });
