@@ -2,22 +2,26 @@ package io.github.rmmc.rmmctourism.util;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 public class Validator {
 
-    public static boolean isFieldEmpty(TextInputLayout ... fields){
+    public static boolean fieldIsEmpty(TextInputLayout field) {
+        return Objects.requireNonNull(field.getEditText()).getText().toString().isEmpty();
+    }
 
+    public static boolean fieldsAreEmpty(TextInputLayout ... fields){
         for(TextInputLayout field: fields){
-
-            if(field.getEditText().getText().toString().isEmpty()){
+            if (fieldIsEmpty(field)) {
                 field.setError("Fields is empty!");
                 field.setErrorEnabled(true);
                 return true;
             }
+
             field.setError("");
             field.setErrorEnabled(false);
         }
 
         return false;
     }
-
 }
