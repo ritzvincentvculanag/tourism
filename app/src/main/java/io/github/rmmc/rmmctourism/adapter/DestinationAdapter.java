@@ -1,7 +1,6 @@
 package io.github.rmmc.rmmctourism.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,17 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.Destination;
-import io.github.rmmc.rmmctourism.views.DestinationInformation;
 
 public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.DestinationViewHolder> {
 
     private final Context context;
     private final OnDestinationClick onDestinationClick;
-    private final List<Destination> list;
+    private final List<Destination> destinations;
 
-    public DestinationAdapter(Context context, OnDestinationClick onDestinationClick, List<Destination> list){
+    public DestinationAdapter(Context context, OnDestinationClick onDestinationClick, List<Destination> destinations){
         this.context = context;
         this.onDestinationClick = onDestinationClick;
-        this.list = list;
+        this.destinations = destinations;
     }
 
     @NonNull
@@ -43,14 +41,15 @@ public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull DestinationViewHolder holder, int position) {
-        holder.cvTouristSpot.setOnClickListener(e ->{
-            context.startActivity(new Intent(this.context, DestinationInformation.class));
-        });
+        Destination currentDestination = destinations.get(position);
+
+        holder.tvTouristSpotName.setText(currentDestination.getName());
+        holder.tvTouristDescription.setText(currentDestination.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return destinations.size();
     }
 
     public static class DestinationViewHolder extends RecyclerView.ViewHolder {
