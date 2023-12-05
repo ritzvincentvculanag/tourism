@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.util.FieldsValidetor;
+import io.github.rmmc.rmmctourism.util.Validator;
 
  public class Login extends AppCompatActivity {
 
@@ -45,7 +45,7 @@ import io.github.rmmc.rmmctourism.util.FieldsValidetor;
 
         TextInputLayout[] fields = {tfUsername, tfPassword};
 
-        if(!FieldsValidetor.isFieldEmpty(fields)){
+        if(!Validator.fieldsAreEmpty(fields)){
 
             String email = tfUsername.getEditText().getText().toString();
             String password = tfPassword.getEditText().getText().toString();
