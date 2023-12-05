@@ -13,12 +13,9 @@ public class Validator {
     public static boolean fieldsAreEmpty(TextInputLayout ... fields){
         for(TextInputLayout field: fields){
             if (fieldIsEmpty(field)) {
-                field.setError("Fields is empty!");
                 field.setErrorEnabled(true);
                 return true;
             }
-
-            field.setError("");
             field.setErrorEnabled(false);
         }
 
