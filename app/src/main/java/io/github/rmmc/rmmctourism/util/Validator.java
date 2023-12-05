@@ -1,9 +1,8 @@
 package io.github.rmmc.rmmctourism.util;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class FieldsValidetor {
+public class Validator {
 
     public static boolean isFieldEmpty(TextInputLayout ... fields){
 
