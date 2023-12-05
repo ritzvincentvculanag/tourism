@@ -15,9 +15,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 import android.view.MenuItem;
-import android.view.View;
+
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.fragments.SpotViewerFragment;
+import io.github.rmmc.rmmctourism.fragments.DestinationsView;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         userNavView = findViewById(R.id.user_navigation);
-        ChangeFragment(new SpotViewerFragment());
+        ChangeFragment(new DestinationsView());
 
         userAuth = FirebaseAuth.getInstance();
 
@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private boolean bottomNavBarListener(MenuItem item ){
         if(item.getItemId() == R.id.user_home){
-            ChangeFragment(new SpotViewerFragment());
+            ChangeFragment(new DestinationsView());
         }else if(item.getItemId() == R.id.user_logout){
             userLogout();
         }
