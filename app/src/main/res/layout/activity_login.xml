@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:srcCompat="@drawable/sample"
+        tools:srcCompat="@drawable/sample" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -57,7 +58,6 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        app:boxBackgroundColor="#fafafa"
         app:boxStrokeColor="#fafafa"
         app:cursorColor="#111"
         app:layout_constraintBottom_toTopOf="@+id/tf_password"
@@ -71,7 +71,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:hint="Username"
-            android:textColor="#000000" />
+            android:textColor="#fafafa"
+            android:textColorHint="#fafafa" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
