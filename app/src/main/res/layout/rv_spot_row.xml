@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_tourist_spot"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -39,7 +40,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/img_tourist_cover"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
@@ -52,7 +53,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/tv_tourist_spot_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -65,26 +66,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/tv_tourist_spot_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Destination description"
                 android:textColor="?attr/colorSecondary"
-                app:layout_constraintEnd_toEndOf="@+id/textView8"
-                app:layout_constraintStart_toStartOf="@+id/textView8"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintEnd_toEndOf="@+id/tv_tourist_spot_name"
+                app:layout_constraintStart_toStartOf="@+id/tv_tourist_spot_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tourist_spot_name" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btn_view_destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="View Destination"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:layout_constraintStart_toStartOf="@+id/tv_tourist_spot_description"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tourist_spot_description"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
