@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import io.github.rmmc.rmmctourism.R;
 
-public class TouristSpotInformationActivity extends AppCompatActivity {
+public class DestinationInformation extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
