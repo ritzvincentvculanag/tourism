@@ -10,18 +10,25 @@ public class Destination implements Parcelable {
     public static final String OBJ_DESTINATION = "OBJ_DESTINATION";
 
     private final String name;
+    private final String description;
 
-    public Destination(String name) {
+    public Destination(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public String getName() {
         return name;
     }
 
-    // Parcelable details start here
+    public String getDescription() {
+        return description;
+    }
+
+    // Parcelable starts here
     protected Destination(Parcel in) {
         name = in.readString();
+        description = in.readString();
     }
 
     public static final Creator<Destination> CREATOR = new Creator<Destination>() {
@@ -44,5 +51,6 @@ public class Destination implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(description);
     }
 }
