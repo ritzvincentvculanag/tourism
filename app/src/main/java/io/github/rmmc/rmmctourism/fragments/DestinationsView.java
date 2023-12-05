@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
@@ -35,6 +36,7 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_spot_viewer, container, false);
 
+        destinations = new ArrayList<>();
         destinationAdapter= new DestinationAdapter(getContext(), this, destinations);
         rvSpotViewer = view.findViewById(R.id.rv_spot_viewer);
         rvSpotViewer.setAdapter(destinationAdapter);
