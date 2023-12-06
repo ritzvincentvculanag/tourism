@@ -1,5 +1,7 @@
 package io.github.rmmc.rmmctourism.model;
 
+import com.google.firebase.Timestamp;
+
 import java.time.LocalDate;
 
 public class UserInformation {
@@ -17,14 +19,14 @@ public class UserInformation {
     private String firstName;
     private String lastName;
     private String middleName;
-    private LocalDate birthDate;
+    private Timestamp birthDate;
     private String gender;
     private String email;
     private String password;
 
     public UserInformation(){}
 
-    public UserInformation(String UID, String firstName, String lastName, String middleName, LocalDate birthDate, String gender, String email, String password) {
+    public UserInformation(String UID, String firstName, String lastName, String middleName, Timestamp birthDate, String gender, String email, String password) {
         this.UID = UID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,11 +69,11 @@ public class UserInformation {
         this.middleName = middleName;
     }
 
-    public LocalDate getBirthDate() {
+    public Timestamp getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Timestamp birthDate) {
         this.birthDate = birthDate;
     }
 

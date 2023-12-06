@@ -12,11 +12,16 @@ import android.widget.Button;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.SpinnerAdapter;
@@ -26,8 +31,6 @@ import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.Validator;
 
 public class Register extends AppCompatActivity {
-
-
     private TextInputLayout tilRegisterFirstName;
     private TextInputLayout tilRegisterLastName;
     private TextInputLayout tilRegisterMiddleName;
@@ -48,7 +51,7 @@ public class Register extends AppCompatActivity {
         initializeWidgets();
         initializeListeners();
         initialiseSpinner();
-        userRepository = new UserRepository(getApplicationContext());
+        userRepository = new UserRepository(this);
     }
     private void initializeWidgets(){
 
@@ -59,7 +62,7 @@ public class Register extends AppCompatActivity {
         tilRegisterBirtDate = findViewById(R.id.til_reg_birthdate);
         tilRegisterEmail = findViewById(R.id.til_reg_email);
         tilRegisterPassword = findViewById(R.id.til_reg_password);
-        tilRegisterPassword = findViewById(R.id.til_reg_password_retype);
+        tilRegisterRetypePassword = findViewById(R.id.til_reg_password_retype);
 
         //Spinner
         actvGender = findViewById(R.id.actv_reg_gender);
@@ -90,30 +93,36 @@ public class Register extends AppCompatActivity {
 
         TextInputLayout[] fields = {
                 tilRegisterFirstName,
-                tilRegisterLastName ,
+                tilRegisterLastName,
                 tilRegisterBirtDate,
                 tilRegisterEmail,
                 tilRegisterPassword,
                 tilRegisterPassword
         };
 
-        if(Validator.fieldsAreEmpty(fields)){
-            Messenger.showAlertDialog(getApplicationContext(), "User Registration",
+        if (Validator.fieldsAreEmpty(fields)) {
+            Messenger.showAlertDialog(this, "User Registration",
                     "Please provide information needed!").show();
 
             return;
         }
 
-        if(!tilRegisterPassword.getEditText().getText().toString().equals(tilRegisterRetypePassword.getEditText().getText().toString())){
+        if (!tilRegisterPassword.getEditText().getText().toString().equals(tilRegisterRetypePassword.getEditText().getText().toString())) {
             Messenger.showAlertDialog(this, "User Registration",
                     "Password does not match!").show();
             return;
         }
 
-        LocalDate birthDate = null;
+        // Parse birthdate and convert it to Timestamp
+        String birthDateStr = tilRegisterBirtDate.getEditText().getText().toString();
+        Timestamp birthDate = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            birthDate = LocalDate.parse(tilRegisterBirtDate.getEditText().getText().toString());
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            Date parsedDate = dateFormat.parse(birthDateStr);
+            birthDate = new Timestamp(parsedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         UserInformation user = new UserInformation(
