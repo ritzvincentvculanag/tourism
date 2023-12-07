@@ -128,6 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/til_reg_birthdate">
 
             <AutoCompleteTextView
+                android:id="@+id/actv_reg_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="Gender"
@@ -148,7 +149,7 @@
             app:layout_constraintTop_toBottomOf="@+id/til_reg_gender" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_reg_username"
+            android:id="@+id/til_reg_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -173,7 +174,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_reg_username"
+            app:layout_constraintTop_toBottomOf="@+id/til_reg_email"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText

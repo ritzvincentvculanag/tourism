@@ -58,11 +58,7 @@ import io.github.rmmc.rmmctourism.util.Validator;
 
     private void login(View view) {
         if (fieldsAreEmpty(tilLoginUsername, tilLoginPassword)) {
-            showAlertDialog(
-                    this,
-                    "Login Error",
-                    "Username and password is required. Try again."
-            ).show();
+            Messenger.showAlertDialog(this, "User Login", "Username and password is required!").show();
 
             return;
         }
