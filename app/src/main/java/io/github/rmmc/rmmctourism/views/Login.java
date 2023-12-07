@@ -1,4 +1,4 @@
- package io.github.rmmc.rmmctourism.views;
+package io.github.rmmc.rmmctourism.views;
 
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 import static io.github.rmmc.rmmctourism.util.Validator.fieldIsEmpty;
@@ -6,24 +6,28 @@ import static io.github.rmmc.rmmctourism.util.Validator.fieldsAreEmpty;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.Validator;
 
- public class Login extends AppCompatActivity {
-     private TextInputLayout tilLoginUsername;
-     private TextInputLayout tilLoginPassword;
+public class Login extends AppCompatActivity {
+    private TextInputLayout tilLoginUsername;
+    private TextInputLayout tilLoginPassword;
 
-     private Button btnLogin;
-     private Button btnRegister;
+    private Button btnLogin;
+    private Button btnRegister;
 
-     private FirebaseAuth userAuth;
+    private FirebaseAuth userAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +52,10 @@ import io.github.rmmc.rmmctourism.util.Validator;
         btnRegister.setOnClickListener(this::register);
     }
 
-    private void initializeFirebaseAuth(){
+    private void initializeFirebaseAuth() {
         userAuth = FirebaseAuth.getInstance();
-        if(userAuth.getCurrentUser() != null){
+
+        if (userAuth.getCurrentUser() != null) {
             Intent goToHome = new Intent(this, HomeActivity.class);
             startActivity(goToHome);
         }
@@ -67,19 +72,14 @@ import io.github.rmmc.rmmctourism.util.Validator;
         String password = tilLoginPassword.getEditText().getText().toString();
 
         userAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this , task -> {
-                    if(task.isSuccessful()){
-
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
                         Intent goToHome = new Intent(this, HomeActivity.class);
                         startActivity(goToHome);
-
-                    }else{
-                        showAlertDialog(
-                                this,
-                                "Login Error",
-                                "Username and password is incorrect. Try again." + username + password
-                        ).show();
+                        return;
                     }
+
+                    Toast.makeText(this, "User not found!", Toast.LENGTH_SHORT).show();
                 });
     }
 
