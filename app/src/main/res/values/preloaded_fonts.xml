@@ -2,9 +2,14 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/dm_serif_display</item>
+        <item>@font/inter</item>
+        <item>@font/inter_bold</item>
+        <item>@font/inter_medium</item>
         <item>@font/lato</item>
         <item>@font/lato_bold</item>
         <item>@font/playfair_display</item>
         <item>@font/playfair_display_bold</item>
+        <item>@font/poppins</item>
+        <item>@font/poppins_bold</item>
     </array>
 </resources>
