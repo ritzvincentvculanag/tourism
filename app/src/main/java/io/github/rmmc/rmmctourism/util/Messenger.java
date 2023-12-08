@@ -9,11 +9,13 @@ public class Messenger {
     public static MaterialAlertDialogBuilder showAlertDialog(
             Context context,
             String title,
-            String message
+            String message,
+            String positiveButtonTitle
     ) {
         return new MaterialAlertDialogBuilder(context)
                 .setTitle(title)
-                .setMessage(message);
+                .setMessage(message)
+                .setPositiveButton(positiveButtonTitle, (dialog, which) -> {});
     }
 
     public static MaterialAlertDialogBuilder showAlertDialog(
