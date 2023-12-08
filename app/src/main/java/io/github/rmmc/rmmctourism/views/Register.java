@@ -102,14 +102,31 @@ public class Register extends AppCompatActivity {
 
         if (Validator.fieldsAreEmpty(fields)) {
             Messenger.showAlertDialog(this, "User Registration",
-                    "Please provide information needed!").show();
+                    "Please provide information needed!", "Ok").show();
 
             return;
         }
 
+        if (!Validator.isValidName(tilRegisterFirstName) || !Validator.isValidName(tilRegisterLastName)) {
+            Messenger.showAlertDialog(this, "User Registration",
+                    "Invalid name!", "Ok").show();
+            return;
+        }
+
+        if (!Validator.isValidEmail(tilRegisterEmail)) {
+            Messenger.showAlertDialog(this, "User Registration",
+                    "Invalid email address!", "Ok").show();
+            return;
+        }
+
+        if (!Validator.isValidPassword(tilRegisterPassword)) {
+            Messenger.showAlertDialog(this, "User Registration",
+                    "Invalid password (minimum 8 characters with at least one uppercase, one lowercase, one digit, and one special character)", "Ok").show();
+            return;
+        }
         if (!tilRegisterPassword.getEditText().getText().toString().equals(tilRegisterRetypePassword.getEditText().getText().toString())) {
             Messenger.showAlertDialog(this, "User Registration",
-                    "Password does not match!").show();
+                    "Password does not match!", "Ok").show();
             return;
         }
 
