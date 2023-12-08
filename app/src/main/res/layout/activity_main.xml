@@ -71,7 +71,7 @@
     <Button
         android:id="@+id/btnTraveler"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/inter_medium"
         android:text="I am a Traveler"
@@ -85,7 +85,7 @@
         android:id="@+id/btnManager"
         style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/inter_medium"
         android:text="I am a Manager / Owner"
