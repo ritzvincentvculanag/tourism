@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -91,7 +90,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
             showAlertDialog(
                     this,
                     getString(R.string.login_dialog_error_title),
-                    getString(R.string.loging_dialog_error_user_not_found),
+                    getString(R.string.login_dialog_error_user_not_found),
                     getString(R.string.login_dialog_error_positive_button_title)
             ).show();
 
