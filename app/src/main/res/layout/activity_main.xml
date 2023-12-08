@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:srcCompat="@drawable/bg_splash" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -39,7 +39,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:fontFamily="@font/playfair_display_bold"
+        android:fontFamily="@font/inter_bold"
         android:text="South Cotabato"
         android:textAlignment="center"
         android:textColor="#fafafa"
@@ -57,10 +57,11 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:fontFamily="@font/inter"
         android:text="Discover amazing tourist spots in the heart of South Cotabato. From the stunning view, to the local people, to the towering skycrapers, and the natural wonders located within. What are you waiting for? Visit South Cotabato now!"
         android:textAlignment="center"
         android:textColor="#fafafa"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/btnTraveler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -72,6 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/inter_medium"
         android:text="I am a Traveler"
         app:layout_constraintBottom_toTopOf="@+id/btnManager"
         app:layout_constraintEnd_toEndOf="@+id/textView2"
@@ -85,6 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_medium"
         android:text="I am a Manager / Owner"
         app:layout_constraintBottom_toTopOf="@+id/imgCarousel"
         app:layout_constraintEnd_toEndOf="@+id/btnTraveler"

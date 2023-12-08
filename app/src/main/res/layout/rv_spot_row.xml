@@ -7,12 +7,12 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_tourist_spot"
-        style="@style/Widget.Material3.CardView.Filled"
+        style="@style/Widget.Material3.CardView.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="1dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,9 +27,6 @@
                 android:id="@+id/materialCardView"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 app:cardElevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,13 +53,15 @@
                 android:id="@+id/tv_tourist_spot_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="Destination Title"
                 android:textColor="?attr/colorOnPrimaryContainer"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/materialCardView"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/materialCardView"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
             <TextView
@@ -84,7 +83,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="View Destination"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tv_tourist_spot_description"
+                app:layout_constraintEnd_toEndOf="@+id/tv_tourist_spot_description"
                 app:layout_constraintTop_toBottomOf="@+id/tv_tourist_spot_description"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>

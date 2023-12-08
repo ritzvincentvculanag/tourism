@@ -17,11 +17,15 @@
             android:exported="false" />
         <activity
             android:name=".views.Register"
+            android:label="Register"
+            android:parentActivityName=".views.Login"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.RmmcTourismNoActionBar"
             android:name=".views.HomeActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.RmmcTourismNoActionBar"
             android:name=".views.Login"
             android:exported="true" >
             <intent-filter>
