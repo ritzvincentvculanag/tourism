@@ -3,5 +3,8 @@
     <string name="login_dialog_error_title">Login error</string>
     <string name="login_dialog_error_message">Username and password is required!</string>
     <string name="login_dialog_error_positive_button_title">Try again</string>
-    <string name="loging_dialog_error_user_not_found">User not found!</string>
+    <string name="login_dialog_error_user_not_found">User not found!</string>
+    <string name="register_dialog_error_title">Registration Error</string>
+    <string name="register_dialog_error_message">Please provide information needed!</string>
+    <string name="register_dialog_error_postive_button">Try again</string>
 </resources>

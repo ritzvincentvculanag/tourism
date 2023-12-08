@@ -1,9 +1,21 @@
 <resources>
     <string name="app_name">RmmcTourism</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Fragments -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Login -->
     <string name="login_dialog_error_title">Login error</string>
     <string name="login_dialog_error_message">Username and password is required!</string>
     <string name="login_dialog_error_positive_button_title">Try again</string>
-    <string name="loging_dialog_error_user_not_found">User not found!</string>
+    <string name="login_dialog_error_user_not_found">User not found!</string>
+
+    <!-- Login -->
+    <string name="register_dialog_error_title">Registration Error</string>
+    <string name="register_dialog_error_message">Please provide information needed!</string>
+    <string name="register_dialog_error_postive_button">Try again</string>
+    <string-array name="register_til_gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
