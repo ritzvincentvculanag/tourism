@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Validator {
 
-
     public static boolean isValidName(TextInputLayout tilName) {
         String name = tilName.getEditText().getText().toString().trim();
         if (name.matches("^[a-zA-Z ]+$")) {
