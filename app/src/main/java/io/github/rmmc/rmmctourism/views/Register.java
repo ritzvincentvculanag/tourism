@@ -80,7 +80,7 @@ public class Register extends AppCompatActivity {
     }
 
 
-    private void initialiseSpinner(){
+    private void initialiseSpinner(){   
         List<String> list = new ArrayList<>();
         list.add("Male");
         list.add("Female");

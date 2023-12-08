@@ -46,12 +46,12 @@ public class UserRepository {
                 this.instance.collection(UserInformation.collectionName).document(uid).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Messenger.showAlertDialog(context, "User Register", "User register successful: ");
+                        Messenger.showAlertDialog(context, "User Register", "You successfully register!");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Messenger.showAlertDialog(context, "User Register", "User register unsuccessful: ");
+                        Messenger.showAlertDialog(context, "User Register", "You unsuccessfully register!");
                     }
                 });
             } else {
