@@ -9,7 +9,7 @@ import com.google.firebase.Timestamp;
 
 public class Destination implements Parcelable {
 
-    public static final String documentNameField = "Destinations";
+    public static final String collectioName = "Destinations";
     public static final String userIdField = "userId";
     public static final String destinationCategoryIdField = "destinationCategory";
     public static final String nameField = "name";
