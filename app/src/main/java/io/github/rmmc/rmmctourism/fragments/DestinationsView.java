@@ -25,10 +25,7 @@ import io.github.rmmc.rmmctourism.util.DataCallback;
 import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.views.DestinationInformation;
-
-
 public class DestinationsView extends Fragment implements OnDestinationClick {
-
     private RecyclerView rvSpotViewer;
     private List<Destination> destinations;
     private DestinationAdapter destinationAdapter;
@@ -64,9 +61,7 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
 
     private void setupDestinations() {
         destinationRepository = new DestinationRepository(getContext().getApplicationContext());
-
         destinationRepository.getDestination(new DataCallback<Destination>() {
-
             @Override
             public void onDataLoaded(List<Destination> t) {
                 destinations.clear();
@@ -78,10 +73,7 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
 
             @Override
             public void onDataNotAvailable() {
-
             }
         });
-
-
     }
 }
