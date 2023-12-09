@@ -1,7 +1,5 @@
 package io.github.rmmc.rmmctourism.fragments;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,19 +7,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.DestinationAdapter;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
-import io.github.rmmc.rmmctourism.util.DataCallback;
+import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.views.DestinationInformation;
@@ -61,7 +57,7 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
 
     private void setupDestinations() {
         destinationRepository = new DestinationRepository(getContext().getApplicationContext());
-        destinationRepository.getDestination(new DataCallback<Destination>() {
+        destinationRepository.getDestination(new DestinationDataCallback<Destination>() {
             @Override
             public void onDataLoaded(List<Destination> t) {
                 destinations.clear();
