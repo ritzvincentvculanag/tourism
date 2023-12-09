@@ -31,7 +31,6 @@
             android:name=".views.HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.RmmcTourismNoActionBar">
-
         </activity>
         <activity
             android:name=".MainActivity"
