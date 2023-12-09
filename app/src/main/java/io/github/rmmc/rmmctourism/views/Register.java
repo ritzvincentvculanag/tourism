@@ -143,14 +143,15 @@ public class Register extends AppCompatActivity {
         }
 
         UserInformation user = new UserInformation(
-                "",
+                1,
                 tilRegisterFirstName.getEditText().getText().toString(),
                 tilRegisterLastName.getEditText().getText().toString(),
                 tilRegisterMiddleName.getEditText().getText().toString(),
                 birthDate,
                 actvGender.getText().toString(),
                 tilRegisterEmail.getEditText().getText().toString(),
-                tilRegisterPassword.getEditText().getText().toString()
+                tilRegisterPassword.getEditText().getText().toString(),
+                null, null
         );
 
         userRepository.addUser(user);
