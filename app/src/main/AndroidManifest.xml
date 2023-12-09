@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RmmcTourism"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".views.Hero"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".views.Hero"
+            android:exported="false" />
         <activity
             android:name=".views.DestinationInformation"
             android:exported="false" />
@@ -29,10 +29,6 @@
             android:parentActivityName=".views.Login" />
         <activity
             android:name=".views.HomeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.RmmcTourismNoActionBar" />
-        <activity
-            android:name=".views.Hero"
             android:exported="true"
             android:theme="@style/Theme.RmmcTourismNoActionBar">
             <intent-filter>
@@ -40,6 +36,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.RmmcTourismNoActionBar">
+
         </activity>
 
         <meta-data

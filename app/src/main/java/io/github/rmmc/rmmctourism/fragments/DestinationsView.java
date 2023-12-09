@@ -1,5 +1,7 @@
 package io.github.rmmc.rmmctourism.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,8 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.DestinationAdapter;
+import io.github.rmmc.rmmctourism.repository.DestinationRepository;
+import io.github.rmmc.rmmctourism.util.DataCallback;
 import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.views.DestinationInformation;
@@ -27,6 +32,7 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     private RecyclerView rvSpotViewer;
     private List<Destination> destinations;
     private DestinationAdapter destinationAdapter;
+    private DestinationRepository destinationRepository;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,54 +58,30 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     public void onDestinationClick(int position) {
         Destination destination = destinations.get(position);
         Intent viewDestination = new Intent(getContext(), DestinationInformation.class);
-        viewDestination.putExtra(Destination.documentNameField, destination);
+        viewDestination.putExtra(Destination.collectioName, destination);
         startActivity(viewDestination);
     }
 
     private void setupDestinations() {
-        destinations.add(new Destination(
-                "Breads and Blends",
-                "The best coffee shop in South Cotabato",
-                "user_id_1",
-                "category_id_1",
-                "Breads and Blends Description",
-                "123 Main St, City",
-                "123456789",
-                "http://www.breadsandblends.com",
-                "http://www.facebook.com/breadsandblends",
-                "http://www.instagram.com/breadsandblends",
-                "info@breadsandblends.com",
-                null, null
-        ));
+        destinationRepository = new DestinationRepository(getContext().getApplicationContext());
 
-        destinations.add(new Destination(
-                "Koronadal City",
-                "Koronadal City Description.",
-                "user_id_2",
-                "category_id_2",
-                "Koronadal City Address",
-                "987 City Ave, Koronadal",
-                "987654321",
-                "http://www.koronadalcity.com",
-                "http://www.facebook.com/koronadalcity",
-                "http://www.instagram.com/koronadalcity",
-                "info@koronadalcity.com",
-                null, null
-        ));
+        destinationRepository.getDestination(new DataCallback<Destination>() {
 
-        destinations.add(new Destination(
-                "Tupi",
-                "Tupi South Cotabato Description.",
-                "user_id_3",
-                "category_id_3",
-                "Tupi Address",
-                "456 Tupi St, Tupi",
-                "456789012",
-                "http://www.tupi.com",
-                "http://www.facebook.com/tupi",
-                "http://www.instagram.com/tupi",
-                "info@tupi.com",
-                null, null
-        ));
+            @Override
+            public void onDataLoaded(List<Destination> t) {
+                destinations.clear();
+                for (Destination data: t){
+                    destinations.add(data);
+                }
+                destinationAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+
+
     }
 }

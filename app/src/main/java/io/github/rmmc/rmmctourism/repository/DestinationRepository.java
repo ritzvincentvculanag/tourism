@@ -1,6 +1,9 @@
 package io.github.rmmc.rmmctourism.repository;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -23,6 +26,7 @@ import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.UserInformation;
+import io.github.rmmc.rmmctourism.util.DataCallback;
 import io.github.rmmc.rmmctourism.util.Messenger;
 
 public class DestinationRepository {
@@ -61,7 +65,7 @@ public class DestinationRepository {
                 });
     }
 
-    public List<Destination> getDestination(){
+    public List<Destination> getDestination(final DataCallback<Destination> callback){
         List<Destination> list = new ArrayList<>();
 
         instance.collection(Destination.collectioName)
@@ -70,12 +74,22 @@ public class DestinationRepository {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getString(Destination.nameField));
                                 Destination destination = documentToDestination(document);
                                 list.add(destination);
                             }
-                        } else {
 
+                            if (callback != null) {
+                                callback.onDataLoaded(list);
+                                Log.d(TAG, "success: ", task.getException());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            if (callback != null) {
+                                callback.onDataNotAvailable();
+                            }
                         }
                     }
                 });
