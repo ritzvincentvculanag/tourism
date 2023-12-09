@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
             return;
         }
 
-        Intent goToHome = new Intent(this, HomeActivity.class);
+        Intent goToHome = new Intent(this, Hero.class);
         startActivity(goToHome);
     }
 

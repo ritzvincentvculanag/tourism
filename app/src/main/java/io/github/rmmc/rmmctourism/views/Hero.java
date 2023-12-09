@@ -3,6 +3,7 @@ package io.github.rmmc.rmmctourism.views;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
@@ -41,5 +42,9 @@ public class Hero extends AppCompatActivity implements WidgetInitializer, Action
     private void initializeBottomNavigation() {
         bnvHero = findViewById(R.id.bnvHero);
         nvfHero = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nvfHero);
+
+        if (nvfHero != null) {
+            NavigationUI.setupWithNavController(bnvHero, nvfHero.getNavController());
+        }
     }
 }
