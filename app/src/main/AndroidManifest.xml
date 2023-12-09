@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +20,9 @@
             android:name=".views.DestinationInformation"
             android:exported="false" />
         <activity
+            android:name=".views.Login"
+            android:exported="false" />
+        <activity
             android:name=".views.Register"
             android:exported="false"
             android:label="Register"
@@ -28,7 +32,7 @@
             android:exported="false"
             android:theme="@style/Theme.RmmcTourismNoActionBar" />
         <activity
-            android:name=".views.Login"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.RmmcTourismNoActionBar">
             <intent-filter>

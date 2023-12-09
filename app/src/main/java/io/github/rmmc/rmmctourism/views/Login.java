@@ -17,7 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.Miner;
+import io.github.rmmc.rmmctourism.util.NetworkUtils;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Login extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
@@ -68,6 +70,10 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
     }
 
     private void login(View view) {
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
+            return;
+        }
         if (fieldsAreEmpty(tilLoginUsername, tilLoginPassword)) {
             showAlertDialog(
                     this,

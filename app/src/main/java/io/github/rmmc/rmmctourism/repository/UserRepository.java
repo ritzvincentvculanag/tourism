@@ -5,8 +5,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,24 +42,29 @@ public class UserRepository {
         newUser.put(UserInformation.emailField, user.getEmail());
         newUser.put(UserInformation.passwordField, user.getPassword());
 
-        userAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener((Activity) context, task -> {
-            if (task.isSuccessful()) {
-                String uid = userAuth.getCurrentUser().getUid();
+        userAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
 
-                this.instance.collection(UserInformation.collectionName).document(uid).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Messenger.showAlertDialog(context, "User Register", "You successfully register!", "Ok");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Messenger.showAlertDialog(context, "User Register", "You unsuccessfully register!", "Ok");
-                    }
-                });
-            } else {
-                Messenger.showAlertDialog(context, "User Register", "User registration failed: " + task.getException().getMessage(), "Ok");
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    String uid = userAuth.getCurrentUser().getUid();
+                    instance.collection(UserInformation.collectionName).document(uid).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Messenger.showAlertDialog(context, "User Register", "You successfully register!", "Ok").show();
+                            userAuth.signOut();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Messenger.showAlertDialog(context, "User Register", "You unsuccessfully register!", "Ok").show();
+                        }
+                    });
+                } else {
+                    Messenger.showAlertDialog(context, "User Register", task.getException().getMessage(), "Ok").show();
+                }
             }
+
         });
     }
 

@@ -18,8 +18,10 @@ import android.view.MenuItem;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.fragments.DestinationsView;
+import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements ActionInitializer, WidgetInitializer {
 
 
     private BottomNavigationView userNavView;
@@ -28,13 +30,21 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        userNavView = findViewById(R.id.user_navigation);
+        initializeWidgets();
+        initializeActions();
         ChangeFragment(new DestinationsView());
-
         userAuth = FirebaseAuth.getInstance();
 
+    }
+
+    @Override
+    public void initializeActions() {
         userNavView.setOnItemSelectedListener(this :: bottomNavBarListener);
+    }
+
+    @Override
+    public void initializeWidgets() {
+        userNavView = findViewById(R.id.user_navigation);
     }
 
     private boolean bottomNavBarListener(MenuItem item ){
@@ -78,4 +88,6 @@ public class HomeActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+
 }

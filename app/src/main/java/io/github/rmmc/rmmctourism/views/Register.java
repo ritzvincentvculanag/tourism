@@ -30,7 +30,7 @@ import io.github.rmmc.rmmctourism.repository.UserRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.Miner;
-import io.github.rmmc.rmmctourism.util.Validator;
+import io.github.rmmc.rmmctourism.util.NetworkUtils;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Register extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
@@ -99,6 +99,12 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
     }
 
     private void register(View view) {
+
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
+            return;
+        }
+
         // Fields validation
         if (fieldsAreEmpty(
                 tilRegisterFirstName,
@@ -147,14 +153,15 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
         }
 
         UserInformation user = new UserInformation(
-                "",
+                1,
                 tilRegisterFirstName.getEditText().getText().toString(),
                 tilRegisterLastName.getEditText().getText().toString(),
                 tilRegisterMiddleName.getEditText().getText().toString(),
                 birthDate,
                 actvGender.getText().toString(),
                 tilRegisterEmail.getEditText().getText().toString(),
-                tilRegisterPassword.getEditText().getText().toString()
+                tilRegisterPassword.getEditText().getText().toString(),
+                null, null
         );
 
         userRepository.addUser(user);

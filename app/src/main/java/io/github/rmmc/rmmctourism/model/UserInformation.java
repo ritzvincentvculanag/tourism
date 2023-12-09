@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class UserInformation {
 
     public static final String collectionName = "userInformation";
-
+    public static final String accountTypeField = "accountType";
     public static final String firstNameField = "firstName";
     public static final String lastNameField = "lastName";
     public static final String middleNameField = "middleName";
@@ -15,7 +15,10 @@ public class UserInformation {
     public static final  String genderField = "gender";
     public static final String emailField = "email";
     public static final String passwordField = "password";
+    public static final String dateRegisteredField = "dataRegistered";
+    public static final String lastUpdatedField = "lastUpdated";
     private String UID;
+    private int accountType;
     private String firstName;
     private String lastName;
     private String middleName;
@@ -23,11 +26,23 @@ public class UserInformation {
     private String gender;
     private String email;
     private String password;
+    private Timestamp dateRegistered;
+    private Timestamp lastUpdated;
 
     public UserInformation(){}
 
-    public UserInformation(String UID, String firstName, String lastName, String middleName, Timestamp birthDate, String gender, String email, String password) {
-        this.UID = UID;
+    public UserInformation(
+                           int accountType,
+                           String firstName,
+                           String lastName,
+                           String middleName,
+                           Timestamp birthDate,
+                           String gender,
+                           String email,
+                           String password,
+                           Timestamp dateRegistered,
+                           Timestamp lastUpdated) {
+        this.accountType = accountType;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -35,6 +50,8 @@ public class UserInformation {
         this.gender = gender;
         this.email = email;
         this.password = password;
+        this.dateRegistered = dateRegistered;
+        this.lastUpdated = lastUpdated;
     }
 
     public String getUID() {
@@ -43,6 +60,14 @@ public class UserInformation {
 
     public void setUID(String UID) {
         this.UID = UID;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 
     public String getFirstName() {
@@ -99,5 +124,21 @@ public class UserInformation {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Timestamp getDateRegistered() {
+        return dateRegistered;
+    }
+
+    public void setDateRegistered(Timestamp dateRegistered) {
+        this.dateRegistered = dateRegistered;
+    }
+
+    public Timestamp getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
