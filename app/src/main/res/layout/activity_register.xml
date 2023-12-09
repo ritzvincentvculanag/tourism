@@ -11,28 +11,16 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/playfair_display_bold"
-            android:text="Register"
-            android:textSize="34sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/playfair_display"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter_bold"
             android:text="Personal Information"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_reg_first_name"
@@ -48,6 +36,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="First Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,6 +54,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="Last Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,6 +72,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="Middle Name (Optional)" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,6 +91,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="Birthdate" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="Gender"
+                android:fontFamily="@font/inter"
                 android:hint="Gender"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:fontFamily="@font/playfair_display"
+            android:fontFamily="@font/inter_bold"
             android:text="Account Information"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +155,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username" />
+                android:fontFamily="@font/inter"
+                android:hint="Email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -180,6 +174,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="Password" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -198,17 +193,19 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
                 android:hint="Retype Password" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_reg_register"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/inter_medium"
             android:text="Register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -221,11 +218,12 @@
             android:id="@+id/btn_reg_login"
             style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/inter_medium"
             android:text="Login instead"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_reg_register"
