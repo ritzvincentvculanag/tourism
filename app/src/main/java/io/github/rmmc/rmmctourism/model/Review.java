@@ -1,55 +1,71 @@
 package io.github.rmmc.rmmctourism.model;
 
+import com.google.firebase.Timestamp;
+
 public class Review {
 
-    public static final String collectionName = "userReview";
-    public static final String userUIDField = "userUID";
-    public static final String destinationUIDField = "destinationUID";
-    public static final String rateField = "rate";
+    private String reviewId;
+    private String userId;
+    private String destinationId;
+    private String content;
+    private Timestamp datePublished;
 
-    private String reviewUID;
-    private String userUID;
-    private String destinationUID;
-    private int Rate;
 
     public Review() {
     }
 
-    public Review(String userUID, String destinationUID, int rate) {
-        this.userUID = userUID;
-        this.destinationUID = destinationUID;
-        Rate = rate;
+    public Review(String userId, String destinationId, String content, Timestamp datePublished) {
+        this.userId = userId;
+        this.destinationId = destinationId;
+        this.content = content;
+        this.datePublished = datePublished;
     }
 
-    public String getReviewUID() {
-        return reviewUID;
+    public Review(String reviewId, String userId, String destinationId, String content, Timestamp datePublished) {
+        this.reviewId = reviewId;
+        this.userId = userId;
+        this.destinationId = destinationId;
+        this.content = content;
+        this.datePublished = datePublished;
     }
 
-    public void setReviewUID(String reviewUID) {
-        this.reviewUID = reviewUID;
+    public String getReviewId() {
+        return reviewId;
     }
 
-    public String getUserUID() {
-        return userUID;
+    public void setReviewId(String reviewId) {
+        this.reviewId = reviewId;
     }
 
-    public void setUserUID(String userUID) {
-        this.userUID = userUID;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getDestinationUID() {
-        return destinationUID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setDestinationUID(String destinationUID) {
-        this.destinationUID = destinationUID;
+    public String getDestinationId() {
+        return destinationId;
     }
 
-    public int getRate() {
-        return Rate;
+    public void setDestinationId(String destinationId) {
+        this.destinationId = destinationId;
     }
 
-    public void setRate(int rate) {
-        Rate = rate;
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Timestamp getDatePublished() {
+        return datePublished;
+    }
+
+    public void setDatePublished(Timestamp datePublished) {
+        this.datePublished = datePublished;
     }
 }

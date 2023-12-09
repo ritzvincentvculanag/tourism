@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.DestinationAdapter;
-import io.github.rmmc.rmmctourism.adapter.OnDestinationClick;
+import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.views.DestinationInformation;
 
@@ -51,16 +52,54 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     public void onDestinationClick(int position) {
         Destination destination = destinations.get(position);
         Intent viewDestination = new Intent(getContext(), DestinationInformation.class);
-        viewDestination.putExtra(Destination.OBJ_DESTINATION, destination);
+        viewDestination.putExtra(Destination.documentNameField, destination);
         startActivity(viewDestination);
     }
 
     private void setupDestinations() {
-        destinations.add(new Destination("Breads and Blends", "The best coffee shop in South Cotabato"));
-        destinations.add(new Destination("Koronadal City", "Koronadal City Description."));
-        destinations.add(new Destination("Tupi", "Tupi South Cotabato Description."));
-        destinations.add(new Destination("KCC Mall of Marbel", "The closes mall in Tacurong City"));
-        destinations.add(new Destination("Gaisano Mall of Marble", "The second closest mall in Tacurong"));
-        destinations.add(new Destination("STI College Koronadal", "The best IT school in Koronadal City"));
+        destinations.add(new Destination(
+                "Breads and Blends",
+                "The best coffee shop in South Cotabato",
+                "user_id_1",
+                "category_id_1",
+                "Breads and Blends Description",
+                "123 Main St, City",
+                "123456789",
+                "http://www.breadsandblends.com",
+                "http://www.facebook.com/breadsandblends",
+                "http://www.instagram.com/breadsandblends",
+                "info@breadsandblends.com",
+                null, null
+        ));
+
+        destinations.add(new Destination(
+                "Koronadal City",
+                "Koronadal City Description.",
+                "user_id_2",
+                "category_id_2",
+                "Koronadal City Address",
+                "987 City Ave, Koronadal",
+                "987654321",
+                "http://www.koronadalcity.com",
+                "http://www.facebook.com/koronadalcity",
+                "http://www.instagram.com/koronadalcity",
+                "info@koronadalcity.com",
+                null, null
+        ));
+
+        destinations.add(new Destination(
+                "Tupi",
+                "Tupi South Cotabato Description.",
+                "user_id_3",
+                "category_id_3",
+                "Tupi Address",
+                "456 Tupi St, Tupi",
+                "456789012",
+                "http://www.tupi.com",
+                "http://www.facebook.com/tupi",
+                "http://www.instagram.com/tupi",
+                "info@tupi.com",
+                null, null
+        ));
     }
 }

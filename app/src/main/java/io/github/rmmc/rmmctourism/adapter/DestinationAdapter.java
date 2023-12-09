@@ -17,6 +17,7 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 
 public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.DestinationViewHolder> {
 

@@ -28,9 +28,7 @@ import io.github.rmmc.rmmctourism.adapter.SpinnerAdapter;
 import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.repository.UserRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
-import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.Miner;
-import io.github.rmmc.rmmctourism.util.Validator;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Register extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
