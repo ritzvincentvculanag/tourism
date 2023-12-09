@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <group android:checkableBehavior="single">
-            <item android:id="@+id/user_home"
-                android:title="Home"
-                android:icon="@drawable/baseline_home"
-                />
+    <item
+        android:id="@+id/user_home"
+        android:icon="@drawable/baseline_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/user_explore"
+        android:icon="@drawable/baseline_explore"
+        android:title="Explore" />
+    <item
+        android:id="@+id/user_add"
+        android:title="Add"
 
-            <item android:id="@+id/user_explore"
-                android:title="Explore"
-                android:icon="@drawable/baseline_explore"
-                />
-            <item android:id="@+id/user_add"
-                android:title="Add"
-
-                />
-            <item android:id="@+id/user_setting"
-                android:title="Setting"
-                android:icon="@drawable/baseline_settings"
-                />
-            <item android:id="@+id/user_logout"
-                android:title="Logout"
-                android:icon="@drawable/baseline_logout"
-                />
-        </group>
+        />
+    <item
+        android:id="@+id/user_setting"
+        android:icon="@drawable/baseline_settings"
+        android:title="Setting" />
+    <item
+        android:id="@+id/user_logout"
+        android:icon="@drawable/baseline_logout"
+        android:title="Logout" />
 </menu>

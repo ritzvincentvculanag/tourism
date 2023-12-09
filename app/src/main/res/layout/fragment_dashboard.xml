@@ -123,9 +123,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="361dp"
-        android:layout_height="579dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
