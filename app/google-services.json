@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "78015866534",
-    "project_id": "rmmctourism",
-    "storage_bucket": "rmmctourism.appspot.com"
+    "project_number": "330314720756",
+    "project_id": "tourismrmmc",
+    "storage_bucket": "tourismrmmc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:78015866534:android:75eb0af581d4b3b5ec3667",
+        "mobilesdk_app_id": "1:330314720756:android:ccde8143f8a880a17505a1",
         "android_client_info": {
           "package_name": "io.github.rmmc.rmmctourism"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDo6CXM5WDwYv9YEDteqXqvtlobEwyl4FM"
+          "current_key": "AIzaSyBoZ2rZSwS8gzwkUPy6dXX1fIesUXAcnGQ"
         }
       ],
       "services": {
