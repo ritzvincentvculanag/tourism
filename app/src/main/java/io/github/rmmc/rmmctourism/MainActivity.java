@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+
+import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.repository.DestinationRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.NetworkUtils;
@@ -30,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
         initializeWidgets();
         initializeActions();
     }
+
     @Override
     public void initializeWidgets() {
         btnManager = findViewById(R.id.btnManager);
