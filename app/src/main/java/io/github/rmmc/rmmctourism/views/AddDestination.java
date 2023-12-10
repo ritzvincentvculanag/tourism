@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
@@ -22,6 +24,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
     private View view;
 
+    private ImageView ivAddDestinationCover;
     private Button btnUploadCover;
 
     private ActivityResultLauncher<String> arlTakePhoto;
@@ -39,15 +42,9 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
     @Override
     public void initializeActions() {
-
         arlTakePhoto = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri uri) {
-                        Log.d("RITCHIE", uri.toString());
-                    }
-                }
+                uri -> ivAddDestinationCover.setImageURI(uri)
         );
 
         btnUploadCover.setOnClickListener(e -> arlTakePhoto.launch("image/*"));
@@ -55,6 +52,8 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
     @Override
     public void initializeWidgets() {
+        ivAddDestinationCover = view.findViewById(R.id.iv_add_destination_cover);
+
         btnUploadCover = view.findViewById(R.id.btn_upload_cover);
     }
 }
