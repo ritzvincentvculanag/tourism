@@ -152,7 +152,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btn_logout"
         style="?attr/materialIconButtonFilledTonalStyle"
         android:layout_width="0dp"
         android:layout_height="60dp"

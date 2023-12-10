@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.NetworkUtils;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
+import io.github.rmmc.rmmctourism.views.Hero;
 import io.github.rmmc.rmmctourism.views.Login;
 import io.github.rmmc.rmmctourism.views.Register;
 
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
     private Button btnTraveler;
     private Button btnManager;
+    private FirebaseAuth userAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
         initializeWidgets();
         initializeActions();
-
+        initializeFirebaseAuth();
     }
 
     @Override
@@ -42,6 +46,16 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
     public void initializeActions() {
         btnTraveler.setOnClickListener(this::login);
         btnManager.setOnClickListener(this::register);
+    }
+
+    private void initializeFirebaseAuth() {
+        userAuth = FirebaseAuth.getInstance();
+        if (userAuth.getCurrentUser() == null) {
+            return;
+        }
+
+        Intent goToHome = new Intent(this, Hero.class);
+        startActivity(goToHome);
     }
 
     private void register(View view) {
@@ -59,8 +73,5 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
         }
         startActivity(new Intent(this, Login.class));
     }
-
-
-
 
 }
