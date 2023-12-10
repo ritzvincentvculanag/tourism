@@ -26,7 +26,6 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
     private List<Destination> destinations;
     private DestinationAdapter destinationAdapter;
     private DestinationRepository destinationRepository;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +60,11 @@ public class DestinationsView extends Fragment implements OnDestinationClick {
             @Override
             public void onDataLoaded(List<Destination> t) {
                 destinations.clear();
-                for (Destination data: t){
+                for (Destination data : t) {
                     destinations.add(data);
                 }
                 destinationAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onDataNotAvailable() {
             }

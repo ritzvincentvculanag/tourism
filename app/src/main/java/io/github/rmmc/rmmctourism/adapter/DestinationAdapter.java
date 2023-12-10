@@ -52,7 +52,6 @@ public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.
     public int getItemCount() {
         return destinations.size();
     }
-
     public static class DestinationViewHolder extends RecyclerView.ViewHolder {
 
         private final MaterialCardView cvTouristSpot;
