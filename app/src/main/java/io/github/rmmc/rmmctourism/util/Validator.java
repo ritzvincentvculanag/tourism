@@ -2,6 +2,7 @@ package io.github.rmmc.rmmctourism.util;
 
 import android.util.Patterns;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
@@ -50,5 +51,34 @@ public class Validator {
 
         return false;
     }
+
+    public static boolean isPhoneNumberValid(TextInputLayout field){
+        String philippinesPhoneNumberPattern = "^09\\d{9}$";
+        if (field.getEditText().getText().toString().matches(philippinesPhoneNumberPattern)) {
+            field.setError(null);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean areAllUrlsValid(TextInputLayout... fields) {
+        boolean allValid = true;
+
+        for (TextInputLayout field : fields) {
+            String url = field.getEditText().getText().toString().trim();
+            if (!url.isEmpty()) {
+                if (!Patterns.WEB_URL.matcher(url).matches()) {
+                    // Invalid URL
+                    field.setError("Invalid URL");
+                    allValid = false;
+                } else {
+                    // Valid URL, clear any previous error
+                    field.setError(null);
+                }
+            }
+        }
+        return allValid;
+    }
+
 
 }

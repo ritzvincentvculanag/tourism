@@ -2,8 +2,12 @@ package io.github.rmmc.rmmctourism.repository;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.media.Image;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -25,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
+import io.github.rmmc.rmmctourism.util.ImageDataCallback;
 import io.github.rmmc.rmmctourism.util.Messenger;
 
 public class DestinationRepository {
@@ -33,14 +39,22 @@ public class DestinationRepository {
     private Context context;
     private FirebaseAuth userAuth;
     private FirebaseFirestore instance;
+    private ImageRepository imageRepository;
+
+    public DestinationRepository(){
+        this.userAuth = FirebaseAuth.getInstance();
+        this.instance = FirebaseFirestore.getInstance();
+        this.imageRepository = new ImageRepository();
+    }
 
     public DestinationRepository(Context context){
         this.context = context;
         this.userAuth = FirebaseAuth.getInstance();
         this.instance = FirebaseFirestore.getInstance();
+        this.imageRepository = new ImageRepository();
     }
 
-    public void addDestination(Destination destination){
+    public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver){
 
         Map<String, Object> data = destinationToMap(destination);
         instance.collection(Destination.collectioName)
@@ -48,10 +62,36 @@ public class DestinationRepository {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Messenger.showAlertDialog(context,
-                                "Tourist Destination",
-                                "Tourist Destination added successfully!",
-                                "Ok").show();
+                        imageRepository.uploadImageCover(uri, documentReference.getId(), imageView, contentResolver, new ImageDataCallback(){
+                            @Override
+                            public void onSuccess() {
+                                imageRepository.batchUploadImages(listUri, documentReference.getId(), contentResolver, new BatchUploadCallback() {
+                                    @Override
+                                    public void onSuccess(List<String> downloadUrls) {
+                                        Messenger.showAlertDialog(context,
+                                                "Tourist Destination",
+                                                "Tourist Destination added successfully!",
+                                                "Ok").show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception exception) {
+                                        Messenger.showAlertDialog(context,
+                                                "Image Upload",
+                                                "Failed to upload the image gallery: " + exception.getMessage(),
+                                                "Ok").show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Exception exception) {
+                                Messenger.showAlertDialog(context,
+                                        "Image Upload",
+                                        "Failed to upload the image cover: " + exception.getMessage(),
+                                        "Ok").show();
+                            }
+                        });
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -64,7 +104,7 @@ public class DestinationRepository {
                 });
     }
 
-    public List<Destination> getDestination(final DestinationDataCallback<Destination> callback){
+    public void getDestination(final DestinationDataCallback<Destination> callback){
         List<Destination> list = new ArrayList<>();
 
         instance.collection(Destination.collectioName)
@@ -92,8 +132,6 @@ public class DestinationRepository {
                         }
                     }
                 });
-
-        return list;
     }
 
     private Map<String, Object> destinationToMap(Destination destination) {
@@ -117,7 +155,7 @@ public class DestinationRepository {
     }
 
     private Destination documentToDestination(QueryDocumentSnapshot document) {
-        String destinationId = document.getString(Destination.descriptionField);
+        String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
         String destinationCategoryId = document.getString(Destination.destinationCategoryIdField);
         String name = document.getString(Destination.nameField);

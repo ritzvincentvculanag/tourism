@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/iv_cover"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -43,7 +43,7 @@
                 app:srcCompat="@drawable/layer_destination_cover" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -58,7 +58,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -67,12 +67,12 @@
                 android:fontFamily="@font/inter_light"
                 android:text="Address"
                 android:textColor="#fafafa"
-                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                app:layout_constraintBottom_toTopOf="@+id/tv_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/tv_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -81,7 +81,7 @@
                 android:text="Title"
                 android:textColor="#fafafa"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView4"
+                app:layout_constraintBottom_toTopOf="@+id/tv_address"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

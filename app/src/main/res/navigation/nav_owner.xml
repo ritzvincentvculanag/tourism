@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addDestination"
-        android:name="io.github.rmmc.rmmctourism.views.AddDestination"
+        android:name="io.github.rmmc.rmmctourism.fragments.AddDestination"
         android:label="fragment_add_destination"
         tools:layout="@layout/fragment_add_destination" />
     <fragment
