@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
-import io.github.rmmc.rmmctourism.model.UserInformation;
-import io.github.rmmc.rmmctourism.util.DataCallback;
+import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.Messenger;
 
 public class DestinationRepository {
@@ -65,7 +64,7 @@ public class DestinationRepository {
                 });
     }
 
-    public List<Destination> getDestination(final DataCallback<Destination> callback){
+    public List<Destination> getDestination(final DestinationDataCallback<Destination> callback){
         List<Destination> list = new ArrayList<>();
 
         instance.collection(Destination.collectioName)
