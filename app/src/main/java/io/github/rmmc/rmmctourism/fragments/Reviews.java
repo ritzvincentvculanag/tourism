@@ -23,19 +23,14 @@ import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 public class Reviews extends Fragment implements WidgetInitializer, ActionInitializer {
 
     private View view;
-    private View dialogView;
-
-    private ExtendedFloatingActionButton efabAddReview;
 
     private ReviewAdapter reviewAdapter;
     private RecyclerView rvReviews;
 
-    private BottomSheetDialog addReview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_reviews, container, false);
-        dialogView = getLayoutInflater().inflate(R.layout.layout_add_review, null, false);
 
         initializeWidgets();
         initializeActions();
@@ -45,37 +40,19 @@ public class Reviews extends Fragment implements WidgetInitializer, ActionInitia
 
     @Override
     public void initializeActions() {
-        efabAddReview.setOnClickListener(this::btnAddReviewAction);
     }
 
     @Override
     public void initializeWidgets() {
-        efabAddReview = view.findViewById(R.id.fav_destination_detail_add_review);
         rvReviews = view.findViewById(R.id.rv_destination_detail_reviews);
-        addReview = new BottomSheetDialog(getContext());
 
         setupReviews();
-        initializeDialog();
-    }
-
-    private void initializeDialog() {
-        TextInputLayout tilContent = dialogView.findViewById(R.id.til_add_review_content);
-        Button btnSubmit = dialogView.findViewById(R.id.btn_submit_review);
-        btnSubmit.setOnClickListener(this::btnSubmitAction);
     }
 
     private void setupReviews() {
         reviewAdapter = new ReviewAdapter();
         rvReviews.setAdapter(reviewAdapter);
         rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    private void btnSubmitAction(View view) {
-        addReview.dismiss();
-    }
-
-    private void btnAddReviewAction(View view) {
-        addReview.show();
     }
 
 }
