@@ -3,64 +3,79 @@ package io.github.rmmc.rmmctourism.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.adapter.ReviewAdapter;
+import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Reviews#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Reviews extends Fragment {
+public class Reviews extends Fragment implements WidgetInitializer, ActionInitializer {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private View view;
+    private View dialogView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ExtendedFloatingActionButton efabAddReview;
 
-    public Reviews() {
-        // Required empty public constructor
-    }
+    private ReviewAdapter reviewAdapter;
+    private RecyclerView rvReviews;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Reviews.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Reviews newInstance(String param1, String param2) {
-        Reviews fragment = new Reviews();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private BottomSheetDialog addReview;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_reviews, container, false);
+        dialogView = getLayoutInflater().inflate(R.layout.layout_add_review, null, false);
+
+        initializeWidgets();
+        initializeActions();
+        
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void initializeActions() {
+        efabAddReview.setOnClickListener(this::btnAddReviewAction);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reviews, container, false);
+    public void initializeWidgets() {
+        efabAddReview = view.findViewById(R.id.fav_destination_detail_add_review);
+        rvReviews = view.findViewById(R.id.rv_destination_detail_reviews);
+        addReview = new BottomSheetDialog(getContext());
+
+        setupReviews();
+        initializeDialog();
     }
+
+    private void initializeDialog() {
+        TextInputLayout tilContent = dialogView.findViewById(R.id.til_add_review_content);
+        Button btnSubmit = dialogView.findViewById(R.id.btn_submit_review);
+        btnSubmit.setOnClickListener(this::btnSubmitAction);
+    }
+
+    private void setupReviews() {
+        reviewAdapter = new ReviewAdapter();
+        rvReviews.setAdapter(reviewAdapter);
+        rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void btnSubmitAction(View view) {
+        addReview.dismiss();
+    }
+
+    private void btnAddReviewAction(View view) {
+        addReview.show();
+    }
+
 }
