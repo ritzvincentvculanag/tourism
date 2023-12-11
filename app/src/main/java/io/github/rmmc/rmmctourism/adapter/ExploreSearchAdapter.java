@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
@@ -24,7 +25,7 @@ public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdap
     private ImageRepository imageRepository;
     public ExploreSearchAdapter(Context context, List<Destination> list){
         this.context = context;
-        this.list = list;
+        this.list = new ArrayList<>(list);
         this.imageRepository = new ImageRepository();
     }
     @NonNull
@@ -43,6 +44,13 @@ public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdap
         holder.tvAddress.setText(destination.getAddress());
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.ivCoverImg);
     }
+
+    public void searchDestination(List<Destination> filterData) {
+        list.clear();
+        list.addAll(filterData);
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {

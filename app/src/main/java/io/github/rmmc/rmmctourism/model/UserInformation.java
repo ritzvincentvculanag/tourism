@@ -1,13 +1,17 @@
 package io.github.rmmc.rmmctourism.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 
 import java.time.LocalDate;
 
-public class UserInformation {
+public class UserInformation implements Parcelable {
 
     public static final String collectionName = "userInformation";
-    public static final String accountTypeField = "accountType";
     public static final String firstNameField = "firstName";
     public static final String lastNameField = "lastName";
     public static final String middleNameField = "middleName";
@@ -53,6 +57,32 @@ public class UserInformation {
         this.dateRegistered = dateRegistered;
         this.lastUpdated = lastUpdated;
     }
+
+    protected UserInformation(Parcel in) {
+        UID = in.readString();
+        accountType = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        middleName = in.readString();
+        birthDate = in.readParcelable(Timestamp.class.getClassLoader());
+        gender = in.readString();
+        email = in.readString();
+        password = in.readString();
+        dateRegistered = in.readParcelable(Timestamp.class.getClassLoader());
+        lastUpdated = in.readParcelable(Timestamp.class.getClassLoader());
+    }
+
+    public static final Creator<UserInformation> CREATOR = new Creator<UserInformation>() {
+        @Override
+        public UserInformation createFromParcel(Parcel in) {
+            return new UserInformation(in);
+        }
+
+        @Override
+        public UserInformation[] newArray(int size) {
+            return new UserInformation[size];
+        }
+    };
 
     public String getUID() {
         return UID;
@@ -140,5 +170,25 @@ public class UserInformation {
 
     public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(UID);
+        parcel.writeInt(accountType);
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
+        parcel.writeString(middleName);
+        parcel.writeParcelable(birthDate, i);
+        parcel.writeString(gender);
+        parcel.writeString(email);
+        parcel.writeString(password);
+        parcel.writeParcelable(dateRegistered, i);
+        parcel.writeParcelable(lastUpdated, i);
     }
 }

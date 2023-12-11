@@ -34,8 +34,6 @@ public class Hero extends AppCompatActivity implements WidgetInitializer, Action
 
     @Override
     public void initializeWidgets() {
-
-
         initializeBottomNavigation();
     }
 

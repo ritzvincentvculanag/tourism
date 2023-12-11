@@ -1,21 +1,28 @@
 package io.github.rmmc.rmmctourism.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.ExploreAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
+import io.github.rmmc.rmmctourism.repository.UserRepository;
+import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
@@ -26,17 +33,21 @@ public class Dashboard extends Fragment{
     private ExploreAdapter exploreAdapter;
     private DestinationRepository destinationRepository;
     private List<Destination> list;
+    private UserRepository userRepository;
+    private TextView tvFirstName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         destinationRepository = new DestinationRepository();
+        userRepository = new UserRepository(getContext());
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         rvDashboard = view.findViewById(R.id.rv_dashboard_destination);
+        tvFirstName = view.findViewById(R.id.tv_dashboard_first_name);
         populateData();
         return view;
     }
@@ -48,12 +59,24 @@ public class Dashboard extends Fragment{
                 exploreAdapter = new ExploreAdapter(getContext(), list);
                 rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
                 rvDashboard.setAdapter(exploreAdapter);
-
             }
 
             @Override
             public void onDataNotAvailable() {
 
+            }
+        });
+
+        userRepository.getUserInformation(new DataCallBack<UserInformation>() {
+            @Override
+            public void onDataLoaded(UserInformation userInformation) {
+                tvFirstName.setText(userInformation.getFirstName());
+                Log.d(TAG, "Name: " + userInformation.getFirstName());
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                Log.d(TAG, "Name error " + error);
             }
         });
     }
