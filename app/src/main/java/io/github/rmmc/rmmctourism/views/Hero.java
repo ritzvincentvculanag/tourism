@@ -30,7 +30,7 @@ public class Hero extends AppCompatActivity implements WidgetInitializer, Action
 
     @Override
     public void initializeActions() {
-        startActivity(new Intent(this, DestinationDetail.class));
+
     }
 
     @Override

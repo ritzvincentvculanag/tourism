@@ -132,7 +132,6 @@ public class ImageRepository {
         destinationRef.listAll().addOnSuccessListener(listResult -> {
             if (!listResult.getItems().isEmpty()) {
                 StorageReference imageRef = listResult.getItems().get(0);
-
                 imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
