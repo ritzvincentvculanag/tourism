@@ -8,7 +8,7 @@
     tools:context=".fragments.Explore">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/lit_search_destination"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -36,9 +36,10 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/lit_search_destination" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_explore_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

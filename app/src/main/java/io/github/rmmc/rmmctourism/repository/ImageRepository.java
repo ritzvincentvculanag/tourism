@@ -1,15 +1,37 @@
 package io.github.rmmc.rmmctourism.repository;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
+import io.github.rmmc.rmmctourism.util.ImageDataCallback;
 
 public class ImageRepository {
 
@@ -21,63 +43,113 @@ public class ImageRepository {
         this.storageRef = storage.getReference();
     }
 
-    public void uploadImage(Uri imageUri, String destinationId, ImageView imageView) {
+    public void uploadImageCover(Uri imageUri, String destinationId, ImageView imageView, ContentResolver contentResolver, ImageDataCallback imageDataCallback) {
 
-        if (!isValidFileExtension(imageUri)) {
-            Toast.makeText(imageView.getContext(), "Invalid file format. Please choose a PNG or JPG image.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String filename = getFileNameAndExtension(imageUri, contentResolver);
 
-        String fileName = UUID.randomUUID().toString() + getFileExtension(imageUri);
+        StorageReference destinationRef = storageRef.child("images/destination/" + destinationId + "/cover/" + filename);
 
-        StorageReference destinationRef = storageRef.child("images/" + destinationId + "/");
-
-        StorageReference imageRef = destinationRef.child(fileName);
-
-        UploadTask uploadTask = imageRef.putFile(imageUri);
+        UploadTask uploadTask = destinationRef.putFile(imageUri);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
 
-            loadUploadedImage(destinationId, imageView);
+            if (imageDataCallback != null) {
+                imageDataCallback.onSuccess();
+            }
         }).addOnFailureListener(e -> {
-
             e.printStackTrace();
+            if (imageDataCallback != null) {
+                imageDataCallback.onFailure(e);
+            }
         });
     }
 
-    private boolean isValidFileExtension(Uri imageUri) {
-        String fileExtension = getFileExtension(imageUri);
-        return fileExtension.equalsIgnoreCase("png") || fileExtension.equalsIgnoreCase("jpg");
-    }
+    public void batchUploadImages(List<Uri> imageUris, String destinationId, ContentResolver contentResolver, BatchUploadCallback callback) {
 
-    private String getFileExtension(Uri uri) {
-        String extension = null;
-        String uriString = uri.toString();
-        int lastDot = uriString.lastIndexOf('.');
-        if (lastDot > 0) {
-            extension = uriString.substring(lastDot + 1);
+        final int totalImages = imageUris.size();
+        final int[] uploadedCount = {0};
+        final List<String> downloadUrls = new ArrayList<>();
+
+        for (Uri imageUri : imageUris) {
+            String fileName = getFileNameAndExtension(imageUri, contentResolver);
+
+            StorageReference destinationRef = storageRef.child("images/destination/" + destinationId + "/gallery/" + fileName);
+
+            UploadTask uploadTask = destinationRef.putFile(imageUri);
+
+            uploadTask.addOnCompleteListener(task -> {
+                uploadedCount[0]++;
+                if (task.isSuccessful()) {
+
+                    destinationRef.getDownloadUrl().addOnCompleteListener(uriTask -> {
+                        if (uriTask.isSuccessful()) {
+                            downloadUrls.add(uriTask.getResult().toString());
+                        }
+                        if (uploadedCount[0] == totalImages) {
+                            if (callback != null) {
+                                callback.onSuccess(downloadUrls);
+                            }
+                        }
+                    });
+                } else {
+                    if (callback != null) {
+                        callback.onFailure(task.getException());
+                    }
+                }
+            });
         }
-        return extension;
     }
 
-    private void loadUploadedImage(String destinationId, ImageView imageView) {
-        StorageReference destinationRef = storageRef.child("images/" + destinationId + "/");
+    public String getFileNameAndExtension(Uri uri, ContentResolver contentResolver) {
+        Cursor cursor = null;
+        try {
+            String[] projection = {MediaStore.Images.Media.DISPLAY_NAME};
+            cursor = contentResolver.query(uri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+                String fileName = cursor.getString(columnIndex);
+                if (fileName != null) {
+                    int dotIndex = fileName.lastIndexOf(".");
+                    if (dotIndex != -1) {
+                        return fileName;
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
 
-        destinationRef.listAll()
-                .addOnSuccessListener(listResult -> {
-                    if (!listResult.getItems().isEmpty()) {
-                        StorageReference imageRef = listResult.getItems().get(0);
-                        Glide.with(imageView.getContext())
-                                .load(imageRef)
-                                .apply(new RequestOptions()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true)) // Disable caching for development
+    public void loadUploadedImage(String destinationId, ImageView imageView) {
+        // Construct the StorageReference with the gs:// URL
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/cover/");
+
+
+        destinationRef.listAll().addOnSuccessListener(listResult -> {
+            if (!listResult.getItems().isEmpty()) {
+                StorageReference imageRef = listResult.getItems().get(0);
+
+                imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        Picasso.get()
+                                .load(String.valueOf(task.getResult()))
+                                .placeholder(R.drawable.sample) // Placeholder image while loading
+                                .error(R.drawable.sample) // Image to display in case of an error
                                 .into(imageView);
                     }
-                })
-                .addOnFailureListener(e -> {
-                    // Handle any errors that occurred while listing items
-                    e.printStackTrace();
                 });
+
+
+            }
+        }).addOnFailureListener(e -> {
+            Picasso.get().load(R.drawable.sample);
+        });
     }
+
+
 }
