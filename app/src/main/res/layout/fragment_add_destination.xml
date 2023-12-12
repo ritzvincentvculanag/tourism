@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_edit_destination_facebook"
+        android:id="@+id/til_add_destination_facebook"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -20,7 +20,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_edit_destination_website"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_destination_website"
         app:startIconDrawable="@drawable/ic_website">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -97,7 +97,7 @@
         android:text="Gallery"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_edit_destination_instagram" />
+        app:layout_constraintTop_toBottomOf="@+id/til_add_destination_instagram" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_add_destination_name"
@@ -157,7 +157,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_edit_destination_email"
+        android:id="@+id/til_add_destination_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -176,7 +176,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_edit_destination_phone"
+        android:id="@+id/til_add_destination_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -184,7 +184,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_edit_destination_email"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_destination_email"
         app:startIconDrawable="@drawable/ic_phone">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -195,7 +195,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_edit_destination_website"
+        android:id="@+id/til_add_destination_website"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -203,7 +203,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_edit_destination_phone"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_destination_phone"
         app:startIconDrawable="@drawable/ic_website">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -213,7 +213,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_edit_destination_instagram"
+        android:id="@+id/til_add_destination_instagram"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -222,7 +222,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_edit_destination_facebook"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_destination_facebook"
         app:startIconDrawable="@drawable/ic_website">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -232,23 +232,23 @@
     </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_update_destination"
+            android:id="@+id/btn_add_destination"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Update destination"
+            android:text="Add destination"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_edit_destination_select_photos"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_destination_select_photos"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_edit_destination_gallery"
+            android:id="@+id/rv_destination_gallery"
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginTop="16dp"
@@ -260,7 +260,7 @@
             tools:listitem="@layout/layout_destination_gallery_item" />
 
         <Button
-            android:id="@+id/btn_edit_destination_select_photos"
+            android:id="@+id/btn_add_destination_select_photos"
             style="?attr/materialIconButtonFilledTonalStyle"
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -271,7 +271,7 @@
             android:text="Select photos"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_edit_destination_gallery" />
+            app:layout_constraintTop_toBottomOf="@+id/rv_destination_gallery" />
 
         <TextView
             android:id="@+id/tv_destination_gallery_indicator"
@@ -279,10 +279,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
             android:text="No photos available"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_edit_destination_gallery"
-            app:layout_constraintEnd_toEndOf="@+id/rv_edit_destination_gallery"
-            app:layout_constraintStart_toStartOf="@+id/rv_edit_destination_gallery"
-            app:layout_constraintTop_toTopOf="@+id/rv_edit_destination_gallery" />
+            app:layout_constraintBottom_toBottomOf="@+id/rv_destination_gallery"
+            app:layout_constraintEnd_toEndOf="@+id/rv_destination_gallery"
+            app:layout_constraintStart_toStartOf="@+id/rv_destination_gallery"
+            app:layout_constraintTop_toTopOf="@+id/rv_destination_gallery" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

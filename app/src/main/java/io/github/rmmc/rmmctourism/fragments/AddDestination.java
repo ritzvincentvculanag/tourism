@@ -117,17 +117,17 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         ivAddDestinationCover = view.findViewById(R.id.iv_add_destination_cover);
 
         btnUploadCover = view.findViewById(R.id.btn_upload_cover);
-        btnGallerySelectPhotos = view.findViewById(R.id.btn_edit_destination_select_photos);
-        btnAddDestination = view.findViewById(R.id.btn_update_destination);
+        btnGallerySelectPhotos = view.findViewById(R.id.btn_add_destination_select_photos);
+        btnAddDestination = view.findViewById(R.id.btn_add_destination);
 
         tilAddDestinationName = view.findViewById(R.id.til_add_destination_name);
         tilAddDestinationDescription = view.findViewById(R.id.til_add_destination_description);
         tilAddDestinationAddress = view.findViewById(R.id.til_add_destination_address);
-        tilAddDestinationEmail = view.findViewById(R.id.til_edit_destination_email);
-        tilAddDestinationPhone = view.findViewById(R.id.til_edit_destination_phone);
-        tilAddDestinationWebsite = view.findViewById(R.id.til_edit_destination_website);
-        tilAddDestinationFacebook = view.findViewById(R.id.til_edit_destination_facebook);
-        tilAddDestinationInstagram = view.findViewById(R.id.til_edit_destination_instagram);
+        tilAddDestinationEmail = view.findViewById(R.id.til_add_destination_email);
+        tilAddDestinationPhone = view.findViewById(R.id.til_add_destination_phone);
+        tilAddDestinationWebsite = view.findViewById(R.id.til_add_destination_website);
+        tilAddDestinationFacebook = view.findViewById(R.id.til_add_destination_facebook);
+        tilAddDestinationInstagram = view.findViewById(R.id.til_add_destination_instagram);
 
         initializeDestinationGallery();
     }
@@ -136,7 +136,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         imgUris = new ArrayList<>();
         gallerySnapHelper = new LinearSnapHelper();
         galleryAdapter = new GalleryAdapter(imgUris);
-        rvDestinationGallery = view.findViewById(R.id.rv_edit_destination_gallery);
+        rvDestinationGallery = view.findViewById(R.id.rv_destination_gallery);
         rvDestinationGallery.setAdapter(galleryAdapter);
         rvDestinationGallery.setLayoutManager(new LinearLayoutManager(getContext()));
 
