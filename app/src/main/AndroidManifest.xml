@@ -16,6 +16,9 @@
         android:theme="@style/Theme.RmmcTourism"
         tools:targetApi="31">
         <activity
+            android:name=".views.MyDestinations"
+            android:exported="false" />
+        <activity
             android:name=".views.DestinationDetail"
             android:exported="false" />
         <activity
@@ -35,7 +38,7 @@
         <activity
             android:name=".views.HomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.RmmcTourismNoActionBar"></activity>
+            android:theme="@style/Theme.RmmcTourismNoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
