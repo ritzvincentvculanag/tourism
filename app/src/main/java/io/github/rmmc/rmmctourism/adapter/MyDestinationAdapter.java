@@ -11,8 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.util.OnDestinationDelete;
+import io.github.rmmc.rmmctourism.util.OnDestinationUpdate;
 
 public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdapter.MyDestinationViewHolder> {
+
+    private OnDestinationDelete onDestinationDelete;
+    private OnDestinationUpdate onDestinationUpdate;
+
+    public MyDestinationAdapter(OnDestinationDelete onDestinationDelete, OnDestinationUpdate onDestinationUpdate) {
+        this.onDestinationDelete = onDestinationDelete;
+        this.onDestinationUpdate = onDestinationUpdate;
+    }
 
     @NonNull
     @Override
@@ -20,7 +30,7 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_my_destination, parent, false);
 
-        return new MyDestinationViewHolder(view);
+        return new MyDestinationViewHolder(onDestinationDelete, onDestinationUpdate, view);
     }
 
     @Override
@@ -35,6 +45,9 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
 
     public static class MyDestinationViewHolder extends RecyclerView.ViewHolder {
 
+        private OnDestinationDelete onDestinationDelete;
+        private OnDestinationUpdate onDestinationUpdate;
+
         private ImageView ivCover;
         private TextView tvTitle;
         private TextView tvAddress;
@@ -43,8 +56,13 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
         private Button btnUpdate;
         private Button btnDelete;
 
-        public MyDestinationViewHolder(@NonNull View view) {
+        public MyDestinationViewHolder(OnDestinationDelete onDestinationDelete,
+                                       OnDestinationUpdate onDestinationUpdate,
+                                       @NonNull View view) {
             super(view);
+
+            this.onDestinationDelete = onDestinationDelete;
+            this.onDestinationUpdate = onDestinationUpdate;
 
             ivCover = view.findViewById(R.id.iv_my_destination_cover);
             tvTitle = view.findViewById(R.id.tv_my_destination_title);
@@ -53,6 +71,17 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
 
             btnUpdate = view.findViewById(R.id.btn_my_destination_update);
             btnDelete = view.findViewById(R.id.btn_my_destination_delete);
+
+            btnUpdate.setOnClickListener(e -> {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                    onDestinationUpdate.update(getAdapterPosition());
+                }
+            });
+            btnDelete.setOnClickListener(e -> {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                    onDestinationDelete.delete(getAdapterPosition());
+                }
+            });
         }
     }
 
