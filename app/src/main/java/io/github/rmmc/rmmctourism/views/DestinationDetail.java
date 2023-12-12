@@ -30,7 +30,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private View dialogView;
 
     private ExtendedFloatingActionButton efabAddReview;
-    private BottomSheetDialog addReview;
 
     private DetailAdapter detailAdapter;
     private ViewPager2 vpDestinationDetails;
@@ -51,7 +50,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
 
     @Override
     public void initializeActions() {
-        efabAddReview.setOnClickListener(this::btnAddReviewAction);
+
     }
 
     @Override
@@ -61,7 +60,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         ivDestinationCoverPhoto = findViewById(R.id.iv_destination_details_cover);
         populateData();
 
-        addReview = new BottomSheetDialog(DestinationDetail.this);
         efabAddReview = findViewById(R.id.fav_destination_detail_add_review);
         dialogView = getLayoutInflater().inflate(R.layout.layout_add_review, null, false);
 
@@ -106,15 +104,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private void initializeDialog() {
         TextInputLayout tilContent = dialogView.findViewById(R.id.til_add_review_content);
         Button btnSubmit = dialogView.findViewById(R.id.btn_submit_review);
-        btnSubmit.setOnClickListener(this::btnSubmitAction);
-    }
-
-    private void btnSubmitAction(View view) {
-        addReview.dismiss();
-    }
-
-    private void btnAddReviewAction(View view) {
-        addReview.show();
     }
 
     private void populateData(){
