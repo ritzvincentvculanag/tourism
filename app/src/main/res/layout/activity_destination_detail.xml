@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/iv_destination_details_cover"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -43,7 +43,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageView10"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_destination_details_cover" />
 
     <TextView
         android:id="@+id/tv_destination_detail_address"

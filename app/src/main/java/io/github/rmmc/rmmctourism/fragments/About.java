@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
@@ -44,7 +45,22 @@ public class About extends Fragment implements WidgetInitializer, ActionInitiali
         tvDescription = view.findViewById(R.id.tv_destination_detail_description);
         tvPhone = view.findViewById(R.id.tv_destination_detail_phone);
         tvEmail = view.findViewById(R.id.tv_destination_detail_email);
-        tvFacebook = view.findViewById(R.id.til_add_destination_facebook);
+        tvFacebook = view.findViewById(R.id.tv_destination_detail_facebook  );
         tvInstagram = view.findViewById(R.id.tv_destination_detail_instagram);
+        populateData();
+    }
+
+    private void populateData(){
+        if(getArguments() != null){
+            Destination destination = getArguments().getParcelable(Destination.collectioName);
+            tvDescription.setText(destination.getDescription());
+            tvPhone.setText(getValue(destination.getContactNumber()));
+            tvEmail.setText(getValue(destination.getEmailAddress()));
+            tvFacebook.setText(getValue(destination.getFacebookPage()));
+            tvInstagram.setText(getValue(destination.getInstagramPage()));
+        }
+    }
+    private String getValue(String value){
+        return value.isEmpty() ? "Na" : value;
     }
 }

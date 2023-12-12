@@ -1,6 +1,7 @@
 package io.github.rmmc.rmmctourism.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.List;
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
+import io.github.rmmc.rmmctourism.views.DestinationDetail;
 
 public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdapter.MyViewHolder> {
 
@@ -43,7 +45,14 @@ public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdap
         holder.tvDescription.setText(destination.getDescription());
         holder.tvAddress.setText(destination.getAddress());
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.ivCoverImg);
+        holder.btnViewDestination.setOnClickListener(e -> {
+            Intent intent = new Intent(context, DestinationDetail.class);
+            intent.putExtra(Destination.collectioName, destination);
+            context.startActivity(intent);
+        });
     }
+
+
 
     public void searchDestination(List<Destination> filterData) {
         list.clear();
