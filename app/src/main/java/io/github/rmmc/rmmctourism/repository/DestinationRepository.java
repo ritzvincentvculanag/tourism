@@ -37,19 +37,17 @@ import io.github.rmmc.rmmctourism.util.Messenger;
 public class DestinationRepository {
 
     private Context context;
-    private FirebaseAuth userAuth;
+
     private FirebaseFirestore instance;
     private ImageRepository imageRepository;
 
     public DestinationRepository(){
-        this.userAuth = FirebaseAuth.getInstance();
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
     }
 
     public DestinationRepository(Context context){
         this.context = context;
-        this.userAuth = FirebaseAuth.getInstance();
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
     }

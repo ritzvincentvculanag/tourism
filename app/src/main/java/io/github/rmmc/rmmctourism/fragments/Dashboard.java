@@ -19,11 +19,14 @@ import java.util.List;
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.ExploreAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.Favorite;
 import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
+import io.github.rmmc.rmmctourism.repository.FavoriteRepository;
 import io.github.rmmc.rmmctourism.repository.UserRepository;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
+import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 
@@ -32,6 +35,7 @@ public class Dashboard extends Fragment{
     private RecyclerView rvDashboard;
     private ExploreAdapter exploreAdapter;
     private DestinationRepository destinationRepository;
+    private FavoriteRepository favoriteRepository;
     private List<Destination> list;
     private UserRepository userRepository;
     private TextView tvFirstName;
@@ -41,6 +45,7 @@ public class Dashboard extends Fragment{
         super.onCreate(savedInstanceState);
         destinationRepository = new DestinationRepository();
         userRepository = new UserRepository(getContext());
+        favoriteRepository = new FavoriteRepository(getContext());
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +60,21 @@ public class Dashboard extends Fragment{
         destinationRepository.getDestination(new DestinationDataCallback<Destination>() {
             @Override
             public void onDataLoaded(List<Destination> t) {
-                list = t;
-                exploreAdapter = new ExploreAdapter(getContext(), list);
-                rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rvDashboard.setAdapter(exploreAdapter);
+                favoriteRepository.getFavorite(new OnFavoriteDataCallback() {
+                    @Override
+                    public void onSuccess(List<Favorite> list) {
+                        exploreAdapter = new ExploreAdapter(getContext(), t, list);
+                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvDashboard.setAdapter(exploreAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Exception exception) {
+                        exploreAdapter = new ExploreAdapter(getContext(), t);
+                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvDashboard.setAdapter(exploreAdapter);
+                    }
+                });
             }
 
             @Override
