@@ -37,7 +37,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private ImageRepository imageRepository;
     private Destination destination;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +44,14 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         imageRepository = new ImageRepository();
         initializeWidgets();
         initializeActions();
-
     }
 
     @Override
     public void initializeActions() {
-
+        efabAddReview.setOnClickListener(e -> {
+            Intent goToAddReview = new Intent(this, AddReview.class);
+            startActivity(goToAddReview);
+        });
     }
 
     @Override
@@ -61,7 +62,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         populateData();
 
         efabAddReview = findViewById(R.id.fav_destination_detail_add_review);
-        dialogView = getLayoutInflater().inflate(R.layout.layout_add_review, null, false);
 
         detailAdapter = new DetailAdapter(this, destination);
 
@@ -70,8 +70,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         vpDestinationDetails.setAdapter(detailAdapter);
 
         initializeViewPager();
-        initializeDialog();
-
     }
 
     private void initializeViewPager() {
@@ -99,11 +97,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
                 tlDestinationDetails.getTabAt(position).select();
             }
         });
-    }
-
-    private void initializeDialog() {
-        TextInputLayout tilContent = dialogView.findViewById(R.id.til_add_review_content);
-        Button btnSubmit = dialogView.findViewById(R.id.btn_submit_review);
     }
 
     private void populateData(){
