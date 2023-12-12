@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ public class Dashboard extends Fragment{
     private List<Destination> list;
     private UserRepository userRepository;
     private TextView tvFirstName;
+    private SnapHelper snapHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,9 @@ public class Dashboard extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        snapHelper = new LinearSnapHelper();
         rvDashboard = view.findViewById(R.id.rv_dashboard_destination);
+        snapHelper.attachToRecyclerView(rvDashboard);
         tvFirstName = view.findViewById(R.id.tv_dashboard_first_name);
         populateData();
         return view;
@@ -64,14 +69,14 @@ public class Dashboard extends Fragment{
                     @Override
                     public void onSuccess(List<Favorite> list) {
                         exploreAdapter = new ExploreAdapter(getContext(), t, list);
-                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
                         rvDashboard.setAdapter(exploreAdapter);
                     }
 
                     @Override
                     public void onFailure(Exception exception) {
                         exploreAdapter = new ExploreAdapter(getContext(), t);
-                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
                         rvDashboard.setAdapter(exploreAdapter);
                     }
                 });
