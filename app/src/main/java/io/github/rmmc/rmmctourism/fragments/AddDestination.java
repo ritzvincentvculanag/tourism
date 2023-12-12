@@ -3,7 +3,6 @@ package io.github.rmmc.rmmctourism.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
@@ -24,7 +23,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +117,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         ivAddDestinationCover = view.findViewById(R.id.iv_add_destination_cover);
 
         btnUploadCover = view.findViewById(R.id.btn_upload_cover);
-        btnGallerySelectPhotos = view.findViewById(R.id.btn_gallery_select_photos);
+        btnGallerySelectPhotos = view.findViewById(R.id.btn_add_destination_select_photos);
         btnAddDestination = view.findViewById(R.id.btn_add_destination);
 
         tilAddDestinationName = view.findViewById(R.id.til_add_destination_name);

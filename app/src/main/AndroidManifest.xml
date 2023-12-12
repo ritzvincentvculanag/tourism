@@ -16,6 +16,12 @@
         android:theme="@style/Theme.RmmcTourism"
         tools:targetApi="31">
         <activity
+            android:name=".views.EditDestination"
+            android:exported="false" />
+        <activity
+            android:name=".views.AddReview"
+            android:exported="false" />
+        <activity
             android:name=".views.MyDestinations"
             android:exported="false" />
         <activity
