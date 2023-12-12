@@ -107,6 +107,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
         btnUploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/*"));
         btnGallerySelectPhotos.setOnClickListener(e -> selectDestinationImages.launch("image/*"));
+
         btnAddDestination.setOnClickListener(this::addDestination);
     }
 

@@ -23,7 +23,6 @@ import io.github.rmmc.rmmctourism.views.Register;
 public class MainActivity extends AppCompatActivity implements ActionInitializer, WidgetInitializer {
 
     private Button btnTraveler;
-    private Button btnManager;
     private FirebaseAuth userAuth;
 
     @Override
@@ -38,14 +37,12 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
     @Override
     public void initializeWidgets() {
-        btnManager = findViewById(R.id.btnManager);
         btnTraveler = findViewById(R.id.btnTraveler);
     }
 
     @Override
     public void initializeActions() {
         btnTraveler.setOnClickListener(this::login);
-        btnManager.setOnClickListener(this::register);
     }
 
     private void initializeFirebaseAuth() {
@@ -56,14 +53,6 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
         Intent goToHome = new Intent(this, Hero.class);
         startActivity(goToHome);
-    }
-
-    private void register(View view) {
-        if (!NetworkUtils.isNetworkConnected(this)) {
-            Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
-            return;
-        }
-        startActivity(new Intent(this, Register.class));
     }
 
     private void login(View view) {
