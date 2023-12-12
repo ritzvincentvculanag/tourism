@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -53,7 +54,7 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
     @Override
     public void initializeWidgets() {
         Log.d(TAG, "Model transfer " + (getArguments() != null));
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             Destination destination = getArguments().getParcelable(Destination.collectioName);
             Log.d(TAG, "Model transfer " + destination.getDestinationId());
             imageRepository.loadGalleryImage(destination.getDestinationId(), new OnImageLoadListener<String>() {
@@ -63,7 +64,11 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
                     galleryAdapter = new GalleryLoadAdapter(imageUris);
                     rvGallery = view.findViewById(R.id.rv_destination_detail_gallery);
                     rvGallery.setAdapter(galleryAdapter);
-                    rvGallery.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                    if (imageUris.size() == 3) {
+                        rvGallery.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                    } else {
+                        rvGallery.setLayoutManager(new LinearLayoutManager(getContext()));
+                    }
                 }
 
                 @Override
