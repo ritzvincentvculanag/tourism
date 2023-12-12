@@ -11,11 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.ExploreSearchAdapter;
+import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.Favorite;
+import io.github.rmmc.rmmctourism.repository.DestinationRepository;
+import io.github.rmmc.rmmctourism.repository.FavoriteRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.OnDestinationClick;
+import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Favorites extends Fragment implements WidgetInitializer, ActionInitializer, OnDestinationClick {
@@ -23,12 +30,15 @@ public class Favorites extends Fragment implements WidgetInitializer, ActionInit
     private View view;
 
     private ExploreSearchAdapter adapter;
+    private DestinationRepository destinationRepository;
+    private FavoriteRepository favoriteRepository;
     private RecyclerView favorites;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_favorites, container, false);
-
+        destinationRepository = new DestinationRepository();
+        favoriteRepository = new FavoriteRepository(getContext());
         initializeWidgets();
         initializeWidgets();
 
@@ -37,10 +47,32 @@ public class Favorites extends Fragment implements WidgetInitializer, ActionInit
 
     @Override
     public void initializeWidgets() {
-        adapter = new ExploreSearchAdapter(getContext(), new ArrayList<>());
-        favorites = view.findViewById(R.id.rv_favorites);
-        favorites.setAdapter(adapter);
-        favorites.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        favoriteRepository.getFavorite(new OnFavoriteDataCallback() {
+            @Override
+            public void onSuccess(List<Favorite> list) {
+                destinationRepository.getDestination(list, new DestinationDataCallback<Destination>() {
+                    @Override
+                    public void onDataLoaded(List<Destination> t) {
+                        adapter = new ExploreSearchAdapter(getContext(), t);
+                        favorites = view.findViewById(R.id.rv_favorites);
+                        favorites.setAdapter(adapter);
+                        favorites.setLayoutManager(new LinearLayoutManager(getContext()));
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
+
     }
 
     @Override

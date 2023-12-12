@@ -15,9 +15,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.Favorite;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
@@ -132,6 +135,44 @@ public class DestinationRepository {
                 });
     }
 
+    public void getDestination(List<Favorite> favorites, final DestinationDataCallback<Destination> callback) {
+        List<Destination> list = new ArrayList<>();
+        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+
+        for (Favorite favorite : favorites) {
+            Task<DocumentSnapshot> task = instance.collection(Destination.collectioName)
+                    .document(favorite.getDestinationId())
+                    .get();
+
+            tasks.add(task);
+        }
+
+        Tasks.whenAllComplete(tasks)
+                .addOnCompleteListener(overallTask -> {
+                    for (Task<DocumentSnapshot> individualTask : tasks) {
+                        if (individualTask.isSuccessful()) {
+                            DocumentSnapshot document = individualTask.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, document.getString(Destination.nameField));
+                                Destination destination = documentToDestination(document);
+                                list.add(destination);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", individualTask.getException());
+                        }
+                    }
+
+                    if (callback != null) {
+                        callback.onDataLoaded(list);
+                        Log.d(TAG, "success");
+                    }
+                });
+    }
+
+
+
+
+
     private Map<String, Object> destinationToMap(Destination destination) {
         Map<String, Object> destinationMap = new HashMap<>();
         destinationMap.put(Destination.userIdField, destination.getUserId());
@@ -170,4 +211,23 @@ public class DestinationRepository {
         return new Destination(destinationId, userId, destinationCategoryId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
+    private Destination documentToDestination(DocumentSnapshot document) {
+        String destinationId = document.getId();
+        String userId = document.getString(Destination.userIdField);
+        String destinationCategoryId = document.getString(Destination.destinationCategoryIdField);
+        String name = document.getString(Destination.nameField);
+        String description = document.getString(Destination.descriptionField);
+        String address = document.getString(Destination.addressField);
+        String contactNumber = document.getString(Destination.contactNumberField);
+        String websiteUrl = document.getString(Destination.websiteUrlField);
+        String facebookPage = document.getString(Destination.facebookPageField);
+        String instagramPage = document.getString(Destination.instagramPageField);
+        String emailAddress = document.getString(Destination.emailAddressField);
+        Timestamp datePublished = document.getTimestamp(Destination.datePublishedField);
+        Timestamp lastUpdate = document.getTimestamp(Destination.lastUpdateField);
+
+        return new Destination(destinationId, userId, destinationCategoryId, name, description, address, contactNumber,
+                websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
+    }
+
 }
