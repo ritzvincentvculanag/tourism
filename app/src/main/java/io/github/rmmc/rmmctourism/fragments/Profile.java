@@ -27,15 +27,21 @@ import io.github.rmmc.rmmctourism.repository.UserRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
+import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-public class Profile extends Fragment implements ActionInitializer {
+public class Profile extends Fragment implements WidgetInitializer, ActionInitializer {
+
+    private View view;
 
     private TextView tvFullName;
     private TextView tvGender;
     private TextView tvBirthdate;
     private TextView tvEmail;
+
     private Button btnLogout;
     private Button btnDeleteAccount;
+    private Button btnMyDestinations;
+
     private UserRepository userRepository;
 
 
@@ -48,16 +54,12 @@ public class Profile extends Fragment implements ActionInitializer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        btnLogout = view.findViewById(R.id.btn_logout);
-        btnDeleteAccount = view.findViewById(R.id.btn_delete_account);
-        tvFullName = view.findViewById(R.id.tv_profile_fullname);
-        tvGender = view.findViewById(R.id.tv_profile_gender);
-        tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
-        tvEmail = view.findViewById(R.id.tv_profile_email);
+        initializeWidgets();
         populateData();
         initializeActions();
+
         return view;
     }
 
@@ -65,6 +67,16 @@ public class Profile extends Fragment implements ActionInitializer {
     public void initializeActions() {
         btnLogout.setOnClickListener(this::logout);
         btnDeleteAccount.setOnClickListener(this::deleteAccount);
+    }
+
+    @Override
+    public void initializeWidgets() {
+        btnLogout = view.findViewById(R.id.btn_logout);
+        btnDeleteAccount = view.findViewById(R.id.btn_delete_account);
+        tvFullName = view.findViewById(R.id.tv_profile_fullname);
+        tvGender = view.findViewById(R.id.tv_profile_gender);
+        tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
+        tvEmail = view.findViewById(R.id.tv_profile_email);
     }
 
     public void populateData(){
@@ -110,12 +122,7 @@ public class Profile extends Fragment implements ActionInitializer {
                 startActivity(new Intent(getContext(), MainActivity.class));
                 userAuth.signOut();
             }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).show();
+        }, (dialogInterface, i) -> {}).show();
     }
 
     public static String formatBirthDate(Timestamp timestamp) {
@@ -133,4 +140,5 @@ public class Profile extends Fragment implements ActionInitializer {
         long ageInMillis = diffInMillis;
         return (int) (ageInMillis / (1000 * 60 * 60 * 24 * 365.25));
     }
+
 }
