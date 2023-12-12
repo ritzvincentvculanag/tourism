@@ -150,7 +150,6 @@ public class ImageRepository {
 
         destinationRef.listAll().addOnSuccessListener(listResult -> {
             List<String> imageUris = new ArrayList<>();
-            AtomicInteger taskCount = new AtomicInteger(listResult.getItems().size());
 
             for (StorageReference item : listResult.getItems()) {
                 item.getDownloadUrl().addOnCompleteListener(task -> {
@@ -164,7 +163,7 @@ public class ImageRepository {
                     }
 
                     // Check if all tasks are completed
-                    if (taskCount.decrementAndGet() == 0) {
+                    if (imageUris.size() == listResult.getItems().size()) {
                         if (listener != null) {
                             listener.onImageLoadSuccess(imageUris);
                         }
