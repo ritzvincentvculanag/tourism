@@ -1,4 +1,4 @@
-package io.github.rmmc.rmmctourism.views;
+package io.github.rmmc.rmmctourism.fragments;
 
 import android.os.Bundle;
 
@@ -25,7 +25,7 @@ import io.github.rmmc.rmmctourism.util.OnDestinationClick;
 import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-public class Favorites extends Fragment implements WidgetInitializer, ActionInitializer, OnDestinationClick {
+public class Favorites extends Fragment implements WidgetInitializer {
 
     private View view;
 
@@ -73,16 +73,6 @@ public class Favorites extends Fragment implements WidgetInitializer, ActionInit
             }
         });
 
-    }
-
-    @Override
-    public void initializeActions() {
-        // TODO: Ikaw na bahala ano gawin mo dito
-    }
-
-    @Override
-    public void onDestinationClick(int position) {
-        // TODO: implement on view destination click
     }
 
 }

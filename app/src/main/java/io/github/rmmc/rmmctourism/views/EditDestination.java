@@ -46,6 +46,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
     private Button uploadCover;
     private Button updateDestination;
+    private Button updateGallery;
 
     private ActivityResultLauncher<String> selectDestinationCover;
     private ActivityResultLauncher<String> selectDestinationImages;
@@ -74,12 +75,14 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
                 uris -> {
                     uris.forEach(uri -> {
                         uris.add(uri);
-                        Log.d("RITCHIE_RESULT", uri.toString());
+
                     });
                     adapter.refreshUris(uris);
                     adapter.notifyDataSetChanged();
                 }
         );
+        uploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/"));
+        updateGallery.setOnClickListener(e -> selectDestinationImages.launch("image/"));
     }
 
     @Override
@@ -102,5 +105,6 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
         uploadCover = findViewById(R.id.btn_edit_destination_cover);
         updateDestination = findViewById(R.id.btn_update_destination);
+        updateGallery = findViewById(R.id.btn_edit_destination_photos);
     }
 }

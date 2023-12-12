@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_add_destination" />
     <fragment
         android:id="@+id/favorites"
-        android:name="io.github.rmmc.rmmctourism.views.Favorites"
+        android:name="io.github.rmmc.rmmctourism.fragments.Favorites"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment

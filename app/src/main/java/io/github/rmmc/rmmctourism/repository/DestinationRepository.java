@@ -43,16 +43,19 @@ public class DestinationRepository {
 
     private FirebaseFirestore instance;
     private ImageRepository imageRepository;
+    private FirebaseAuth userAuth;
 
     public DestinationRepository(){
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
+        this.userAuth = FirebaseAuth.getInstance();
     }
 
     public DestinationRepository(Context context){
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
+        this.userAuth = FirebaseAuth.getInstance();
     }
 
     public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver){
@@ -135,6 +138,37 @@ public class DestinationRepository {
                 });
     }
 
+    public void getMyDestination(final DestinationDataCallback<Destination> callback){
+        List<Destination> list = new ArrayList<>();
+
+        instance.collection(Destination.collectioName)
+                .whereEqualTo(Destination.userIdField, userAuth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getString(Destination.nameField));
+                                Destination destination = documentToDestination(document);
+                                list.add(destination);
+                            }
+
+                            if (callback != null) {
+                                callback.onDataLoaded(list);
+                                Log.d(TAG, "success: ", task.getException());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            if (callback != null) {
+                                callback.onDataNotAvailable();
+                            }
+                        }
+                    }
+                });
+    }
+
     public void getDestination(List<Favorite> favorites, final DestinationDataCallback<Destination> callback) {
         List<Destination> list = new ArrayList<>();
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
@@ -169,6 +203,28 @@ public class DestinationRepository {
                 });
     }
 
+    public void deleteDestination(String destinationId)
+    {
+        instance.collection(Destination.collectioName).document(destinationId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Messenger.showAlertDialog(context,
+                                "Delete Destination",
+                                "Destination delete successfully!",
+                                "Ok").show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Messenger.showAlertDialog(context,
+                                "Delete Destination",
+                                "Destination delete unsuccessfully!",
+                                "Ok").show();
+                    }
+                });
+    }
 
 
 

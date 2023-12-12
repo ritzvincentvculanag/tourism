@@ -1,5 +1,11 @@
 package io.github.rmmc.rmmctourism.adapter;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +16,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.repository.DestinationRepository;
+import io.github.rmmc.rmmctourism.repository.ImageRepository;
+import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.OnDestinationDelete;
 import io.github.rmmc.rmmctourism.util.OnDestinationUpdate;
+import io.github.rmmc.rmmctourism.views.EditDestination;
 
 public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdapter.MyDestinationViewHolder> {
 
-    private OnDestinationDelete onDestinationDelete;
-    private OnDestinationUpdate onDestinationUpdate;
+    private List<Destination> list;
+    private Context context;
+    private ImageRepository imageRepository;
+    private DestinationRepository destinationRepository;
 
-    public MyDestinationAdapter(OnDestinationDelete onDestinationDelete, OnDestinationUpdate onDestinationUpdate) {
-        this.onDestinationDelete = onDestinationDelete;
-        this.onDestinationUpdate = onDestinationUpdate;
+    public MyDestinationAdapter(List<Destination> list, Context context) {
+        this.list = list;
+        this.context = context;
+        imageRepository = new ImageRepository();
+        destinationRepository = new DestinationRepository(context);
     }
 
     @NonNull
@@ -30,23 +47,46 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_my_destination, parent, false);
 
-        return new MyDestinationViewHolder(onDestinationDelete, onDestinationUpdate, view);
+        return new MyDestinationViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyDestinationAdapter.MyDestinationViewHolder holder, int position) {
-        // TODO: Handle onBindViewHolder
+        Destination destination = list.get(position);
+        holder.tvTitle.setText(destination.getName());
+        holder.tvAddress.setText(destination.getAddress());
+        holder.tvDescription.setText(destination.getDescription());
+        imageRepository.loadUploadedImage(destination.getDestinationId(), holder.ivCover);
+        holder.btnUpdate.setOnClickListener(e ->{
+            context.startActivity(new Intent(context, EditDestination.class));
+        });
+        holder.btnDelete.setOnClickListener(e ->{
+            Messenger.showAlertDialog(context,
+                    "Delete Destination",
+                    "Do you want to delete the " + destination.getName() + "?",
+                    "Yes",
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            destinationRepository.deleteDestination(destination.getDestinationId());
+                            notifyDataSetChanged();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return list.size();
     }
 
     public static class MyDestinationViewHolder extends RecyclerView.ViewHolder {
-
-        private OnDestinationDelete onDestinationDelete;
-        private OnDestinationUpdate onDestinationUpdate;
 
         private ImageView ivCover;
         private TextView tvTitle;
@@ -56,13 +96,8 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
         private Button btnUpdate;
         private Button btnDelete;
 
-        public MyDestinationViewHolder(OnDestinationDelete onDestinationDelete,
-                                       OnDestinationUpdate onDestinationUpdate,
-                                       @NonNull View view) {
+        public MyDestinationViewHolder(@NonNull View view) {
             super(view);
-
-            this.onDestinationDelete = onDestinationDelete;
-            this.onDestinationUpdate = onDestinationUpdate;
 
             ivCover = view.findViewById(R.id.iv_my_destination_cover);
             tvTitle = view.findViewById(R.id.tv_my_destination_title);
@@ -72,16 +107,7 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
             btnUpdate = view.findViewById(R.id.btn_my_destination_update);
             btnDelete = view.findViewById(R.id.btn_my_destination_delete);
 
-            btnUpdate.setOnClickListener(e -> {
-                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                    onDestinationUpdate.update(getAdapterPosition());
-                }
-            });
-            btnDelete.setOnClickListener(e -> {
-                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                    onDestinationDelete.delete(getAdapterPosition());
-                }
-            });
+
         }
     }
 

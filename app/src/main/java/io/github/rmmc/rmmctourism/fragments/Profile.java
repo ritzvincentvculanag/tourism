@@ -28,6 +28,7 @@ import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
+import io.github.rmmc.rmmctourism.views.MyDestinations;
 
 public class Profile extends Fragment implements WidgetInitializer, ActionInitializer {
 
@@ -67,12 +68,16 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     public void initializeActions() {
         btnLogout.setOnClickListener(this::logout);
         btnDeleteAccount.setOnClickListener(this::deleteAccount);
+        btnMyDestinations.setOnClickListener(this::myDestination);
     }
+
+
 
     @Override
     public void initializeWidgets() {
         btnLogout = view.findViewById(R.id.btn_logout);
         btnDeleteAccount = view.findViewById(R.id.btn_delete_account);
+        btnMyDestinations = view.findViewById(R.id.btn_my_destinations);
         tvFullName = view.findViewById(R.id.tv_profile_fullname);
         tvGender = view.findViewById(R.id.tv_profile_gender);
         tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
@@ -123,6 +128,10 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
                 userAuth.signOut();
             }
         }, (dialogInterface, i) -> {}).show();
+    }
+
+    private void myDestination(View view) {
+        startActivity(new Intent(getContext(), MyDestinations.class));
     }
 
     public static String formatBirthDate(Timestamp timestamp) {

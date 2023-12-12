@@ -131,8 +131,6 @@ public class ImageRepository {
                     public void onComplete(@NonNull Task<Uri> task) {
                         Picasso.get()
                                 .load(String.valueOf(task.getResult()))
-                                .placeholder(R.drawable.sample) // Placeholder image while loading
-                                .error(R.drawable.sample) // Image to display in case of an error
                                 .into(imageView);
                     }
                 });
