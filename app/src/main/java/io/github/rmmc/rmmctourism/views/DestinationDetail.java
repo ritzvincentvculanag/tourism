@@ -30,6 +30,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private View dialogView;
 
     private ExtendedFloatingActionButton efabAddReview;
+    private Button favorite;
 
     private DetailAdapter detailAdapter;
     private ViewPager2 vpDestinationDetails;
@@ -52,6 +53,8 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
             Intent goToAddReview = new Intent(this, AddReview.class);
             startActivity(goToAddReview);
         });
+
+        favorite.setOnClickListener(this::favoriteAction);
     }
 
     @Override
@@ -62,6 +65,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         populateData();
 
         efabAddReview = findViewById(R.id.fav_destination_detail_add_review);
+        favorite = findViewById(R.id.btn_destination_detail_favorite);
 
         detailAdapter = new DetailAdapter(this, destination);
 
@@ -108,6 +112,10 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
 
             imageRepository.loadUploadedImage(destination.getDestinationId(), ivDestinationCoverPhoto);
         }
+    }
+
+    private void favoriteAction(View view) {
+        // TODO: Handle favorite click
     }
 
 }
