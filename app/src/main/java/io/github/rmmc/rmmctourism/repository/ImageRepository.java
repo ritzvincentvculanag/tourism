@@ -3,23 +3,16 @@ package io.github.rmmc.rmmctourism.repository;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -27,11 +20,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
+import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
 
 public class ImageRepository {
 
@@ -150,5 +144,38 @@ public class ImageRepository {
         });
     }
 
+    public void loadGalleryImage(String destinationId, OnImageLoadListener<String> listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/gallery/");
+
+        destinationRef.listAll().addOnSuccessListener(listResult -> {
+            List<String> imageUris = new ArrayList<>();
+            AtomicInteger taskCount = new AtomicInteger(listResult.getItems().size());
+
+            for (StorageReference item : listResult.getItems()) {
+                item.getDownloadUrl().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        imageUris.add(String.valueOf(task.getResult()));
+                        Log.d(TAG, imageUris.size() + String.valueOf(task.getResult()));
+                    } else {
+                        if (listener != null) {
+                            listener.onImageLoadFailure(task.getException());
+                        }
+                    }
+
+                    // Check if all tasks are completed
+                    if (taskCount.decrementAndGet() == 0) {
+                        if (listener != null) {
+                            listener.onImageLoadSuccess(imageUris);
+                        }
+                    }
+                });
+            }
+        }).addOnFailureListener(e -> {
+            if (listener != null) {
+                listener.onImageLoadFailure(e);
+            }
+        });
+    }
 
 }

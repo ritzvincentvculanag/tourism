@@ -1,5 +1,7 @@
 package io.github.rmmc.rmmctourism.adapter;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Uri uri = uris.get(position);
+        Log.d(TAG, uri.toString());
         holder.ivGalleryItem.setImageURI(uri);
     }
 

@@ -30,7 +30,6 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private View dialogView;
 
     private ExtendedFloatingActionButton efabAddReview;
-
     private BottomSheetDialog addReview;
 
     private DetailAdapter detailAdapter;

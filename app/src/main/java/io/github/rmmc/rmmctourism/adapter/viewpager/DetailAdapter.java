@@ -29,7 +29,7 @@ public class DetailAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         Bundle bundle = new Bundle();
         switch (position) {
-            case 0: return setFragments(new About(),bundle);
+            case 0: return setFragments(new About(), bundle);
             case 1: return setFragments(new Gallery(), bundle);
             case 2: return setFragments(new Reviews(), bundle);
 
