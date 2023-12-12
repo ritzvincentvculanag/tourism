@@ -16,6 +16,9 @@
         android:theme="@style/Theme.RmmcTourism"
         tools:targetApi="31">
         <activity
+            android:name=".views.ForgotPassword"
+            android:exported="false" />
+        <activity
             android:name=".views.EditDestination"
             android:exported="false" />
         <activity
