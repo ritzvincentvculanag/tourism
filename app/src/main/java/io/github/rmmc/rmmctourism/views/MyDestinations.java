@@ -38,7 +38,7 @@ public class MyDestinations extends AppCompatActivity implements
 
     @Override
     public void initializeWidgets() {
-        myDestinationAdapter = new MyDestinationAdapter();
+        myDestinationAdapter = new MyDestinationAdapter(this, this);
         rvMyDestinations = findViewById(R.id.rv_my_destinations);
         rvMyDestinations.setAdapter(myDestinationAdapter);
         rvMyDestinations.setLayoutManager(new LinearLayoutManager(this));
@@ -46,11 +46,11 @@ public class MyDestinations extends AppCompatActivity implements
 
     @Override
     public void delete(int position) {
-
+        // TODO: Handle delete event click
     }
 
     @Override
     public void update(int position) {
-
+        // TODO: Handle update event click
     }
 }
