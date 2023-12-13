@@ -94,10 +94,7 @@ public class Destination implements Parcelable {
         }
     };
 
-    // Getter and setter methods for each field
-    // ...
 
-    // Parcelable implementation
 
     @Override
     public int describeContents() {

@@ -37,6 +37,9 @@ import io.github.rmmc.rmmctourism.util.Miner;
 import io.github.rmmc.rmmctourism.util.Validator;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
+/**
+ * Fragment for adding a new destination.
+ */
 public class AddDestination extends Fragment implements WidgetInitializer, ActionInitializer {
 
     private static final int REQUEST_PERMISSION_CODE = 4283;
@@ -70,9 +73,16 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
     private DestinationRepository repository;
     private FirebaseAuth userAuth;
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_add_destination, container, false);
 
         initializeWidgets();
@@ -82,6 +92,9 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         return view;
     }
 
+    /**
+     * Initializes actions for the fragment. This method should be overridden to set up event listeners or other actions.
+     */
     @Override
     public void initializeActions() {
         selectDestinationCover = registerForActivityResult(
@@ -111,6 +124,9 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         btnAddDestination.setOnClickListener(this::addDestination);
     }
 
+    /**
+     * Initializes widgets in the fragment. This method should be overridden to find and set up UI elements.
+     */
     @Override
     public void initializeWidgets() {
         tvDestinationGalleryIndicator = view.findViewById(R.id.tv_destination_gallery_indicator);
@@ -133,6 +149,9 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         initializeDestinationGallery();
     }
 
+    /**
+     * Initializes the destination gallery RecyclerView and its associated components.
+     */
     private void initializeDestinationGallery() {
         imgUris = new ArrayList<>();
         gallerySnapHelper = new LinearSnapHelper();
@@ -144,11 +163,15 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         gallerySnapHelper.attachToRecyclerView(rvDestinationGallery);
     }
 
+    /**
+     * Handles the process of adding a new destination.
+     *
+     * @param view The view that triggered the action.
+     */
     private void addDestination(View view) {
-
         TextInputLayout fields[] = {tilAddDestinationName, tilAddDestinationDescription, tilAddDestinationAddress, tilAddDestinationEmail, tilAddDestinationPhone};
 
-        if(ivAddDestinationCover.getDrawable() == null){
+        if (ivAddDestinationCover.getDrawable() == null) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
                     "Please select the cover photo of the tourist spot!",
@@ -156,7 +179,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
             return;
         }
 
-        if(Validator.fieldsAreEmpty(fields)){
+        if (Validator.fieldsAreEmpty(fields)) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
                     "Please provide the needed information!",
@@ -164,7 +187,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
             return;
         }
 
-        if(!Validator.isValidEmail(tilAddDestinationEmail)){
+        if (!Validator.isValidEmail(tilAddDestinationEmail)) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
                     "Please provide a valid email!",
@@ -172,7 +195,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
             return;
         }
 
-        if(!Validator.isPhoneNumberValid(tilAddDestinationPhone)){
+        if (!Validator.isPhoneNumberValid(tilAddDestinationPhone)) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
                     "Please provide a valid number!",
@@ -180,10 +203,10 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
             return;
         }
 
-        if(!Validator.areAllUrlsValid(tilAddDestinationWebsite, tilAddDestinationFacebook, tilAddDestinationInstagram)){
+        if (!Validator.areAllUrlsValid(tilAddDestinationWebsite, tilAddDestinationFacebook, tilAddDestinationInstagram)) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
-                    "Please provide correct url for the social media!",
+                    "Please provide correct URLs for the social media!",
                     "Ok").show();
             return;
         }
@@ -203,8 +226,5 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         );
 
         repository.addDestination(destination, coverUri, imgUris, ivAddDestinationCover, requireContext().getContentResolver(), btnAddDestination);
-
     }
-
-
 }

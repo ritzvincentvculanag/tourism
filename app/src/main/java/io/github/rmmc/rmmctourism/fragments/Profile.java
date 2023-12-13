@@ -1,6 +1,5 @@
 package io.github.rmmc.rmmctourism.fragments;
 
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +54,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Initialize Firebase Authentication and User Repository
         user = FirebaseAuth.getInstance();
         userRepository = new UserRepository(getContext());
     }
@@ -62,8 +62,10 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        // Initialize widgets, populate data, and set up actions
         initializeWidgets();
         populateData();
         initializeActions();
@@ -73,14 +75,17 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
 
     @Override
     public void initializeActions() {
+        // Set click listeners for various buttons
         btnLogout.setOnClickListener(this::logout);
         btnDeleteAccount.setOnClickListener(this::deleteAccount);
         btnMyDestinations.setOnClickListener(this::myDestination);
         btnEditEmail.setOnClickListener(e -> startActivity(new Intent(getContext(), UpdateEmail.class)));
         btnEditPassword.setOnClickListener(e -> startActivity(new Intent(getContext(), UpdatePassword.class)));
     }
+
     @Override
     public void initializeWidgets() {
+        // Find and initialize UI elements
         btnLogout = view.findViewById(R.id.btn_logout);
         btnDeleteAccount = view.findViewById(R.id.btn_delete_account);
         btnMyDestinations = view.findViewById(R.id.btn_my_destinations);
@@ -94,49 +99,61 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     }
 
     public void populateData(){
+        // Fetch user information and populate UI elements
         userRepository.getUserInformation(new DataCallBack<UserInformation>() {
             @Override
             public void onDataLoaded(UserInformation userInformation) {
+                // Construct the full name
                 String middleNameInitial = userInformation.getMiddleName().toString().isEmpty() ? "" : userInformation.getMiddleName().charAt(0) + ".";
                 String fullName = userInformation.getFirstName() + " " + middleNameInitial + " " + userInformation.getLastName();
+
+                // Set data to UI elements
                 tvFullName.setText(fullName);
                 tvGender.setText(userInformation.getGender());
                 tvBirthdate.setText(formatBirthDate(userInformation.getBirthDate()));
                 tvEmail.setText(userInformation.getEmail());
+
+                // Set up click listener for editing profile
                 btnEditProfile.setOnClickListener(e ->{
                     Intent intent = new Intent(getContext(), UpdateUser.class);
                     intent.putExtra(UserInformation.collectionName, userInformation);
                     startActivity(intent);
                 });
+
+                // Display current user's email
                 tvEmail.setText(user.getCurrentUser().getEmail());
             }
+
             @Override
             public void onDataNotAvailable(String error) {
-
+                // Handle the case where data is not available
             }
         });
     }
 
     private void deleteAccount(View view) {
+        // Show an alert dialog to confirm account deletion
         Messenger.showAlertDialog(getContext(), "Logout", "Do you want to delete this account?", "Yes", "No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // Delete the user account and navigate to the main activity
                 userRepository.deleteUserAccount();
                 startActivity(new Intent(getContext(), MainActivity.class));
             }
         }, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                // Handle the case where the user decides not to delete the account
             }
         }).show();
     }
 
     private void logout(View view) {
-
+        // Show an alert dialog to confirm logout
         Messenger.showAlertDialog(getContext(), "Logout", "Do you want to logout?", "Yes", "No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // Sign out the user and navigate to the main activity
                 FirebaseAuth userAuth = FirebaseAuth.getInstance();
                 startActivity(new Intent(getContext(), MainActivity.class));
                 userAuth.signOut();
@@ -145,10 +162,12 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     }
 
     private void myDestination(View view) {
+        // Navigate to the MyDestinations activity
         startActivity(new Intent(getContext(), MyDestinations.class));
     }
 
     public static String formatBirthDate(Timestamp timestamp) {
+        // Format the birthdate to a readable string
         Date birthDate = new Date(timestamp.toDate().getTime());
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         String formattedBirthDate = sdf.format(birthDate);
@@ -158,10 +177,10 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     }
 
     private static int calculateAge(Date birthDate) {
+        // Calculate age based on the birthdate
         Date currentDate = new Date();
         long diffInMillis = currentDate.getTime() - birthDate.getTime();
         long ageInMillis = diffInMillis;
         return (int) (ageInMillis / (1000 * 60 * 60 * 24 * 365.25));
     }
-
 }

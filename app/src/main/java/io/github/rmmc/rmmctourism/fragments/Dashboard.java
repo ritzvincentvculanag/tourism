@@ -31,8 +31,10 @@ import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-
-public class Dashboard extends Fragment{
+/**
+ * Fragment for displaying the dashboard with destination cards and user information.
+ */
+public class Dashboard extends Fragment {
 
     private RecyclerView rvDashboard;
     private ExploreAdapter exploreAdapter;
@@ -43,6 +45,11 @@ public class Dashboard extends Fragment{
     private TextView tvFirstName;
     private SnapHelper snapHelper;
 
+    /**
+     * Called when the fragment is first created.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +57,17 @@ public class Dashboard extends Fragment{
         userRepository = new UserRepository(getContext());
         favoriteRepository = new FavoriteRepository(getContext());
     }
+
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         snapHelper = new LinearSnapHelper();
         rvDashboard = view.findViewById(R.id.rv_dashboard_destination);
@@ -61,21 +76,25 @@ public class Dashboard extends Fragment{
         populateData();
         return view;
     }
-    private void populateData(){
+
+    /**
+     * Populates the dashboard with destination cards and user information.
+     */
+    private void populateData() {
         destinationRepository.getDestination(new DestinationDataCallback<Destination>() {
             @Override
-            public void onDataLoaded(List<Destination> t) {
+            public void onDataLoaded(List<Destination> destinations) {
                 favoriteRepository.getFavorite(new OnFavoriteDataCallback() {
                     @Override
-                    public void onSuccess(List<Favorite> list) {
-                        exploreAdapter = new ExploreAdapter(getContext(), t, list);
+                    public void onSuccess(List<Favorite> favorites) {
+                        exploreAdapter = new ExploreAdapter(getContext(), destinations, favorites);
                         rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
                         rvDashboard.setAdapter(exploreAdapter);
                     }
 
                     @Override
                     public void onFailure(Exception exception) {
-                        exploreAdapter = new ExploreAdapter(getContext(), t);
+                        exploreAdapter = new ExploreAdapter(getContext(), destinations);
                         rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
                         rvDashboard.setAdapter(exploreAdapter);
                     }
@@ -84,7 +103,7 @@ public class Dashboard extends Fragment{
 
             @Override
             public void onDataNotAvailable() {
-
+                // Handle when destination data is not available
             }
         });
 

@@ -37,53 +37,72 @@ public class Explore extends Fragment implements ActionInitializer{
     private ExploreSearchAdapter exploreSearchAdapter;
     private TextInputLayout tfSearchDestination;
     private List<Destination> list;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Create an instance of DestinationRepository
         destinationRepository = new DestinationRepository();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
+
+        // Find the RecyclerView and TextInputLayout in the layout
         rvSearchExplore = view.findViewById(R.id.rv_explore_search);
         tfSearchDestination = view.findViewById(R.id.lit_search_destination);
+
+        // Populate data and set up the RecyclerView
         populateData();
 
         return view;
     }
+
     private void populateData(){
+        // Fetch destinations from the repository
         destinationRepository.getDestination(new DestinationDataCallback<Destination>() {
             @Override
             public void onDataLoaded(List<Destination> t) {
+                // Save the data in a list and create an adapter
                 list = t;
                 exploreSearchAdapter = new ExploreSearchAdapter(getContext(), list);
+
+                // Set up the RecyclerView with the adapter
                 rvSearchExplore.setLayoutManager(new LinearLayoutManager(getActivity()));
                 rvSearchExplore.setAdapter(exploreSearchAdapter);
+
+                // Initialize actions for search functionality
                 initializeActions();
             }
 
             @Override
             public void onDataNotAvailable() {
-
+                // Handle the case where data is not available
             }
         });
     }
 
     @Override
     public void initializeActions() {
+        // Add a TextWatcher to the search TextInputLayout
         tfSearchDestination.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Not needed for this implementation
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Get the search query
                 String query = Miner.getString(tfSearchDestination);
                 List<Destination> filterData = new ArrayList<>();
                 List<Destination> oldData = new ArrayList<>();
                 oldData.addAll(list);
+
+                // Filter the data based on the search query
                 if (query.isEmpty()) {
                     filterData.addAll(list);
                 } else {
@@ -93,16 +112,16 @@ public class Explore extends Fragment implements ActionInitializer{
                             Log.d(TAG, data.getName());
                         }
                     }
-
                 }
+
+                // Update the adapter with the filtered data
                 exploreSearchAdapter.searchDestination(filterData);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                // Not needed for this implementation
             }
         });
-
     }
 }

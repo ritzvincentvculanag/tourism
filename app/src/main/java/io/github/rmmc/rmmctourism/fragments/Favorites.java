@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
@@ -36,10 +35,14 @@ public class Favorites extends Fragment implements WidgetInitializer {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_favorites, container, false);
+
+        // Initialize repositories
         destinationRepository = new DestinationRepository();
         favoriteRepository = new FavoriteRepository(getContext());
-        initializeWidgets();
+
+        // Initialize widgets
         initializeWidgets();
 
         return view;
@@ -47,32 +50,36 @@ public class Favorites extends Fragment implements WidgetInitializer {
 
     @Override
     public void initializeWidgets() {
-
+        // Fetch favorite destinations from the repository
         favoriteRepository.getFavorite(new OnFavoriteDataCallback() {
             @Override
             public void onSuccess(List<Favorite> list) {
+                // Fetch detailed destination information for each favorite
                 destinationRepository.getDestination(list, new DestinationDataCallback<Destination>() {
                     @Override
                     public void onDataLoaded(List<Destination> t) {
+                        // Create an ExploreSearchAdapter with the fetched destinations
                         adapter = new ExploreSearchAdapter(getContext(), t);
+
+                        // Find the RecyclerView in the layout
                         favorites = view.findViewById(R.id.rv_favorites);
+
+                        // Set the adapter and layout manager for the RecyclerView
                         favorites.setAdapter(adapter);
                         favorites.setLayoutManager(new LinearLayoutManager(getContext()));
                     }
 
                     @Override
                     public void onDataNotAvailable() {
-
+                        // Handle the case where destination data is not available
                     }
                 });
             }
 
             @Override
             public void onFailure(Exception exception) {
-
+                // Handle the case where there is a failure in fetching favorite data
             }
         });
-
     }
-
 }
