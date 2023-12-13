@@ -5,39 +5,43 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Model class representing an image in the gallery associated with a destination.
+ * Implements Parcelable to allow passing instances between activities.
+ */
 public class ImageGallery implements Parcelable {
 
+    // Constants for Firestore collection and field names
     public final static String collectionName = "galleryUrl";
     public final static String destinationIdField = "destinationId";
     public final static String urlField = "url";
+
     private String uid;
     private String destinationId;
     private String url;
 
+    // Empty constructor required for Firestore
     public ImageGallery() {
     }
 
+    // Constructor for creating a new image in the gallery
     public ImageGallery(String destinationId, String url) {
         this.destinationId = destinationId;
         this.url = url;
     }
 
+    // Constructor for updating an existing image in the gallery
     public ImageGallery(String uid, String destinationId, String url) {
         this.uid = uid;
         this.destinationId = destinationId;
         this.url = url;
     }
 
-    protected ImageGallery(Parcel in) {
-        uid = in.readString();
-        destinationId = in.readString();
-        url = in.readString();
-    }
-
+    // Parcelable creator
     public static final Creator<ImageGallery> CREATOR = new Creator<ImageGallery>() {
         @Override
         public ImageGallery createFromParcel(Parcel in) {
-            return new ImageGallery(in);
+            return new ImageGallery();
         }
 
         @Override
@@ -46,29 +50,10 @@ public class ImageGallery implements Parcelable {
         }
     };
 
-    public String getUid() {
-        return uid;
-    }
+    // Getter and setter methods for each field
+    // ...
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(String destinationId) {
-        this.destinationId = destinationId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
+    // Parcelable implementation
 
     @Override
     public int describeContents() {

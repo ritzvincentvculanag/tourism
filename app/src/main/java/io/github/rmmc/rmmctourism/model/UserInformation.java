@@ -7,41 +7,55 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.Timestamp;
 
-import java.time.LocalDate;
-
+/**
+ * Model class representing user information.
+ */
 public class UserInformation implements Parcelable {
 
+    // Constants for Firestore collection and field names
     public static final String collectionName = "userInformation";
     public static final String firstNameField = "firstName";
     public static final String lastNameField = "lastName";
     public static final String middleNameField = "middleName";
     public static final String birthDateField = "birthDate";
-    public static final  String genderField = "gender";
+    public static final String genderField = "gender";
     public static final String emailField = "email";
     public static final String passwordField = "password";
 
-    private String UID;
+    private String UID;  // User ID associated with this information
 
     private String firstName;
     private String lastName;
     private String middleName;
-    private Timestamp birthDate;
+    private Timestamp birthDate;  // Timestamp indicating the birth date
     private String gender;
     private String email;
     private String password;
 
-    public UserInformation(){}
+    // Default constructor required for Firestore
+    public UserInformation() {
+    }
 
+    /**
+     * Constructor for creating user information.
+     *
+     * @param firstName First name of the user.
+     * @param lastName  Last name of the user.
+     * @param middleName Middle name of the user.
+     * @param birthDate Timestamp indicating the birth date of the user.
+     * @param gender    Gender of the user.
+     * @param email     Email address of the user.
+     * @param password  Password of the user.
+     */
     public UserInformation(
-                           String firstName,
-                           String lastName,
-                           String middleName,
-                           Timestamp birthDate,
-                           String gender,
-                           String email,
-                           String password
-                           ) {
-
+            String firstName,
+            String lastName,
+            String middleName,
+            Timestamp birthDate,
+            String gender,
+            String email,
+            String password
+    ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -51,6 +65,9 @@ public class UserInformation implements Parcelable {
         this.password = password;
     }
 
+    /**
+     * Parcelable constructor for reading from a Parcel.
+     */
     protected UserInformation(Parcel in) {
         UID = in.readString();
         firstName = in.readString();
@@ -60,9 +77,9 @@ public class UserInformation implements Parcelable {
         gender = in.readString();
         email = in.readString();
         password = in.readString();
-
     }
 
+    // Parcelable creator
     public static final Creator<UserInformation> CREATOR = new Creator<UserInformation>() {
         @Override
         public UserInformation createFromParcel(Parcel in) {
@@ -75,6 +92,8 @@ public class UserInformation implements Parcelable {
         }
     };
 
+    // Getter and setter methods for each field
+
     public String getUID() {
         return UID;
     }
@@ -82,7 +101,6 @@ public class UserInformation implements Parcelable {
     public void setUID(String UID) {
         this.UID = UID;
     }
-
 
     public String getFirstName() {
         return firstName;
@@ -140,6 +158,7 @@ public class UserInformation implements Parcelable {
         this.password = password;
     }
 
+    // Parcelable methods
 
     @Override
     public int describeContents() {
