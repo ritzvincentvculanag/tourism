@@ -125,6 +125,6 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
     }
 
     private void forgotPassword(View view) {
-        // TODO: Implement forgot password
+        startActivity(new Intent(this, ForgotPassword.class));
     }
 }

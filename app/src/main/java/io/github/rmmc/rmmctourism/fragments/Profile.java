@@ -50,10 +50,12 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     private Button btnEditPassword;
 
     private UserRepository userRepository;
+    private FirebaseAuth user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = FirebaseAuth.getInstance();
         userRepository = new UserRepository(getContext());
     }
 
@@ -105,6 +107,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
                     intent.putExtra(UserInformation.collectionName, userInformation);
                     startActivity(intent);
                 });
+                tvEmail.setText(user.getCurrentUser().getEmail());
             }
             @Override
             public void onDataNotAvailable(String error) {
