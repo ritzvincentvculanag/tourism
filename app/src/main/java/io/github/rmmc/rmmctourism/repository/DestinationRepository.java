@@ -32,6 +32,7 @@ import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.Favorite;
+import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
@@ -71,7 +72,9 @@ public class DestinationRepository {
                             public void onSuccess() {
                                 imageRepository.batchUploadImages(listUri, documentReference.getId(), contentResolver, new BatchUploadCallback() {
                                     @Override
-                                    public void onSuccess(List<String> downloadUrls) {
+                                    public void onSuccess(List<ImageGallery> downloadUrls) {
+
+                                        imageRepository.uploadBatch(downloadUrls);
                                         Messenger.showAlertDialog(context,
                                                 "Tourist Destination",
                                                 "Tourist Destination added successfully!",
@@ -232,7 +235,7 @@ public class DestinationRepository {
     private Map<String, Object> destinationToMap(Destination destination) {
         Map<String, Object> destinationMap = new HashMap<>();
         destinationMap.put(Destination.userIdField, destination.getUserId());
-        destinationMap.put(Destination.descriptionField, destination.getDestinationCategoryId());
+
         destinationMap.put(Destination.nameField, destination.getName());
         destinationMap.put(Destination.descriptionField, destination.getDescription());
         destinationMap.put(Destination.addressField, destination.getAddress());
@@ -252,7 +255,7 @@ public class DestinationRepository {
     private Destination documentToDestination(QueryDocumentSnapshot document) {
         String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
-        String destinationCategoryId = document.getString(Destination.destinationCategoryIdField);
+
         String name = document.getString(Destination.nameField);
         String description = document.getString(Destination.descriptionField);
         String address = document.getString(Destination.addressField);
@@ -264,13 +267,12 @@ public class DestinationRepository {
         Timestamp datePublished = document.getTimestamp(Destination.datePublishedField);
         Timestamp lastUpdate = document.getTimestamp(Destination.lastUpdateField);
 
-        return new Destination(destinationId, userId, destinationCategoryId, name, description, address, contactNumber,
+        return new Destination(destinationId, userId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
     private Destination documentToDestination(DocumentSnapshot document) {
         String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
-        String destinationCategoryId = document.getString(Destination.destinationCategoryIdField);
         String name = document.getString(Destination.nameField);
         String description = document.getString(Destination.descriptionField);
         String address = document.getString(Destination.addressField);
@@ -282,7 +284,7 @@ public class DestinationRepository {
         Timestamp datePublished = document.getTimestamp(Destination.datePublishedField);
         Timestamp lastUpdate = document.getTimestamp(Destination.lastUpdateField);
 
-        return new Destination(destinationId, userId, destinationCategoryId, name, description, address, contactNumber,
+        return new Destination(destinationId, userId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
 

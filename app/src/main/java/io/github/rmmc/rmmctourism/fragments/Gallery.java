@@ -22,6 +22,7 @@ import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
 import io.github.rmmc.rmmctourism.adapter.viewpager.GalleryLoadAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
@@ -33,7 +34,6 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
 
     private GalleryLoadAdapter galleryAdapter;
     private RecyclerView rvGallery;
-    private List<String> imgUris;
     private ImageRepository imageRepository;
 
     @Override
@@ -57,9 +57,9 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
         if (getArguments() != null) {
             Destination destination = getArguments().getParcelable(Destination.collectioName);
             Log.d(TAG, "Model transfer " + destination.getDestinationId());
-            imageRepository.loadGalleryImage(destination.getDestinationId(), new OnImageLoadListener<String>() {
+            imageRepository.loadGalleryImage(destination.getDestinationId(), new OnImageLoadListener<ImageGallery>() {
                 @Override
-                public void onImageLoadSuccess(List<String> imageUris) {
+                public void onImageLoadSuccess(List<ImageGallery> imageUris) {
                     Log.d(TAG, "Uri loaded" + imageUris.size());
                     galleryAdapter = new GalleryLoadAdapter(imageUris);
                     rvGallery = view.findViewById(R.id.rv_destination_detail_gallery);

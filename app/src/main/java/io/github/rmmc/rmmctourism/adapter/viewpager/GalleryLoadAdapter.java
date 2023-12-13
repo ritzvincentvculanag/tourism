@@ -19,12 +19,13 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
+import io.github.rmmc.rmmctourism.model.ImageGallery;
 
 public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.GalleryViewHolder>{
 
-    private List<String> list;
+    private List<ImageGallery> list;
 
-    public GalleryLoadAdapter(List<String> list){
+    public GalleryLoadAdapter(List<ImageGallery> list){
         this.list = list;
     }
     @NonNull
@@ -37,10 +38,10 @@ public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
-        String url = list.get(position);
+        ImageGallery url = list.get(position);
         Log.d(TAG,  "he "+ list.toString());
         Picasso.get()
-                .load(url)
+                .load(url.getUrl())
                 .placeholder(R.drawable.sample)
                 .error(R.drawable.sample) // Image to display in case of an error
                 .into(holder.ivGalleryItem);

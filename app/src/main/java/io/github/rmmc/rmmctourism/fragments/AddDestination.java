@@ -1,5 +1,6 @@
 package io.github.rmmc.rmmctourism.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -96,7 +97,6 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
                 uris -> {
                     uris.forEach(uri -> {
                         imgUris.add(uri);
-                        Log.d("RITCHIE_RESULT", uri.toString());
                     });
                     galleryAdapter.refreshUris(imgUris);
                     galleryAdapter.notifyDataSetChanged();
@@ -136,7 +136,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
     private void initializeDestinationGallery() {
         imgUris = new ArrayList<>();
         gallerySnapHelper = new LinearSnapHelper();
-        galleryAdapter = new GalleryAdapter(imgUris);
+        galleryAdapter = new GalleryAdapter(imgUris, getContext());
         rvDestinationGallery = view.findViewById(R.id.rv_destination_gallery);
         rvDestinationGallery.setAdapter(galleryAdapter);
         rvDestinationGallery.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -190,7 +190,6 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
         Destination destination = new Destination(
                 userAuth.getCurrentUser().getUid(),
-                "Gg7QZQgunepHC2DQaiMQ",
                 Miner.getString(tilAddDestinationName),
                 Miner.getString(tilAddDestinationDescription),
                 Miner.getString(tilAddDestinationAddress),
@@ -204,6 +203,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         );
 
         repository.addDestination(destination, coverUri, imgUris, ivAddDestinationCover, requireContext().getContentResolver());
+
     }
 
 

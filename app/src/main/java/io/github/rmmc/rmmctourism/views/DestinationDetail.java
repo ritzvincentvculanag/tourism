@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.viewpager.DetailAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.Review;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
@@ -44,13 +45,14 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         setContentView(R.layout.activity_destination_detail);
         imageRepository = new ImageRepository();
         initializeWidgets();
-        initializeActions();
+
     }
 
     @Override
     public void initializeActions() {
         efabAddReview.setOnClickListener(e -> {
             Intent goToAddReview = new Intent(this, AddReview.class);
+            goToAddReview.putExtra(Destination.collectioName, destination);
             startActivity(goToAddReview);
         });
 
@@ -74,6 +76,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         vpDestinationDetails.setAdapter(detailAdapter);
 
         initializeViewPager();
+        initializeActions();
     }
 
     private void initializeViewPager() {

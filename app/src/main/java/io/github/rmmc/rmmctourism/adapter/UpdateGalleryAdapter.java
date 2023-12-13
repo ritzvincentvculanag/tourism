@@ -14,18 +14,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.util.Messenger;
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
+public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdapter.GalleryViewHolder> {
 
     private List<Uri> uris;
     private Context context;
 
-    public GalleryAdapter(List<Uri> uris, Context context) {
+    public UpdateGalleryAdapter(List<Uri> uris, Context context) {
         this.context = context;
         this.uris = uris;
     }

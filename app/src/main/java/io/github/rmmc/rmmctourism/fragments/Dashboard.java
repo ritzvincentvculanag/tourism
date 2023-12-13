@@ -38,7 +38,7 @@ public class Dashboard extends Fragment{
     private ExploreAdapter exploreAdapter;
     private DestinationRepository destinationRepository;
     private FavoriteRepository favoriteRepository;
-    private List<Destination> list;
+
     private UserRepository userRepository;
     private TextView tvFirstName;
     private SnapHelper snapHelper;

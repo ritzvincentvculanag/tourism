@@ -1,8 +1,10 @@
 package io.github.rmmc.rmmctourism.views;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
+import io.github.rmmc.rmmctourism.adapter.UpdateGalleryAdapter;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
@@ -31,7 +34,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
     private Uri coverUri;
 
     private List<Uri> uris;
-    private GalleryAdapter adapter;
+    private UpdateGalleryAdapter adapter;
     private SnapHelper snapHelper;
     private RecyclerView gallery;
 
@@ -72,17 +75,23 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
         selectDestinationImages = registerForActivityResult(
                 new ActivityResultContracts.GetMultipleContents(),
-                uris -> {
-                    uris.forEach(uri -> {
-                        uris.add(uri);
+                new ActivityResultCallback<List<Uri>>() {
+                    @Override
+                    public void onActivityResult(List<Uri> result) {
+                        List<Uri> newUris = new ArrayList<>(uris); // Create a new list to store added elements
+                        newUris.addAll(result); // Add new elements to the new list
 
-                    });
-                    adapter.refreshUris(uris);
-                    adapter.notifyDataSetChanged();
+                        // Update the original list with the new elements
+                        uris.clear();
+                        uris.addAll(newUris);
+
+                        adapter.refreshUris(uris);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
         );
-        uploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/"));
-        updateGallery.setOnClickListener(e -> selectDestinationImages.launch("image/"));
+        uploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/*"));
+        updateGallery.setOnClickListener(e -> selectDestinationImages.launch("image/*"));
     }
 
     @Override
@@ -90,9 +99,13 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         cover = findViewById(R.id.iv_edit_destination_cover);
 
         uris = new ArrayList<>();
-        adapter = new GalleryAdapter(uris);
+        adapter = new UpdateGalleryAdapter(uris, this);
         snapHelper = new LinearSnapHelper();
-        gallery = findViewById(R.id.rv_destination_gallery);
+        gallery = findViewById(R.id.rv_edit_destination_galler);
+        gallery.setAdapter(adapter);
+        gallery.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+
+        snapHelper.attachToRecyclerView(gallery);
 
         name = findViewById(R.id.til_edit_destination_name);
         description = findViewById(R.id.til_edit_destination_description);

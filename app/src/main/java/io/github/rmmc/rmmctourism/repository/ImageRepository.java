@@ -12,17 +12,29 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.fragments.Gallery;
+import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
 import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
@@ -31,10 +43,12 @@ public class ImageRepository {
 
     FirebaseStorage storage;
     StorageReference storageRef;
+    FirebaseFirestore instance;
 
     public ImageRepository() {
         this.storage = FirebaseStorage.getInstance();
         this.storageRef = storage.getReference();
+        this.instance = FirebaseFirestore.getInstance();
     }
 
     public void uploadImageCover(Uri imageUri, String destinationId, ImageView imageView, ContentResolver contentResolver, ImageDataCallback imageDataCallback) {
@@ -62,7 +76,7 @@ public class ImageRepository {
 
         final int totalImages = imageUris.size();
         final int[] uploadedCount = {0};
-        final List<String> downloadUrls = new ArrayList<>();
+        final List<ImageGallery> downloadUrls = new ArrayList<>();
 
         for (Uri imageUri : imageUris) {
             String fileName = getFileNameAndExtension(imageUri, contentResolver);
@@ -77,7 +91,7 @@ public class ImageRepository {
 
                     destinationRef.getDownloadUrl().addOnCompleteListener(uriTask -> {
                         if (uriTask.isSuccessful()) {
-                            downloadUrls.add(uriTask.getResult().toString());
+                            downloadUrls.add(new ImageGallery(destinationId, uriTask.getResult().toString()));
                         }
                         if (uploadedCount[0] == totalImages) {
                             if (callback != null) {
@@ -92,6 +106,29 @@ public class ImageRepository {
                 }
             });
         }
+    }
+
+    public void uploadBatch(List<ImageGallery> imageGalleries) {
+        WriteBatch batch = instance.batch();
+
+        for (ImageGallery data : imageGalleries) {
+            DocumentReference documentReference = instance.collection(ImageGallery.collectionName).document();
+            batch.set(documentReference, imageGalleryToMap(data));
+        }
+        batch.commit()
+                .addOnSuccessListener(aVoid -> {
+                    System.out.println("Batch upload successful");
+                })
+                .addOnFailureListener(e -> {
+                    System.err.println("Error uploading batch: " + e.getMessage());
+                });
+    }
+
+    private Map<String, Object> imageGalleryToMap(ImageGallery imageGallery){
+        Map<String, Object> map = new HashMap<>();
+        map.put(ImageGallery.destinationIdField, imageGallery.getDestinationId());
+        map.put(ImageGallery.urlField, imageGallery.getUrl());
+        return map;
     }
 
     public String getFileNameAndExtension(Uri uri, ContentResolver contentResolver) {
@@ -142,37 +179,28 @@ public class ImageRepository {
         });
     }
 
-    public void loadGalleryImage(String destinationId, OnImageLoadListener<String> listener) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/gallery/");
-
-        destinationRef.listAll().addOnSuccessListener(listResult -> {
-            List<String> imageUris = new ArrayList<>();
-
-            for (StorageReference item : listResult.getItems()) {
-                item.getDownloadUrl().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        imageUris.add(String.valueOf(task.getResult()));
-                        Log.d(TAG, imageUris.size() + String.valueOf(task.getResult()));
-                    } else {
-                        if (listener != null) {
-                            listener.onImageLoadFailure(task.getException());
+    public void loadGalleryImage(String destinationId, OnImageLoadListener<ImageGallery> listener) {
+        instance.collection(ImageGallery.collectionName).whereEqualTo(ImageGallery.destinationIdField, destinationId)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<ImageGallery> list = new ArrayList<>();
+                        for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                            ImageGallery imageGallery = queryDocumentSnapshot.toObject(ImageGallery.class);
+                            list.add(imageGallery);
+                        }
+                        if(listener != null){
+                            listener.onImageLoadSuccess(list);
                         }
                     }
-
-                    // Check if all tasks are completed
-                    if (imageUris.size() == listResult.getItems().size()) {
-                        if (listener != null) {
-                            listener.onImageLoadSuccess(imageUris);
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if(listener != null){
+                            listener.onImageLoadFailure(e);
                         }
                     }
                 });
-            }
-        }).addOnFailureListener(e -> {
-            if (listener != null) {
-                listener.onImageLoadFailure(e);
-            }
-        });
     }
 
 }

@@ -4,6 +4,11 @@ import com.google.firebase.Timestamp;
 
 public class Review {
 
+    public static final String collectionName = "Review";
+    public static final String userIdField = "userId";
+    public static final String destinationIdField = "destinationId";
+    public static final String contentField = "content";
+    public static final String datePublishedField = "datePublished";
     private String reviewId;
     private String userId;
     private String destinationId;

@@ -29,6 +29,7 @@ import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 import io.github.rmmc.rmmctourism.views.MyDestinations;
+import io.github.rmmc.rmmctourism.views.UpdateUser;
 
 public class Profile extends Fragment implements WidgetInitializer, ActionInitializer {
 
@@ -42,9 +43,9 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     private Button btnLogout;
     private Button btnDeleteAccount;
     private Button btnMyDestinations;
+    private Button btnEditProfile;
 
     private UserRepository userRepository;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,9 +71,6 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         btnDeleteAccount.setOnClickListener(this::deleteAccount);
         btnMyDestinations.setOnClickListener(this::myDestination);
     }
-
-
-
     @Override
     public void initializeWidgets() {
         btnLogout = view.findViewById(R.id.btn_logout);
@@ -82,6 +80,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         tvGender = view.findViewById(R.id.tv_profile_gender);
         tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
         tvEmail = view.findViewById(R.id.tv_profile_email);
+        btnEditProfile = view.findViewById(R.id.btn_edit_profile);
     }
 
     public void populateData(){
@@ -93,9 +92,12 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
                 tvGender.setText(userInformation.getGender());
                 tvBirthdate.setText(formatBirthDate(userInformation.getBirthDate()));
                 tvEmail.setText(userInformation.getEmail());
-
+                btnEditProfile.setOnClickListener(e ->{
+                    Intent intent = new Intent(getContext(), UpdateUser.class);
+                    intent.putExtra(UserInformation.collectionName, userInformation);
+                    startActivity(intent);
+                });
             }
-
             @Override
             public void onDataNotAvailable(String error) {
 

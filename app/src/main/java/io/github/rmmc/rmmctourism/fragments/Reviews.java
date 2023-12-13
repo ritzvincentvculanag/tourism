@@ -15,9 +15,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.List;
+
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.ReviewAdapter;
+import io.github.rmmc.rmmctourism.model.Destination;
+import io.github.rmmc.rmmctourism.model.Review;
+import io.github.rmmc.rmmctourism.model.UserInformation;
+import io.github.rmmc.rmmctourism.repository.ReviewRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.OnReviewDataCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Reviews extends Fragment implements WidgetInitializer, ActionInitializer {
@@ -26,12 +33,13 @@ public class Reviews extends Fragment implements WidgetInitializer, ActionInitia
 
     private ReviewAdapter reviewAdapter;
     private RecyclerView rvReviews;
+    private ReviewRepository reviewRepository;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_reviews, container, false);
-
+        reviewRepository = new ReviewRepository(getContext());
         initializeWidgets();
         initializeActions();
         
@@ -50,9 +58,35 @@ public class Reviews extends Fragment implements WidgetInitializer, ActionInitia
     }
 
     private void setupReviews() {
-        reviewAdapter = new ReviewAdapter();
-        rvReviews.setAdapter(reviewAdapter);
-        rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        if (getArguments() != null) {
+            Destination destination = getArguments().getParcelable(Destination.collectioName);
+            reviewRepository.getReview(destination, new OnReviewDataCallback<Review>() {
+                @Override
+                public void onSuccess(List<Review> reviews) {
+                    reviewRepository.getFullName(new OnReviewDataCallback<UserInformation>() {
+                        @Override
+                        public void onSuccess(List<UserInformation> userInformations) {
+                            reviewAdapter = new ReviewAdapter(reviews, userInformations);
+                            rvReviews.setAdapter(reviewAdapter);
+                            rvReviews.setLayoutManager(new LinearLayoutManager(getContext()));
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+
+                }
+                @Override
+                public void onFailure() {
+
+                }
+            });
+
+        }
+
     }
 
 }

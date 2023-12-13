@@ -11,7 +11,6 @@ public class Destination implements Parcelable {
 
     public static final String collectioName = "Destinations";
     public static final String userIdField = "userId";
-    public static final String destinationCategoryIdField = "destinationCategory";
     public static final String nameField = "name";
     public static final String descriptionField = "description";
     public static final String addressField = "address";
@@ -24,7 +23,6 @@ public class Destination implements Parcelable {
     public static final String lastUpdateField = "lastUpdate";
     private String destinationId;
     private String userId;
-    private String destinationCategoryId;
     private String name;
     private String description;
     private String address;
@@ -39,9 +37,9 @@ public class Destination implements Parcelable {
     public Destination() {
     }
 
-    public Destination(String userId, String destinationCategoryId, String name, String description, String address, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
+    public Destination(String userId, String name, String description, String address, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
         this.userId = userId;
-        this.destinationCategoryId = destinationCategoryId;
+
         this.name = name;
         this.description = description;
         this.address = address;
@@ -54,10 +52,9 @@ public class Destination implements Parcelable {
         this.lastUpdate = lastUpdate;
     }
 
-    public Destination(String destinationId, String userId, String destinationCategoryId, String name, String description, String address, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
+    public Destination(String destinationId, String userId, String name, String description, String address, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
         this.destinationId = destinationId;
         this.userId = userId;
-        this.destinationCategoryId = destinationCategoryId;
         this.name = name;
         this.description = description;
         this.address = address;
@@ -73,7 +70,6 @@ public class Destination implements Parcelable {
     protected Destination(Parcel in) {
         destinationId = in.readString();
         userId = in.readString();
-        destinationCategoryId = in.readString();
         name = in.readString();
         description = in.readString();
         address = in.readString();
@@ -112,14 +108,6 @@ public class Destination implements Parcelable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getDestinationCategoryId() {
-        return destinationCategoryId;
-    }
-
-    public void setDestinationCategoryId(String destinationCategoryId) {
-        this.destinationCategoryId = destinationCategoryId;
     }
 
     public String getName() {
@@ -211,7 +199,6 @@ public class Destination implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(destinationId);
         parcel.writeString(userId);
-        parcel.writeString(destinationCategoryId);
         parcel.writeString(name);
         parcel.writeString(description);
         parcel.writeString(address);

@@ -1,13 +1,31 @@
 package io.github.rmmc.rmmctourism.views;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.adapter.SpinnerAdapter;
+import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
@@ -18,6 +36,7 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
     private TextInputLayout middleName;
     private TextInputLayout birthday;
     private TextInputLayout gender;
+    private AutoCompleteTextView actvGender;
     private TextInputLayout email;
     private TextInputLayout password;
     private TextInputLayout passwordRetype;
@@ -37,7 +56,7 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
 
     @Override
     public void initializeActions() {
-        // TODO: intiialize actions
+
     }
 
     @Override
@@ -47,6 +66,7 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
         middleName = findViewById(R.id.til_update_middle_name);
         birthday = findViewById(R.id.til_update_birthdate);
         gender = findViewById(R.id.til_update_gender);
+        actvGender = findViewById(R.id.actv_update_gender);
         email = findViewById(R.id.til_update_email);
         password = findViewById(R.id.til_update_password);
         passwordRetype = findViewById(R.id.til_update_password_retype);
@@ -54,5 +74,47 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
         chooseDate = findViewById(R.id.btn_update_birthdate);
         delete = findViewById(R.id.btn_update_delete);
         update = findViewById(R.id.btn_update);
+        initializeSpinner();
+        populateData();
     }
+
+    private void initializeSpinner(){
+        ArrayAdapter<String> genderAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
+                getApplicationContext(),
+                com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
+                Arrays.asList("Male", "Female")
+        );
+
+        actvGender.setAdapter(genderAdapter);
+    }
+
+    private void populateData() {
+        Intent intent = getIntent();
+
+        if (intent != null && intent.hasExtra(UserInformation.collectionName)) {
+            UserInformation userInformation = intent.getParcelableExtra(UserInformation.collectionName);
+
+            setData(firstName, userInformation.getFirstName());
+            setData(lastName, userInformation.getLastName());
+            setData(middleName, userInformation.getMiddleName() != null ? userInformation.getMiddleName() : "");
+
+            actvGender.setText(userInformation.getGender(), false);
+        }
+    }
+
+
+    private int getIndexFromArray(String[] array, String value) {
+        if (array != null && value != null) {
+            for (int i = 0; i < array.length; i++) {
+                if (value.equals(array[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1; // Not found
+    }
+    private void setData(TextInputLayout textInputLayout, String data){
+        textInputLayout.getEditText().setText(data);
+    }
+
 }
