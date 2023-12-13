@@ -58,7 +58,11 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
         holder.tvDescription.setText(destination.getDescription());
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.ivCover);
         holder.btnUpdate.setOnClickListener(e ->{
-            context.startActivity(new Intent(context, EditDestination.class));
+            Intent intent = new Intent(context, EditDestination.class);
+
+            intent.putExtra(Destination.collectioName, destination);
+
+            context.startActivity(intent);
         });
         holder.btnDelete.setOnClickListener(e ->{
             Messenger.showAlertDialog(context,

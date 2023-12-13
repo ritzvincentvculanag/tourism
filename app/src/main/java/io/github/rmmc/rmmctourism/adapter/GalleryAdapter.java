@@ -42,7 +42,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Uri uri = uris.get(position);
-        Log.d(TAG, uri.toString());
+        Log.d(TAG, "adapter "+uri.toString());
         holder.ivGalleryItem.setImageURI(uri);
         holder.ivGalleryItem.setOnClickListener(e ->{
             int index = position;

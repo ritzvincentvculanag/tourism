@@ -17,16 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.model.ImageGallery;
+import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.Messenger;
+import io.github.rmmc.rmmctourism.util.OnDeleteImageCallback;
 
 public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdapter.GalleryViewHolder> {
 
     private List<Uri> uris;
     private Context context;
+    private ImageRepository imageRepository;
+
 
     public UpdateGalleryAdapter(List<Uri> uris, Context context) {
         this.context = context;
         this.uris = uris;
+        this.imageRepository = new ImageRepository();
     }
 
     @NonNull
@@ -51,8 +57,24 @@ public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdap
                     "Yes", "No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            uris.remove(index);
-                            notifyDataSetChanged();
+                            imageRepository.deleteImage(uri, new OnDeleteImageCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    uris.remove(index);
+                                    notifyDataSetChanged();
+
+                                    Messenger.showAlertDialog(context,
+                                            "Delete Image",
+                                            "Image successfully remove from gallery","Ok").show();
+                                }
+
+                                @Override
+                                public void onFail() {
+                                    Messenger.showAlertDialog(context,
+                                            "Delete Image",
+                                            "Image unsuccessfully remove from gallery","Ok").show();
+                                }
+                            });
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override

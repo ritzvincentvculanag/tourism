@@ -15,8 +15,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -37,6 +39,7 @@ import io.github.rmmc.rmmctourism.fragments.Gallery;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
+import io.github.rmmc.rmmctourism.util.OnDeleteImageCallback;
 import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
 
 public class ImageRepository {
@@ -158,8 +161,7 @@ public class ImageRepository {
         // Construct the StorageReference with the gs:// URL
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/cover/");
-
-
+        
         destinationRef.listAll().addOnSuccessListener(listResult -> {
             if (!listResult.getItems().isEmpty()) {
                 StorageReference imageRef = listResult.getItems().get(0);
@@ -171,8 +173,6 @@ public class ImageRepository {
                                 .into(imageView);
                     }
                 });
-
-
             }
         }).addOnFailureListener(e -> {
             Picasso.get().load(R.drawable.sample);
@@ -187,6 +187,7 @@ public class ImageRepository {
                         List<ImageGallery> list = new ArrayList<>();
                         for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
                             ImageGallery imageGallery = queryDocumentSnapshot.toObject(ImageGallery.class);
+                            Log.d(TAG, "retrieve "+imageGallery.getUrl());
                             list.add(imageGallery);
                         }
                         if(listener != null){
@@ -202,5 +203,55 @@ public class ImageRepository {
                     }
                 });
     }
+
+    public void deleteImage(Uri uri, OnDeleteImageCallback deleteImageCallback) {
+        CollectionReference collectionReference = instance.collection(ImageGallery.collectionName);
+
+        Query query = collectionReference.whereEqualTo(ImageGallery.urlField, uri.toString());
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+
+                if (querySnapshot.size() > 0) {
+                    // Get the document reference
+                    StorageReference storageRef = storage.getReferenceFromUrl(uri.toString());
+                    storageRef.delete().addOnCompleteListener(storageTask -> {
+                        if (storageTask.isSuccessful()) {
+                            // Delete the document from Firestore after successful storage deletion
+                            querySnapshot.getDocuments().get(0).getReference()
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        if (deleteImageCallback != null) {
+                                            deleteImageCallback.onSuccess();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        if (deleteImageCallback != null) {
+                                            deleteImageCallback.onFail();
+                                        }
+                                    });
+                        } else {
+                            // Handle errors during storage deletion
+                            if (deleteImageCallback != null) {
+                                deleteImageCallback.onFail();
+                            }
+                        }
+                    });
+                } else {
+                    // No matching documents found
+                    if (deleteImageCallback != null) {
+                        deleteImageCallback.onFail();
+                    }
+                }
+            } else {
+                // Handle errors in the query
+                if (deleteImageCallback != null) {
+                    deleteImageCallback.onFail();
+                }
+            }
+        });
+    }
+
 
 }
