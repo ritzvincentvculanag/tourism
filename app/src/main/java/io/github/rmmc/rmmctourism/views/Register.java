@@ -35,6 +35,7 @@ import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class Register extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
 
+    // Declare widgets
     private TextInputLayout tilRegisterFirstName;
     private TextInputLayout tilRegisterLastName;
     private TextInputLayout tilRegisterMiddleName;
@@ -42,13 +43,10 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
     private TextInputLayout tilRegisterEmail;
     private TextInputLayout tilRegisterPassword;
     private TextInputLayout tilRegisterRetypePassword;
-
     private Button btnRegister;
     private Button btnLogin;
     private Button btnDatePicker;
-
     private AutoCompleteTextView actvGender;
-
     private UserRepository userRepository;
 
     @Override
@@ -56,14 +54,17 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Initialize UserRepository for user data operations
         userRepository = new UserRepository(this);
 
+        // Initialize widgets and set up actions
         initializeWidgets();
         initializeActions();
     }
 
     @Override
-    public void initializeWidgets(){
+    public void initializeWidgets() {
+        // Initialize UI widgets
         tilRegisterFirstName = findViewById(R.id.til_reg_first_name);
         tilRegisterLastName = findViewById(R.id.til_reg_last_name);
         tilRegisterMiddleName = findViewById(R.id.til_reg_middle_name);
@@ -71,35 +72,35 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
         tilRegisterEmail = findViewById(R.id.til_reg_email);
         tilRegisterPassword = findViewById(R.id.til_reg_password);
         tilRegisterRetypePassword = findViewById(R.id.til_reg_password_retype);
-
         btnLogin = findViewById(R.id.btn_reg_login);
         btnRegister = findViewById(R.id.btn_reg_register);
         btnDatePicker = findViewById(R.id.btn_select_birthdate);
-
         actvGender = findViewById(R.id.actv_reg_gender);
 
+        // Initialize gender spinner
         initializeSpinner();
     }
 
     @Override
     public void initializeActions() {
+        // Set up click listeners for buttons
         btnRegister.setOnClickListener(this::register);
         btnLogin.setOnClickListener(this::login);
         btnDatePicker.setOnClickListener(this::datePicker);
     }
 
-    private void initializeSpinner(){
+    private void initializeSpinner() {
+        // Initialize gender spinner with ArrayAdapter
         ArrayAdapter<String> genderAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
                 getApplicationContext(),
                 com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
                 Arrays.asList(getResources().getStringArray(R.array.register_til_gender_options))
         );
-
         actvGender.setAdapter(genderAdapter);
     }
 
     private void register(View view) {
-
+        // Check internet connection
         if (!NetworkUtils.isNetworkConnected(this)) {
             Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
             return;
@@ -114,13 +115,13 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
                 tilRegisterPassword,
                 tilRegisterPassword
         )) {
+            // Show error dialog for empty fields
             showAlertDialog(
                     this,
                     getString(R.string.register_dialog_error_title),
                     getString(R.string.register_dialog_error_message),
                     getString(R.string.register_dialog_error_postive_button)
             ).show();
-
             return;
         }
 
@@ -128,13 +129,13 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
         String password = Miner.getString(tilRegisterPassword);
         String passwordConfirm = Miner.getString(tilRegisterRetypePassword);
         if (!password.equals(passwordConfirm)) {
+            // Show error dialog for mismatched passwords
             showAlertDialog(
                     this,
                     getString(R.string.register_dialog_error_title),
                     getString(R.string.register_dialog_error_password_do_not_match),
                     getString(R.string.register_dialog_error_postive_button)
             ).show();
-
             return;
         }
 
@@ -152,6 +153,7 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             e.printStackTrace();
         }
 
+        // Create UserInformation object
         UserInformation user = new UserInformation(
                 1,
                 tilRegisterFirstName.getEditText().getText().toString(),
@@ -164,15 +166,18 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
                 null, null
         );
 
+        // Add user to the repository
         userRepository.addUser(user);
     }
 
     private void login(View view) {
+        // Start the login activity
         startActivity(new Intent(this, Login.class));
         finish();
     }
 
     private void datePicker(View view) {
+        // Show material date picker and set selected date to the birthdate field
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -188,6 +193,4 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
 
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
     }
-
-
 }

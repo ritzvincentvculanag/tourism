@@ -19,10 +19,10 @@ import io.github.rmmc.rmmctourism.util.Validator;
 
 public class UpdatePassword extends AppCompatActivity {
 
+    // Declare widgets
     private TextInputLayout oldPassword;
     private TextInputLayout newPassword;
     private TextInputLayout confirmPassword;
-
     private Button updatePassword;
     private UpdateUserRepository updateUserRepository;
 
@@ -31,10 +31,10 @@ public class UpdatePassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_password);
 
+        // Initialize widgets
         oldPassword = findViewById(R.id.til_update_password_old);
         newPassword = findViewById(R.id.til_update_password_new);
         confirmPassword = findViewById(R.id.til_update_password_confirm);
-
         updatePassword = findViewById(R.id.btn_update_password);
 
         updateUserRepository = new UpdateUserRepository(this);
