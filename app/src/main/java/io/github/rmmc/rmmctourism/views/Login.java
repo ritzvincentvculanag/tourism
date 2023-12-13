@@ -57,6 +57,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
     public void initializeActions() {
         btnLogin.setOnClickListener(this::login);
         btnNotRegistered.setOnClickListener(this::register);
+        btnForgotPassword.setOnClickListener(this::forgotPassword);
     }
 
     private void initializeFirebaseAuth() {
@@ -113,7 +114,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
     }
 
     private void forgotPassword(View view) {
-        // TODO: Implement forgot password
+        startActivity(new Intent(this, ForgotPassword.class));
     }
 
 }

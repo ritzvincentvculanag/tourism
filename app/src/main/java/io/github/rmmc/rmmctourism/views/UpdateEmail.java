@@ -1,5 +1,7 @@
 package io.github.rmmc.rmmctourism.views;
 
+import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.repository.UpdateUserRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.Validator;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class UpdateEmail extends AppCompatActivity implements ActionInitializer {
@@ -30,11 +33,21 @@ public class UpdateEmail extends AppCompatActivity implements ActionInitializer 
         password = findViewById(R.id.til_update_email_password);
 
         updateEmail = findViewById(R.id.btn_update_email);
-
+        initializeActions();
     }
 
     @Override
     public void initializeActions() {
+
+        if(Validator.fieldsAreEmpty(email, password)){
+            showAlertDialog(
+                    this,
+                    "Change Email",
+                    "Please enter the new email and password!",
+                    "Try Again"
+            ).show();
+            return;
+        }
         updateEmail.setOnClickListener(e -> {
             updateUserRepository.updateEmail(email, password);
         });
