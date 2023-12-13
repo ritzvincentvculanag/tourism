@@ -34,6 +34,7 @@ public class UserInformation implements Parcelable {
 
     // Default constructor required for Firestore
     public UserInformation() {
+
     }
 
     /**

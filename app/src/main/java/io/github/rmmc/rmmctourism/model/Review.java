@@ -22,6 +22,7 @@ public class Review {
 
     // Empty constructor required for Firestore
     public Review() {
+
     }
 
     /**
