@@ -15,6 +15,7 @@ public class Favorite implements Parcelable {
     private String destinationId;
 
     public Favorite() {
+
     }
 
     public Favorite(String userId, String destinationId) {
