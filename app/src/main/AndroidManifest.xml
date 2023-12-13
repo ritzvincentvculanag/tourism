@@ -54,10 +54,6 @@
             android:label="Register"
             android:parentActivityName=".views.Login" />
         <activity
-            android:name=".views.HomeActivity"
-            android:exported="true"
-            android:theme="@style/Theme.RmmcTourismNoActionBar" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.RmmcTourismNoActionBar">
