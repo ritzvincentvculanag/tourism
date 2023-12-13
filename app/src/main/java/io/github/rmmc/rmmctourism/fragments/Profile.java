@@ -29,6 +29,8 @@ import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 import io.github.rmmc.rmmctourism.views.MyDestinations;
+import io.github.rmmc.rmmctourism.views.UpdateEmail;
+import io.github.rmmc.rmmctourism.views.UpdatePassword;
 import io.github.rmmc.rmmctourism.views.UpdateUser;
 
 public class Profile extends Fragment implements WidgetInitializer, ActionInitializer {
@@ -44,6 +46,8 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
     private Button btnDeleteAccount;
     private Button btnMyDestinations;
     private Button btnEditProfile;
+    private Button btnEditEmail;
+    private Button btnEditPassword;
 
     private UserRepository userRepository;
 
@@ -70,12 +74,16 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         btnLogout.setOnClickListener(this::logout);
         btnDeleteAccount.setOnClickListener(this::deleteAccount);
         btnMyDestinations.setOnClickListener(this::myDestination);
+        btnEditEmail.setOnClickListener(e -> startActivity(new Intent(getContext(), UpdateEmail.class)));
+        btnEditPassword.setOnClickListener(e -> startActivity(new Intent(getContext(), UpdatePassword.class)));
     }
     @Override
     public void initializeWidgets() {
         btnLogout = view.findViewById(R.id.btn_logout);
         btnDeleteAccount = view.findViewById(R.id.btn_delete_account);
         btnMyDestinations = view.findViewById(R.id.btn_my_destinations);
+        btnEditEmail = view.findViewById(R.id.btn_edit_email);
+        btnEditPassword = view.findViewById(R.id.btn_edit_password);
         tvFullName = view.findViewById(R.id.tv_profile_fullname);
         tvGender = view.findViewById(R.id.tv_profile_gender);
         tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
