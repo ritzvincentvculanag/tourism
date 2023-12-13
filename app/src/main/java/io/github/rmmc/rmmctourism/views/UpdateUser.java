@@ -27,8 +27,6 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
     private TextInputLayout gender;
     private AutoCompleteTextView actvGender;
     private TextInputLayout email;
-    private TextInputLayout password;
-    private TextInputLayout passwordRetype;
 
     private Button chooseDate;
     private Button delete;
@@ -57,8 +55,6 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
         gender = findViewById(R.id.til_update_gender);
         actvGender = findViewById(R.id.actv_update_gender);
         email = findViewById(R.id.til_update_email);
-        password = findViewById(R.id.til_update_password);
-        passwordRetype = findViewById(R.id.til_update_password_retype);
 
         chooseDate = findViewById(R.id.btn_update_birthdate);
         delete = findViewById(R.id.btn_update_delete);
