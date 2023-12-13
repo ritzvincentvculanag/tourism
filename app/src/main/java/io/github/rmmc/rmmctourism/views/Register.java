@@ -1,7 +1,11 @@
 package io.github.rmmc.rmmctourism.views;
 
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
+import static io.github.rmmc.rmmctourism.util.Validator.fieldIsEmpty;
 import static io.github.rmmc.rmmctourism.util.Validator.fieldsAreEmpty;
+import static io.github.rmmc.rmmctourism.util.Validator.isValidEmail;
+import static io.github.rmmc.rmmctourism.util.Validator.isValidName;
+import static io.github.rmmc.rmmctourism.util.Validator.isValidPassword;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +24,7 @@ import com.google.firebase.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -125,6 +130,74 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             return;
         }
 
+        if(!isValidName(tilRegisterFirstName)){
+            showAlertDialog(this,
+                    "Registration Error",
+                    "Invalid format for first name!", "Ok").show();
+            return;
+        }
+        if(!isValidName(tilRegisterMiddleName) && !fieldIsEmpty(tilRegisterMiddleName)){
+            showAlertDialog(this,
+                    "Registration Error",
+                    "Invalid format for middle name!", "Ok").show();
+            return;
+        }
+        if(!isValidName(tilRegisterLastName)){
+            showAlertDialog(this,
+                    "Registration Error",
+                    "Invalid format for last name!", "Ok").show();
+            return;
+        }
+
+        // Birthdate validation
+        Timestamp birthDate = null;
+        String birthDateStr = Miner.getString(tilRegisterBirtDate);
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            Date parsedDate = dateFormat.parse(birthDateStr);
+
+            if (parsedDate != null) {
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(parsedDate);
+                calendar.add(Calendar.YEAR, 18);
+
+                Date eighteenYearsAgo = calendar.getTime();
+
+                if (eighteenYearsAgo.before(new Date())) {
+                    // The birthdate is valid, user is at least 18 years old
+                    birthDate = new Timestamp(parsedDate);
+                } else {
+                    showAlertDialog(this, "Validation Error", "User must be at least 18 years old", "Ok").show();
+                    return;
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            showAlertDialog(this, "Validation Error", "Invalid date format", "Ok").show();
+            return;
+        }
+
+        if(!isValidEmail(tilRegisterEmail)){
+            showAlertDialog(
+                    this,
+                    getString(R.string.register_dialog_error_title),
+                    "Invalid email format",
+                    getString(R.string.register_dialog_error_postive_button)
+            ).show();
+            return;
+        }
+
+        if(!isValidPassword(tilRegisterPassword)){
+            showAlertDialog(
+                    this,
+                    getString(R.string.register_dialog_error_title),
+                    "Invalid password format",
+                    getString(R.string.register_dialog_error_postive_button)
+            ).show();
+            return;
+        }
+
         // Password validation
         String password = Miner.getString(tilRegisterPassword);
         String passwordConfirm = Miner.getString(tilRegisterRetypePassword);
@@ -139,31 +212,17 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             return;
         }
 
-        // Birthdate validation
-        Timestamp birthDate = null;
-        String birthDateStr = Miner.getString(tilRegisterBirtDate);
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-            Date parsedDate = dateFormat.parse(birthDateStr);
 
-            if (parsedDate != null) {
-                birthDate = new Timestamp(parsedDate);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         // Create UserInformation object
         UserInformation user = new UserInformation(
-                1,
                 tilRegisterFirstName.getEditText().getText().toString(),
                 tilRegisterLastName.getEditText().getText().toString(),
                 tilRegisterMiddleName.getEditText().getText().toString(),
                 birthDate,
                 actvGender.getText().toString(),
                 tilRegisterEmail.getEditText().getText().toString(),
-                tilRegisterPassword.getEditText().getText().toString(),
-                null, null
+                tilRegisterPassword.getEditText().getText().toString()
         );
 
         // Add user to the repository

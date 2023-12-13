@@ -1,26 +1,31 @@
 package io.github.rmmc.rmmctourism.views;// Import statements
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputLayout;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.viewpager.DetailAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
-import io.github.rmmc.rmmctourism.model.Review;
+import io.github.rmmc.rmmctourism.model.Favorite;
+import io.github.rmmc.rmmctourism.repository.FavoriteRepository;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.OnViewFavoriteCallback;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class DestinationDetail extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
@@ -31,18 +36,22 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
     private ImageView ivDestinationCoverPhoto;
     private View dialogView;
     private ExtendedFloatingActionButton efabAddReview;
-    private Button favorite;
+    private Button btnFavorite;
     private DetailAdapter detailAdapter;
     private ViewPager2 vpDestinationDetails;
     private TabLayout tlDestinationDetails;
     private ImageRepository imageRepository;
     private Destination destination;
+    private FavoriteRepository favoriteRepository;
+    private FirebaseAuth userAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination_detail);
         imageRepository = new ImageRepository();
+        userAuth = FirebaseAuth.getInstance();
+        favoriteRepository = new FavoriteRepository(this);
         initializeWidgets();
     }
 
@@ -56,7 +65,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         });
 
         // Action: Handle favorite button click
-        favorite.setOnClickListener(this::favoriteAction);
+
     }
 
     @Override
@@ -68,7 +77,7 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         populateData();
 
         efabAddReview = findViewById(R.id.fav_destination_detail_add_review);
-        favorite = findViewById(R.id.btn_destination_detail_favorite);
+        btnFavorite = findViewById(R.id.btn_destination_detail_favorite);
 
         // Initialize ViewPager and TabLayout
         detailAdapter = new DetailAdapter(this, destination);
@@ -117,10 +126,40 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
             tvAddress.setText(destination.getAddress());
 
             imageRepository.loadUploadedImage(destination.getDestinationId(), ivDestinationCoverPhoto);
+
+            favoriteRepository.getFavorite(destination.getDestinationId(), new OnViewFavoriteCallback() {
+                @Override
+                public void onSuccess(Favorite favorite) {
+                    favoriteAction(favorite);
+                    isFavorite = false;
+                    btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
+                }
+
+                @Override
+                public void onFailure() {
+                    favoriteAction(new Favorite(userAuth.getCurrentUser().getUid(), destination.getDestinationId()));
+                    btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
+                    isFavorite = true;
+                }
+            });
         }
     }
 
-    private void favoriteAction(View view) {
-        // TODO: Handle favorite click
+    private static boolean isFavorite = true;
+
+    private void favoriteAction(Favorite favorite) {
+        Log.d(TAG, "Fav "+ isFavorite);
+
+
+            btnFavorite.setOnClickListener(e -> {
+                if(isFavorite != true){
+                    favoriteRepository.removeFavorite(favorite);
+                    btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
+                }else{
+                    favoriteRepository.addFavorite(favorite);
+                    btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
+                }
+                isFavorite = !isFavorite;
+            });
     }
 }

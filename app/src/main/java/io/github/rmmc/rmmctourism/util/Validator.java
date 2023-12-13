@@ -50,7 +50,7 @@ public class Validator {
         String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
 
         // Password pattern with specific requirements
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_.])(?=\\S+$).{8,}$";
 
         if (password.matches(passwordPattern)) {
             return true;

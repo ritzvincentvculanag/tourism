@@ -25,6 +25,7 @@ import io.github.rmmc.rmmctourism.model.Review;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
+import io.github.rmmc.rmmctourism.util.OnViewFavoriteCallback;
 
 public class FavoriteRepository {
 
@@ -143,6 +144,33 @@ public class FavoriteRepository {
                 });
     }
 
+    public void getFavorite(String destinationId, OnViewFavoriteCallback dataCallBack) {
+        instance.collection(Favorite.collectionName)
+                .whereEqualTo(Favorite.userIdField, userAuth.getCurrentUser().getUid())
+                .whereEqualTo(Favorite.destinationField, destinationId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                    if (!documents.isEmpty()) {
+                        Favorite favorite = documentToFavorite(documents.get(0));
+                        if (dataCallBack != null) {
+                            dataCallBack.onSuccess(favorite);
+                        }
+                    } else {
+
+                        if (dataCallBack != null) {
+                            dataCallBack.onFailure();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    if (dataCallBack != null) {
+                        dataCallBack.onFailure();
+                    }
+                });
+    }
+
+
 
     private Map<String, Object> reviewToMap(Favorite favorite){
         Map<String, Object> map = new HashMap<>();
@@ -151,7 +179,7 @@ public class FavoriteRepository {
         return map;
     }
 
-    private Favorite documentToFavorite(QueryDocumentSnapshot document){
+    private Favorite documentToFavorite(DocumentSnapshot document){
         String uid = document.getId();
         String userId = document.getString(Favorite.userIdField);
         String destinationId = document.getString(Favorite.destinationField);

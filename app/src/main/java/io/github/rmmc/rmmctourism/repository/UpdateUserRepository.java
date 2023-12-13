@@ -12,8 +12,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.util.Messenger;
 
 public class UpdateUserRepository {
@@ -131,5 +136,33 @@ public class UpdateUserRepository {
                     }
                 });
     }
+
+    public void updateUser(UserInformation userInformation) {
+
+        String uid = userAuth.getCurrentUser().getUid();
+
+        if (uid != null) {
+            DocumentReference userRef = instance.collection(UserInformation.collectionName).document(uid);
+
+            // Create a Map to represent the fields you want to update
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(UserInformation.firstNameField, userInformation.getFirstName());
+            updates.put(UserInformation.lastNameField, userInformation.getMiddleName());
+            updates.put(UserInformation.middleNameField, userInformation.getLastName());
+            updates.put(UserInformation.birthDateField, userInformation.getBirthDate());
+            updates.put(UserInformation.genderField, userInformation.getGender());
+
+            userRef.update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        // Update successful
+                        Messenger.showAlertDialog(context, "User Update!", "User information update successfully", "Ok").show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle the error
+                        Messenger.showAlertDialog(context, "User Update!", "User information update unsuccessfully", "Ok").show();
+                    });
+        }
+    }
+
 
 }

@@ -97,8 +97,9 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         userRepository.getUserInformation(new DataCallBack<UserInformation>() {
             @Override
             public void onDataLoaded(UserInformation userInformation) {
-                String FullName = userInformation.getFirstName() + " " + userInformation.getMiddleName().charAt(0) + ". " + userInformation.getLastName();
-                tvFullName.setText(FullName);
+                String middleNameInitial = userInformation.getMiddleName().toString().isEmpty() ? "" : userInformation.getMiddleName().charAt(0) + ".";
+                String fullName = userInformation.getFirstName() + " " + middleNameInitial + " " + userInformation.getLastName();
+                tvFullName.setText(fullName);
                 tvGender.setText(userInformation.getGender());
                 tvBirthdate.setText(formatBirthDate(userInformation.getBirthDate()));
                 tvEmail.setText(userInformation.getEmail());

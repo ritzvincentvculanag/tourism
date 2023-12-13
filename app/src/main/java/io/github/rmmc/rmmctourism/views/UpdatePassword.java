@@ -1,6 +1,7 @@
 package io.github.rmmc.rmmctourism.views;
 
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
+import static io.github.rmmc.rmmctourism.util.Validator.isValidPassword;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,6 +50,15 @@ public class UpdatePassword extends AppCompatActivity {
                     "Change Password",
                     "Please enter the new email and password!",
                     "Try Again"
+            ).show();
+            return;
+        }
+        if(!isValidPassword(newPassword)){
+            showAlertDialog(
+                    this,
+                    getString(R.string.register_dialog_error_title),
+                    "Invalid password format",
+                    getString(R.string.register_dialog_error_postive_button)
             ).show();
             return;
         }

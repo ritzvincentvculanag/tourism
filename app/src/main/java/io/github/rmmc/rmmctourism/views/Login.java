@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
             showAlertDialog(
                     this,
                     getString(R.string.login_dialog_error_title),
-                    getString(R.string.login_dialog_error_user_not_found),
+                    "Email or password is incorrect!",
                     getString(R.string.login_dialog_error_positive_button_title)
             ).show();
             return;
@@ -116,6 +116,7 @@ public class Login extends AppCompatActivity implements WidgetInitializer, Actio
         // Redirect to the home activity on successful login
         Intent goToHome = new Intent(this, Hero.class);
         startActivity(goToHome);
+        finish();
     }
 
     private void register(View view) {

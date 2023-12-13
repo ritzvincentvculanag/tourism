@@ -1,6 +1,7 @@
 package io.github.rmmc.rmmctourism.views;
 
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
+import static io.github.rmmc.rmmctourism.util.Validator.isValidEmail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,18 +40,28 @@ public class UpdateEmail extends AppCompatActivity implements ActionInitializer 
     @Override
     public void initializeActions() {
 
-        if(Validator.fieldsAreEmpty(email, password)){
-            showAlertDialog(
-                    this,
-                    "Change Email",
-                    "Please enter the new email and password!",
-                    "Try Again"
-            ).show();
-            return;
-        }
-        updateEmail.setOnClickListener(e -> {
+        updateEmail.setOnClickListener(e ->{
+            if(Validator.fieldsAreEmpty(email, password)){
+                showAlertDialog(
+                        this,
+                        "Change Email",
+                        "Please enter the new email and password!",
+                        "Try Again"
+                ).show();
+                return;
+            }
+            if(!isValidEmail(email)){
+                showAlertDialog(
+                        this,
+                        getString(R.string.register_dialog_error_title),
+                        "Invalid email format",
+                        getString(R.string.register_dialog_error_postive_button)
+                ).show();
+                return;
+            }
             updateUserRepository.updateEmail(email, password);
         });
+
     }
 
 }

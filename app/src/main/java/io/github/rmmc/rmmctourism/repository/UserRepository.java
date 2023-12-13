@@ -2,6 +2,7 @@ package io.github.rmmc.rmmctourism.repository;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 import io.github.rmmc.rmmctourism.model.UserInformation;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
+import io.github.rmmc.rmmctourism.views.Login;
 
 public class UserRepository {
 
@@ -42,10 +44,6 @@ public class UserRepository {
         newUser.put(UserInformation.middleNameField, user.getMiddleName());
         newUser.put(UserInformation.birthDateField, user.getBirthDate());
         newUser.put(UserInformation.genderField, user.getGender());
-        newUser.put(UserInformation.emailField, user.getEmail());
-        newUser.put(UserInformation.passwordField, user.getPassword());
-        newUser.put(UserInformation.dateRegisteredField, user.getDateRegistered());
-        newUser.put(UserInformation.lastUpdatedField, user.getLastUpdated());
 
         userAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
 
@@ -57,6 +55,7 @@ public class UserRepository {
                         @Override
                         public void onSuccess(Void unused) {
                             Messenger.showAlertDialog(context, "User Register", "You successfully register!", "Ok").show();
+                            context.startActivity(new Intent(context, Login.class));
                             userAuth.signOut();
                         }
                     }).addOnFailureListener(new OnFailureListener() {

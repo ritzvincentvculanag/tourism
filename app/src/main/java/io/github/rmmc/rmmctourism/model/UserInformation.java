@@ -19,10 +19,9 @@ public class UserInformation implements Parcelable {
     public static final  String genderField = "gender";
     public static final String emailField = "email";
     public static final String passwordField = "password";
-    public static final String dateRegisteredField = "dataRegistered";
-    public static final String lastUpdatedField = "lastUpdated";
+
     private String UID;
-    private int accountType;
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -30,23 +29,19 @@ public class UserInformation implements Parcelable {
     private String gender;
     private String email;
     private String password;
-    private Timestamp dateRegistered;
-    private Timestamp lastUpdated;
 
     public UserInformation(){}
 
     public UserInformation(
-                           int accountType,
                            String firstName,
                            String lastName,
                            String middleName,
                            Timestamp birthDate,
                            String gender,
                            String email,
-                           String password,
-                           Timestamp dateRegistered,
-                           Timestamp lastUpdated) {
-        this.accountType = accountType;
+                           String password
+                           ) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -54,13 +49,10 @@ public class UserInformation implements Parcelable {
         this.gender = gender;
         this.email = email;
         this.password = password;
-        this.dateRegistered = dateRegistered;
-        this.lastUpdated = lastUpdated;
     }
 
     protected UserInformation(Parcel in) {
         UID = in.readString();
-        accountType = in.readInt();
         firstName = in.readString();
         lastName = in.readString();
         middleName = in.readString();
@@ -68,8 +60,7 @@ public class UserInformation implements Parcelable {
         gender = in.readString();
         email = in.readString();
         password = in.readString();
-        dateRegistered = in.readParcelable(Timestamp.class.getClassLoader());
-        lastUpdated = in.readParcelable(Timestamp.class.getClassLoader());
+
     }
 
     public static final Creator<UserInformation> CREATOR = new Creator<UserInformation>() {
@@ -92,13 +83,6 @@ public class UserInformation implements Parcelable {
         this.UID = UID;
     }
 
-    public int getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(int accountType) {
-        this.accountType = accountType;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -156,21 +140,6 @@ public class UserInformation implements Parcelable {
         this.password = password;
     }
 
-    public Timestamp getDateRegistered() {
-        return dateRegistered;
-    }
-
-    public void setDateRegistered(Timestamp dateRegistered) {
-        this.dateRegistered = dateRegistered;
-    }
-
-    public Timestamp getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Timestamp lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
     @Override
     public int describeContents() {
@@ -180,7 +149,6 @@ public class UserInformation implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(UID);
-        parcel.writeInt(accountType);
         parcel.writeString(firstName);
         parcel.writeString(lastName);
         parcel.writeString(middleName);
@@ -188,7 +156,5 @@ public class UserInformation implements Parcelable {
         parcel.writeString(gender);
         parcel.writeString(email);
         parcel.writeString(password);
-        parcel.writeParcelable(dateRegistered, i);
-        parcel.writeParcelable(lastUpdated, i);
     }
 }
