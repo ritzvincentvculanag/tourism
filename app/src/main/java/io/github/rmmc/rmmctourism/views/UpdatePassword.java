@@ -8,6 +8,8 @@ import io.github.rmmc.rmmctourism.R;
 
 public class UpdatePassword extends AppCompatActivity {
 
+    private
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
