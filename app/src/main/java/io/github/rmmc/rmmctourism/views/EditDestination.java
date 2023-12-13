@@ -43,15 +43,13 @@ import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class EditDestination extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
 
+    // Declare widgets
     private ImageView cover;
-
     private Uri coverUri;
-
     private List<Uri> uris;
     private UpdateGalleryAdapter adapter;
     private SnapHelper snapHelper;
     private RecyclerView gallery;
-
     private TextInputLayout name;
     private TextInputLayout description;
     private TextInputLayout address;
@@ -60,12 +58,10 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
     private TextInputLayout website;
     private TextInputLayout facebook;
     private TextInputLayout instagram;
-
     private Button uploadCover;
     private Button updateDestination;
     private Button updateGallery;
     private DestinationRepository repository;
-
     private ActivityResultLauncher<String> selectDestinationCover;
     private ActivityResultLauncher<String> selectDestinationImages;
     private ImageRepository imageRepository;
@@ -86,12 +82,12 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
     @Override
     public void initializeActions() {
+        // Register activity result launchers
         selectDestinationCover = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     cover.setImageURI(uri);
                     newCover = uri;
-
                     cover.setImageURI(newCover);
                 }
         );
@@ -99,15 +95,15 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         selectDestinationImages = registerForActivityResult(
                 new ActivityResultContracts.GetMultipleContents(),
                 data -> {
-                    data.forEach(uri ->{
+                    data.forEach(uri -> {
                         uris.add(uri);
                     });
                     adapter.refreshUris(uris);
-
                     adapter.notifyDataSetChanged();
                 }
         );
 
+        // Set up click listeners for buttons
         uploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/*"));
         updateGallery.setOnClickListener(e -> selectDestinationImages.launch("image/*"));
         updateDestination.setOnClickListener(this::editDestination);
@@ -115,8 +111,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
     @Override
     public void initializeWidgets() {
+        // Initialize UI widgets
         cover = findViewById(R.id.iv_edit_destination_cover);
-
         uris = new ArrayList<>();
         adapter = new UpdateGalleryAdapter(uris, this);
         snapHelper = new LinearSnapHelper();
@@ -129,16 +125,15 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         website = findViewById(R.id.til_edit_destination_website);
         facebook = findViewById(R.id.til_edit_destination_facebook);
         instagram = findViewById(R.id.til_edit_destination_instagram);
-
         uploadCover = findViewById(R.id.btn_edit_destination_cover);
         updateDestination = findViewById(R.id.btn_update_destination);
         updateGallery = findViewById(R.id.btn_edit_destination_photos);
         populateData();
     }
 
-    private void populateData(){
+    private void populateData() {
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(Destination.collectioName)){
+        if (intent != null && intent.hasExtra(Destination.collectioName)) {
             Destination destination = intent.getParcelableExtra(Destination.collectioName);
             destinationId = destination.getDestinationId();
             setData(name, destination.getName());
@@ -178,8 +173,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         }
     }
 
-    private void setData(TextInputLayout tf, String data){
-        if(data != null){
+    private void setData(TextInputLayout tf, String data) {
+        if (data != null) {
             tf.getEditText().setText(data);
         } else {
             tf.getEditText().setText("");
@@ -187,9 +182,9 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
     }
 
     private void editDestination(View view) {
+        // Validate input fields
         TextInputLayout fields[] = {name, description, address, email, phone};
-
-        if(cover.getDrawable() == null){
+        if (cover.getDrawable() == null) {
             Messenger.showAlertDialog(this,
                     "Add Destination",
                     "Please select the cover photo of the tourist spot!",
@@ -197,52 +192,67 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
             return;
         }
 
-        if(Validator.fieldsAreEmpty(fields)){
+        // Validation: Check if any of the specified fields is empty
+        if (Validator.fieldsAreEmpty(fields)) {
+            // Show an alert dialog indicating that the user should provide the needed information
             Messenger.showAlertDialog(this,
                     "Add Destination",
                     "Please provide the needed information!",
                     "Ok").show();
+            // Return from the method as the validation failed
             return;
         }
 
-        if(!Validator.isValidEmail(email)){
+// Validation: Check if the email field contains a valid email address
+        if (!Validator.isValidEmail(email)) {
+            // Show an alert dialog asking the user to provide a valid email
             Messenger.showAlertDialog(this,
                     "Add Destination",
                     "Please provide a valid email!",
                     "Ok").show();
+            // Return from the method as the validation failed
             return;
         }
 
-        if(!Validator.isPhoneNumberValid(phone)){
+// Validation: Check if the phone number field contains a valid phone number
+        if (!Validator.isPhoneNumberValid(phone)) {
+            // Show an alert dialog asking the user to provide a valid number
             Messenger.showAlertDialog(this,
                     "Add Destination",
                     "Please provide a valid number!",
                     "Ok").show();
+            // Return from the method as the validation failed
             return;
         }
 
-        if(!Validator.areAllUrlsValid(website, facebook, instagram)){
+// Validation: Check if the specified URL fields contain valid URLs
+        if (!Validator.areAllUrlsValid(website, facebook, instagram)) {
+            // Show an alert dialog asking the user to provide correct URLs for social media
             Messenger.showAlertDialog(this,
                     "Add Destination",
-                    "Please provide correct url for the social media!",
+                    "Please provide correct URL for the social media!",
                     "Ok").show();
-            return;
-        }
+            // Return from the method as the validation
 
-        Destination destination = new Destination(
-                destinationId,
-                userAuth.getCurrentUser().getUid(),
-                Miner.getString(name),
-                Miner.getString(description),
-                Miner.getString(address),
-                Miner.getString(phone),
-                Miner.getString(website),
-                Miner.getString(facebook),
-                Miner.getString(instagram),
-                Miner.getString(email),
-                Timestamp.now(),
-                Timestamp.now()
-        );
-        repository.updateDestination(destination, coverUri, newCover,uris, cover, getContentResolver(),updateDestination );
+
+            // Create a Destination object
+            Destination destination = new Destination(
+                    destinationId,
+                    userAuth.getCurrentUser().getUid(),
+                    Miner.getString(name),
+                    Miner.getString(description),
+                    Miner.getString(address),
+                    Miner.getString(phone),
+                    Miner.getString(website),
+                    Miner.getString(facebook),
+                    Miner.getString(instagram),
+                    Miner.getString(email),
+                    Timestamp.now(),
+                    Timestamp.now()
+            );
+
+            // Update the destination in the repository
+            repository.updateDestination(destination, coverUri, newCover, uris, cover, getContentResolver(), updateDestination);
+        }
     }
 }
