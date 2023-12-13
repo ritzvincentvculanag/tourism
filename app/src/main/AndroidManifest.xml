@@ -16,6 +16,9 @@
         android:theme="@style/Theme.RmmcTourism"
         tools:targetApi="31">
         <activity
+            android:name=".views.UpdateEmail"
+            android:exported="false" />
+        <activity
             android:name=".views.UpdateUser"
             android:exported="false" />
         <activity
