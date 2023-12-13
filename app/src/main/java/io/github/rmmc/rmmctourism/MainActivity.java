@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
         Intent goToHome = new Intent(this, Hero.class);
         startActivity(goToHome);
+        finish();
+
     }
 
     private void login(View view) {
