@@ -46,7 +46,6 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
     private AutoCompleteTextView actvGender;
     private TextInputLayout email;
     private Button chooseDate;
-    private Button delete;
     private Button update;
     private UpdateUserRepository updateUserRepository;
 
@@ -152,7 +151,6 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
         gender = findViewById(R.id.til_update_gender);
         actvGender = findViewById(R.id.actv_update_gender);
         chooseDate = findViewById(R.id.btn_update_birthdate);
-        delete = findViewById(R.id.btn_update_delete);
         update = findViewById(R.id.btn_update);
 
         // Initialize gender spinner
