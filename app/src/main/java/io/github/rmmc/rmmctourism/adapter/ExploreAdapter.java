@@ -80,6 +80,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
         holder.tvDescription.setText(destination.getDescription());
 
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.coverImg);
+
         for (Iterator<Favorite> iterator = favorites.iterator(); iterator.hasNext();) {
             Favorite favorite = iterator.next();
 

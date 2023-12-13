@@ -7,6 +7,7 @@ import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -59,8 +60,8 @@ public class DestinationRepository {
         this.userAuth = FirebaseAuth.getInstance();
     }
 
-    public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver){
-
+    public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver, Button button){
+        button.setEnabled(false);
         Map<String, Object> data = destinationToMap(destination);
         instance.collection(Destination.collectioName)
                 .add(data)
@@ -79,6 +80,7 @@ public class DestinationRepository {
                                                 "Tourist Destination",
                                                 "Tourist Destination added successfully!",
                                                 "Ok").show();
+                                        button.setEnabled(true);
                                     }
 
                                     @Override
@@ -87,6 +89,7 @@ public class DestinationRepository {
                                                 "Image Upload",
                                                 "Failed to upload the image gallery: " + exception.getMessage(),
                                                 "Ok").show();
+                                        button.setEnabled(true);
                                     }
                                 });
                             }
@@ -97,6 +100,7 @@ public class DestinationRepository {
                                         "Image Upload",
                                         "Failed to upload the image cover: " + exception.getMessage(),
                                         "Ok").show();
+                                button.setEnabled(true);
                             }
                         });
                     }
@@ -107,9 +111,71 @@ public class DestinationRepository {
                                 "Tourist Destination",
                                 "Tourist Destination added fail!",
                                 "Ok").show();
+                        button.setEnabled(true);
                     }
                 });
     }
+
+    public void updateDestination(Destination destination, Uri coverUri, Uri newCover,List<Uri> uris, ImageView cover, ContentResolver contentResolver, Button button) {
+        button.setEnabled(false);
+        Map<String, Object> data = destinationToMap(destination);
+
+        instance.collection(Destination.collectioName)
+                .document(destination.getDestinationId()) // Use document instead of add for updating
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Update cover image
+                        imageRepository.updateCoverImage(newCover, coverUri,destination.getDestinationId(), contentResolver, new ImageDataCallback() {
+                            @Override
+                            public void onSuccess() {
+                                // Update image gallery
+                                imageRepository.batchUploadImages(uris, destination.getDestinationId(), contentResolver, new BatchUploadCallback() {
+                                    @Override
+                                    public void onSuccess(List<ImageGallery> downloadUrls) {
+                                        // Upload updated image gallery
+                                        imageRepository.uploadBatch(downloadUrls);
+                                        Messenger.showAlertDialog(context,
+                                                "Tourist Destination",
+                                                "Tourist Destination updated successfully!",
+                                                "Ok").show();
+                                        button.setEnabled(true);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception exception) {
+                                        Messenger.showAlertDialog(context,
+                                                "Image Upload",
+                                                "Failed to update the image gallery: " + exception.getMessage(),
+                                                "Ok").show();
+                                        button.setEnabled(true);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Exception exception) {
+                                Messenger.showAlertDialog(context,
+                                        "Image Upload",
+                                        "Failed to update the cover image: " + exception.getMessage(),
+                                        "Ok").show();
+                                button.setEnabled(true);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Messenger.showAlertDialog(context,
+                                "Tourist Destination",
+                                "Tourist Destination update failed!",
+                                "Ok").show();
+                    }
+                });
+    }
+
 
     public void getDestination(final DestinationDataCallback<Destination> callback){
         List<Destination> list = new ArrayList<>();
@@ -270,6 +336,7 @@ public class DestinationRepository {
         return new Destination(destinationId, userId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
+
     private Destination documentToDestination(DocumentSnapshot document) {
         String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
@@ -287,5 +354,6 @@ public class DestinationRepository {
         return new Destination(destinationId, userId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
+
 
 }

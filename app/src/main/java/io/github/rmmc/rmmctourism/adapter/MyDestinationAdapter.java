@@ -64,6 +64,7 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
 
             context.startActivity(intent);
         });
+        int index = position;
         holder.btnDelete.setOnClickListener(e ->{
             Messenger.showAlertDialog(context,
                     "Delete Destination",
@@ -74,6 +75,7 @@ public class MyDestinationAdapter extends RecyclerView.Adapter<MyDestinationAdap
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             destinationRepository.deleteDestination(destination.getDestinationId());
+                            list.remove(index);
                             notifyDataSetChanged();
                         }
                     }, new DialogInterface.OnClickListener() {

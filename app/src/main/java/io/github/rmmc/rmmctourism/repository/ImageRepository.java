@@ -41,6 +41,7 @@ import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
 import io.github.rmmc.rmmctourism.util.OnDeleteImageCallback;
 import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
+import io.github.rmmc.rmmctourism.util.OnLoadCover;
 
 public class ImageRepository {
 
@@ -75,13 +76,59 @@ public class ImageRepository {
         });
     }
 
-    public void batchUploadImages(List<Uri> imageUris, String destinationId, ContentResolver contentResolver, BatchUploadCallback callback) {
+    public void updateCoverImage(Uri newCover, Uri oldCover, String destinationId, ContentResolver contentResolver, ImageDataCallback imageDataCallback) {
 
+        if(newCover != null){
+            String filename = getFileNameAndExtension(newCover, contentResolver);
+            StorageReference storageRef = storage.getReference();
+            String oldCoverPath = oldCover.toString();
+            Log.d(TAG, oldCoverPath);
+            StorageReference desertRef = FirebaseStorage.getInstance().getReferenceFromUrl(oldCoverPath);
+            desertRef.delete().addOnSuccessListener(aVoid -> {
+                StorageReference destinationRef = storageRef.child("images/destination/" + destinationId + "/cover/" + filename);
+
+                UploadTask uploadTask = destinationRef.putFile(newCover);
+
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    if (imageDataCallback != null) {
+                        imageDataCallback.onSuccess();
+
+                    }
+                }).addOnFailureListener(e -> {
+                    e.printStackTrace();
+                    if (imageDataCallback != null) {
+                        imageDataCallback.onFailure(e);
+                    }
+                });
+            }).addOnFailureListener(exception -> {
+                // Handle the case where deletion of oldCover fails
+                exception.printStackTrace();
+            });
+        }
+        if (imageDataCallback != null) {
+            imageDataCallback.onSuccess();
+        }
+
+    }
+
+    public void batchUploadImages(List<Uri> imageUris, String destinationId, ContentResolver contentResolver, BatchUploadCallback callback) {
         final int totalImages = imageUris.size();
         final int[] uploadedCount = {0};
         final List<ImageGallery> downloadUrls = new ArrayList<>();
 
         for (Uri imageUri : imageUris) {
+            // Check if the Uri is from Firebase Storage
+            if (isFirebaseStorageUri(imageUri)) {
+                // Ignore Firebase Storage URIs
+                uploadedCount[0]++;
+                if (uploadedCount[0] == totalImages) {
+                    if (callback != null) {
+                        callback.onSuccess(downloadUrls);
+                    }
+                }
+                continue;
+            }
+
             String fileName = getFileNameAndExtension(imageUri, contentResolver);
 
             StorageReference destinationRef = storageRef.child("images/destination/" + destinationId + "/gallery/" + fileName);
@@ -91,7 +138,6 @@ public class ImageRepository {
             uploadTask.addOnCompleteListener(task -> {
                 uploadedCount[0]++;
                 if (task.isSuccessful()) {
-
                     destinationRef.getDownloadUrl().addOnCompleteListener(uriTask -> {
                         if (uriTask.isSuccessful()) {
                             downloadUrls.add(new ImageGallery(destinationId, uriTask.getResult().toString()));
@@ -111,21 +157,50 @@ public class ImageRepository {
         }
     }
 
+    private boolean isFirebaseStorageUri(Uri uri) {
+        // Check if the Uri scheme is "gs" or "https" (typical for Firebase Storage URIs)
+        return "gs".equals(uri.getScheme()) || "https".equals(uri.getScheme());
+    }
+
+
     public void uploadBatch(List<ImageGallery> imageGalleries) {
         WriteBatch batch = instance.batch();
-
         for (ImageGallery data : imageGalleries) {
-            DocumentReference documentReference = instance.collection(ImageGallery.collectionName).document();
-            batch.set(documentReference, imageGalleryToMap(data));
+            instance.collection(ImageGallery.collectionName)
+                    .whereEqualTo("destinationId", data.getDestinationId())
+                    .whereEqualTo("url", data.getUrl())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+
+                            if (querySnapshot.isEmpty()) {
+                                // Document doesn't exist, proceed with the upload
+                                DocumentReference documentReference = instance.collection(ImageGallery.collectionName).document();
+                                batch.set(documentReference, imageGalleryToMap(data));
+                            } else {
+                                // Document already exists, handle accordingly (you can skip or update)
+                                Log.d(TAG, "Document already exists for destinationId: " + data.getDestinationId() +
+                                        " and url: " + data.getUrl());
+                            }
+
+                            // Commit the batch after checking for each document
+                            batch.commit()
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "Batch upload successful");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.d(TAG, "Error uploading batch: " + e.getMessage());
+                                    });
+                        } else {
+                            // Handle errors in the query
+                            Log.d(TAG, "Error checking for document existence: " + task.getException().getMessage());
+                        }
+                    });
         }
-        batch.commit()
-                .addOnSuccessListener(aVoid -> {
-                    System.out.println("Batch upload successful");
-                })
-                .addOnFailureListener(e -> {
-                    System.err.println("Error uploading batch: " + e.getMessage());
-                });
     }
+
+
 
     private Map<String, Object> imageGalleryToMap(ImageGallery imageGallery){
         Map<String, Object> map = new HashMap<>();
@@ -171,6 +246,32 @@ public class ImageRepository {
                         Picasso.get()
                                 .load(String.valueOf(task.getResult()))
                                 .into(imageView);
+                    }
+                });
+            }
+        }).addOnFailureListener(e -> {
+            Picasso.get().load(R.drawable.sample);
+        });
+    }
+
+    public void loadUploadedImage(String destinationId, ImageView imageView, OnLoadCover loadCover) {
+        // Construct the StorageReference with the gs:// URL
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/cover/");
+
+        destinationRef.listAll().addOnSuccessListener(listResult -> {
+            if (!listResult.getItems().isEmpty()) {
+                StorageReference imageRef = listResult.getItems().get(0);
+                imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        Picasso.get()
+                                .load(String.valueOf(task.getResult()))
+                                .into(imageView);
+
+                        if(loadCover != null){
+                            loadCover.OnLoad(task.getResult());
+                        }
                     }
                 });
             }
@@ -252,6 +353,7 @@ public class ImageRepository {
             }
         });
     }
+
 
 
 }

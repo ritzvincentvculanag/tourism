@@ -21,18 +21,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
 import io.github.rmmc.rmmctourism.adapter.UpdateGalleryAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
+import io.github.rmmc.rmmctourism.repository.DestinationRepository;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
+import io.github.rmmc.rmmctourism.util.Messenger;
+import io.github.rmmc.rmmctourism.util.Miner;
 import io.github.rmmc.rmmctourism.util.OnImageLoadListener;
+import io.github.rmmc.rmmctourism.util.OnLoadCover;
+import io.github.rmmc.rmmctourism.util.Validator;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class EditDestination extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
@@ -58,16 +64,22 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
     private Button uploadCover;
     private Button updateDestination;
     private Button updateGallery;
+    private DestinationRepository repository;
 
     private ActivityResultLauncher<String> selectDestinationCover;
     private ActivityResultLauncher<String> selectDestinationImages;
     private ImageRepository imageRepository;
+    private FirebaseAuth userAuth;
+    private String destinationId = "";
+    private Uri newCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_destination);
         imageRepository = new ImageRepository();
+        userAuth = FirebaseAuth.getInstance();
+        repository = new DestinationRepository(this);
         initializeWidgets();
         initializeActions();
     }
@@ -78,28 +90,27 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     cover.setImageURI(uri);
-                    coverUri = uri;
+                    newCover = uri;
+
+                    cover.setImageURI(newCover);
                 }
         );
 
         selectDestinationImages = registerForActivityResult(
                 new ActivityResultContracts.GetMultipleContents(),
-                new ActivityResultCallback<List<Uri>>() {
-                    @Override
-                    public void onActivityResult(List<Uri> result) {
-                        List<Uri> newUris = new ArrayList<>(uris);
-                        newUris.addAll(result);
+                data -> {
+                    data.forEach(uri ->{
+                        uris.add(uri);
+                    });
+                    adapter.refreshUris(uris);
 
-                        uris.clear();
-                        uris.addAll(newUris);
-
-                        adapter.refreshUris(uris);
-                        adapter.notifyDataSetChanged();
-                    }
+                    adapter.notifyDataSetChanged();
                 }
         );
+
         uploadCover.setOnClickListener(e -> selectDestinationCover.launch("image/*"));
         updateGallery.setOnClickListener(e -> selectDestinationImages.launch("image/*"));
+        updateDestination.setOnClickListener(this::editDestination);
     }
 
     @Override
@@ -110,11 +121,6 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         adapter = new UpdateGalleryAdapter(uris, this);
         snapHelper = new LinearSnapHelper();
         gallery = findViewById(R.id.rv_edit_destination_galler);
-        gallery.setAdapter(adapter);
-        gallery.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-
-        snapHelper.attachToRecyclerView(gallery);
-
         name = findViewById(R.id.til_edit_destination_name);
         description = findViewById(R.id.til_edit_destination_description);
         address = findViewById(R.id.til_edit_destination_address);
@@ -134,6 +140,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Destination.collectioName)){
             Destination destination = intent.getParcelableExtra(Destination.collectioName);
+            destinationId = destination.getDestinationId();
             setData(name, destination.getName());
             setData(description, destination.getDescription());
             setData(address, destination.getAddress());
@@ -142,34 +149,100 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
             setData(website, destination.getWebsiteUrl());
             setData(facebook, destination.getFacebookPage());
             setData(instagram, destination.getInstagramPage());
-            imageRepository.loadUploadedImage(destination.getDestinationId(), cover);
+            imageRepository.loadUploadedImage(destination.getDestinationId(), cover, new OnLoadCover() {
+                @Override
+                public void OnLoad(Uri uri) {
+                    coverUri = uri;
+                }
+            });
 
             imageRepository.loadGalleryImage(destination.getDestinationId(), new OnImageLoadListener<ImageGallery>() {
                 @Override
                 public void onImageLoadSuccess(List<ImageGallery> imageUris) {
-                    Context context = getBaseContext();
-                    for (ImageGallery image: imageUris){
+                    uris.clear(); // Clear existing URIs
+                    for (ImageGallery image : imageUris) {
                         uris.add(Uri.parse(image.getUrl()));
-                        Log.d(TAG, "url"+ image.getUrl());
+                        Log.d(TAG, "url" + image.getUrl());
                     }
-                    UpdateGalleryAdapter galleryAdapter;
-                    galleryAdapter = new UpdateGalleryAdapter(uris, context);
-                    galleryAdapter.refreshUris(uris);
-                    galleryAdapter.notifyDataSetChanged();
+                    adapter.refreshUris(uris);
+                    gallery.setAdapter(adapter);
+                    gallery.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                    snapHelper.attachToRecyclerView(gallery);
                 }
 
                 @Override
                 public void onImageLoadFailure(Exception e) {
-
+                    // Handle failure if needed
                 }
             });
         }
     }
+
     private void setData(TextInputLayout tf, String data){
         if(data != null){
             tf.getEditText().setText(data);
-        }else{
+        } else {
             tf.getEditText().setText("");
         }
+    }
+
+    private void editDestination(View view) {
+        TextInputLayout fields[] = {name, description, address, email, phone};
+
+        if(cover.getDrawable() == null){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please select the cover photo of the tourist spot!",
+                    "Ok").show();
+            return;
+        }
+
+        if(Validator.fieldsAreEmpty(fields)){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please provide the needed information!",
+                    "Ok").show();
+            return;
+        }
+
+        if(!Validator.isValidEmail(email)){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please provide a valid email!",
+                    "Ok").show();
+            return;
+        }
+
+        if(!Validator.isPhoneNumberValid(phone)){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please provide a valid number!",
+                    "Ok").show();
+            return;
+        }
+
+        if(!Validator.areAllUrlsValid(website, facebook, instagram)){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please provide correct url for the social media!",
+                    "Ok").show();
+            return;
+        }
+
+        Destination destination = new Destination(
+                destinationId,
+                userAuth.getCurrentUser().getUid(),
+                Miner.getString(name),
+                Miner.getString(description),
+                Miner.getString(address),
+                Miner.getString(phone),
+                Miner.getString(website),
+                Miner.getString(facebook),
+                Miner.getString(instagram),
+                Miner.getString(email),
+                Timestamp.now(),
+                Timestamp.now()
+        );
+        repository.updateDestination(destination, coverUri, newCover,uris, cover, getContentResolver(),updateDestination );
     }
 }

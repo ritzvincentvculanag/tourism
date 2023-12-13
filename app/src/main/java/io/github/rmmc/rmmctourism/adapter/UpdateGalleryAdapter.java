@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
@@ -27,11 +30,9 @@ public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdap
     private List<Uri> uris;
     private Context context;
     private ImageRepository imageRepository;
-
-
     public UpdateGalleryAdapter(List<Uri> uris, Context context) {
         this.context = context;
-        this.uris = uris;
+        this.uris = new ArrayList<>(uris);
         this.imageRepository = new ImageRepository();
     }
 
@@ -47,8 +48,8 @@ public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdap
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Uri uri = uris.get(position);
-        Log.d(TAG, uri.toString());
-        holder.ivGalleryItem.setImageURI(uri);
+        Log.d(TAG,"update" +  uri.toString());
+        Picasso.get().load(uri).placeholder(R.drawable.sample).into(holder.ivGalleryItem);
         holder.ivGalleryItem.setOnClickListener(e ->{
             int index = position;
             Messenger.showAlertDialog(context,
@@ -70,9 +71,11 @@ public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdap
 
                                 @Override
                                 public void onFail() {
+                                    uris.remove(index);
+                                    notifyDataSetChanged();
                                     Messenger.showAlertDialog(context,
                                             "Delete Image",
-                                            "Image unsuccessfully remove from gallery","Ok").show();
+                                            "Image successfully remove from gallery","Ok").show();
                                 }
                             });
                         }
@@ -91,8 +94,7 @@ public class UpdateGalleryAdapter extends RecyclerView.Adapter<UpdateGalleryAdap
     }
 
     public void refreshUris(List<Uri> newUris) {
-        this.uris = newUris;
-
+        this.uris.addAll(newUris);
         notifyDataSetChanged();
     }
 

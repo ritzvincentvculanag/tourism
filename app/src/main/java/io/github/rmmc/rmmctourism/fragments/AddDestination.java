@@ -202,7 +202,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
                 Timestamp.now()
         );
 
-        repository.addDestination(destination, coverUri, imgUris, ivAddDestinationCover, requireContext().getContentResolver());
+        repository.addDestination(destination, coverUri, imgUris, ivAddDestinationCover, requireContext().getContentResolver(), btnAddDestination);
 
     }
 
