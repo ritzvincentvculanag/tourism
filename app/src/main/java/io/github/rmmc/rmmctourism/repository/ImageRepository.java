@@ -49,12 +49,14 @@ public class ImageRepository {
     StorageReference storageRef;
     FirebaseFirestore instance;
 
+    // Constructor
     public ImageRepository() {
         this.storage = FirebaseStorage.getInstance();
         this.storageRef = storage.getReference();
         this.instance = FirebaseFirestore.getInstance();
     }
 
+    // Method to upload a cover image
     public void uploadImageCover(Uri imageUri, String destinationId, ImageView imageView, ContentResolver contentResolver, ImageDataCallback imageDataCallback) {
 
         String filename = getFileNameAndExtension(imageUri, contentResolver);
@@ -76,9 +78,10 @@ public class ImageRepository {
         });
     }
 
+    // Method to update the cover image
     public void updateCoverImage(Uri newCover, Uri oldCover, String destinationId, ContentResolver contentResolver, ImageDataCallback imageDataCallback) {
 
-        if(newCover != null){
+        if (newCover != null) {
             String filename = getFileNameAndExtension(newCover, contentResolver);
             StorageReference storageRef = storage.getReference();
             String oldCoverPath = oldCover.toString();
@@ -111,6 +114,7 @@ public class ImageRepository {
 
     }
 
+    // Method to batch upload images
     public void batchUploadImages(List<Uri> imageUris, String destinationId, ContentResolver contentResolver, BatchUploadCallback callback) {
         final int totalImages = imageUris.size();
         final int[] uploadedCount = {0};
@@ -157,12 +161,13 @@ public class ImageRepository {
         }
     }
 
+    // Helper method to check if a Uri is from Firebase Storage
     private boolean isFirebaseStorageUri(Uri uri) {
         // Check if the Uri scheme is "gs" or "https" (typical for Firebase Storage URIs)
         return "gs".equals(uri.getScheme()) || "https".equals(uri.getScheme());
     }
 
-
+    // Method to upload a batch of images
     public void uploadBatch(List<ImageGallery> imageGalleries) {
         WriteBatch batch = instance.batch();
         for (ImageGallery data : imageGalleries) {
@@ -200,15 +205,15 @@ public class ImageRepository {
         }
     }
 
-
-
-    private Map<String, Object> imageGalleryToMap(ImageGallery imageGallery){
+    // Helper method to convert ImageGallery object to a map
+    private Map<String, Object> imageGalleryToMap(ImageGallery imageGallery) {
         Map<String, Object> map = new HashMap<>();
         map.put(ImageGallery.destinationIdField, imageGallery.getDestinationId());
         map.put(ImageGallery.urlField, imageGallery.getUrl());
         return map;
     }
 
+    // Method to get the file name and extension from a Uri
     public String getFileNameAndExtension(Uri uri, ContentResolver contentResolver) {
         Cursor cursor = null;
         try {
@@ -232,11 +237,12 @@ public class ImageRepository {
         return null;
     }
 
+    // Method to load the uploaded cover image
     public void loadUploadedImage(String destinationId, ImageView imageView) {
         // Construct the StorageReference with the gs:// URL
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference destinationRef = storage.getReferenceFromUrl("gs://tourismrmmc.appspot.com/images/destination/" + destinationId + "/cover/");
-        
+
         destinationRef.listAll().addOnSuccessListener(listResult -> {
             if (!listResult.getItems().isEmpty()) {
                 StorageReference imageRef = listResult.getItems().get(0);
@@ -254,6 +260,7 @@ public class ImageRepository {
         });
     }
 
+    // Method to load the uploaded cover image with a callback
     public void loadUploadedImage(String destinationId, ImageView imageView, OnLoadCover loadCover) {
         // Construct the StorageReference with the gs:// URL
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -269,7 +276,7 @@ public class ImageRepository {
                                 .load(String.valueOf(task.getResult()))
                                 .into(imageView);
 
-                        if(loadCover != null){
+                        if (loadCover != null) {
                             loadCover.OnLoad(task.getResult());
                         }
                     }
@@ -280,31 +287,33 @@ public class ImageRepository {
         });
     }
 
+    // Method to load gallery images
     public void loadGalleryImage(String destinationId, OnImageLoadListener<ImageGallery> listener) {
         instance.collection(ImageGallery.collectionName).whereEqualTo(ImageGallery.destinationIdField, destinationId)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<ImageGallery> list = new ArrayList<>();
-                        for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             ImageGallery imageGallery = queryDocumentSnapshot.toObject(ImageGallery.class);
-                            Log.d(TAG, "retrieve "+imageGallery.getUrl());
+                            Log.d(TAG, "retrieve " + imageGallery.getUrl());
                             list.add(imageGallery);
                         }
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onImageLoadSuccess(list);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onImageLoadFailure(e);
                         }
                     }
                 });
     }
 
+    // Method to delete an image
     public void deleteImage(Uri uri, OnDeleteImageCallback deleteImageCallback) {
         CollectionReference collectionReference = instance.collection(ImageGallery.collectionName);
 
@@ -353,7 +362,4 @@ public class ImageRepository {
             }
         });
     }
-
-
-
 }

@@ -36,6 +36,7 @@ public class UserRepository {
         this.userAuth = FirebaseAuth.getInstance();
     }
 
+    // Method to add a new user
     public void addUser(UserInformation user) {
         Map<String, Object> newUser = new HashMap<>();
 
@@ -45,65 +46,85 @@ public class UserRepository {
         newUser.put(UserInformation.birthDateField, user.getBirthDate());
         newUser.put(UserInformation.genderField, user.getGender());
 
-        userAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    String uid = userAuth.getCurrentUser().getUid();
-                    instance.collection(UserInformation.collectionName).document(uid).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Messenger.showAlertDialog(context, "User Register", "You successfully register!", "Ok").show();
-                            context.startActivity(new Intent(context, Login.class));
-                            userAuth.signOut();
+        // Create a new user using email and password
+        userAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // If user creation is successful, add user information to Firestore
+                            String uid = userAuth.getCurrentUser().getUid();
+                            instance.collection(UserInformation.collectionName).document(uid).set(newUser)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            // Show success message, start login activity, and sign out
+                                            Messenger.showAlertDialog(context, "User Register",
+                                                    "You successfully registered!", "Ok").show();
+                                            context.startActivity(new Intent(context, Login.class));
+                                            userAuth.signOut();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Show failure message
+                                            Messenger.showAlertDialog(context, "User Register",
+                                                    "Registration unsuccessful!", "Ok").show();
+                                        }
+                                    });
+                        } else {
+                            // Show failure message with the exception details
+                            Messenger.showAlertDialog(context, "User Register",
+                                    task.getException().getMessage(), "Ok").show();
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Messenger.showAlertDialog(context, "User Register", "You unsuccessfully register!", "Ok").show();
-                        }
-                    });
-                } else {
-                    Messenger.showAlertDialog(context, "User Register", task.getException().getMessage(), "Ok").show();
-                }
-            }
-
-        });
+                    }
+                });
     }
 
+    // Method to get user information from Firestore
     public void getUserInformation(DataCallBack<UserInformation> dataCallBack) {
         String uid = userAuth.getCurrentUser().getUid();
-        instance.collection(UserInformation.collectionName).document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        UserInformation userInformation = document.toObject(UserInformation.class);
-                        dataCallBack.onDataLoaded(userInformation);
-                    } else {
-                        dataCallBack.onDataNotAvailable("User not found");
+        instance.collection(UserInformation.collectionName).document(uid).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // If user document exists, load user information
+                                UserInformation userInformation = document.toObject(UserInformation.class);
+                                dataCallBack.onDataLoaded(userInformation);
+                            } else {
+                                // If user document does not exist, provide a message
+                                dataCallBack.onDataNotAvailable("User not found");
+                            }
+                        } else {
+                            // If an error occurs during the query, provide an error message
+                            dataCallBack.onDataNotAvailable(task.getException().getMessage());
+                        }
                     }
-                } else {
-                    dataCallBack.onDataNotAvailable(task.getException().getMessage());
-                }
-            }
-        });
+                });
     }
 
+    // Method to delete the user account
     public void deleteUserAccount() {
         FirebaseUser currentUser = userAuth.getCurrentUser();
 
         if (currentUser != null) {
+            // If a user is logged in, delete the user account
             currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Messenger.showAlertDialog(context, "User Account Deletion", "You successfully delete your account!", "Ok").show();
+                    // Show success message
+                    Messenger.showAlertDialog(context, "User Account Deletion",
+                            "You successfully deleted your account!", "Ok").show();
                 }
             });
         } else {
-            Messenger.showAlertDialog(context, "User Account Deletion", "No user is currently logged in!", "Ok").show();
+            // If no user is currently logged in, provide a message
+            Messenger.showAlertDialog(context, "User Account Deletion",
+                    "No user is currently logged in!", "Ok").show();
         }
     }
 

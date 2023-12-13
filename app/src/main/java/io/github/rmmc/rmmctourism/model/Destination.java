@@ -81,6 +81,102 @@ public class Destination implements Parcelable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getDestinationId() {
+        return destinationId;
+    }
+
+    public void setDestinationId(String destinationId) {
+        this.destinationId = destinationId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getWebsiteUrl() {
+        return websiteUrl;
+    }
+
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl;
+    }
+
+    public String getFacebookPage() {
+        return facebookPage;
+    }
+
+    public void setFacebookPage(String facebookPage) {
+        this.facebookPage = facebookPage;
+    }
+
+    public String getInstagramPage() {
+        return instagramPage;
+    }
+
+    public void setInstagramPage(String instagramPage) {
+        this.instagramPage = instagramPage;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public Timestamp getDatePublished() {
+        return datePublished;
+    }
+
+    public void setDatePublished(Timestamp datePublished) {
+        this.datePublished = datePublished;
+    }
+
+    public Timestamp getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Timestamp lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     // Parcelable creator
     public static final Creator<Destination> CREATOR = new Creator<Destination>() {
         @Override

@@ -28,12 +28,15 @@ public class ReviewRepository {
     private Context context;
     private FirebaseAuth userAuth;
     private FirebaseFirestore instance;
+
+    // Constructor
     public ReviewRepository(Context context){
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.userAuth = FirebaseAuth.getInstance();
     }
 
+    // Method to add a review
     public void addReview(Review review){
         instance.collection(Review.collectionName).add(reviewToMap(review)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -47,6 +50,7 @@ public class ReviewRepository {
         });
     }
 
+    // Method to get reviews for a destination
     public void getReview(Destination destination, OnReviewDataCallback reviewDataCallback){
         instance.collection(Review.collectionName)
                 .whereEqualTo(Review.destinationIdField, destination.getDestinationId())
@@ -68,6 +72,7 @@ public class ReviewRepository {
                 });
     }
 
+    // Method to get full names
     public void getFullName(OnReviewDataCallback<UserInformation> onReviewDataCallback){
         instance.collection(UserInformation.collectionName)
                 .get()
@@ -86,6 +91,8 @@ public class ReviewRepository {
                     }
                 });
     }
+
+    // Helper method to convert Firestore document to UserInformation object
     private UserInformation documentToUserInformation(QueryDocumentSnapshot queryDocumentSnapshot){
         UserInformation userInformation = new UserInformation();
         userInformation.setUID(queryDocumentSnapshot.getId());
@@ -95,6 +102,7 @@ public class ReviewRepository {
         return userInformation;
     }
 
+    // Helper method to convert a Review object to a map
     private Map<String, Object> reviewToMap(Review review) {
         Map<String, Object> reviewMap = new HashMap<>();
         reviewMap.put(Review.userIdField, review.getUserId());

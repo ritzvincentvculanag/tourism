@@ -47,12 +47,14 @@ public class DestinationRepository {
     private ImageRepository imageRepository;
     private FirebaseAuth userAuth;
 
+    // Default constructor
     public DestinationRepository(){
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
         this.userAuth = FirebaseAuth.getInstance();
     }
 
+    // Constructor with context
     public DestinationRepository(Context context){
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
@@ -60,21 +62,27 @@ public class DestinationRepository {
         this.userAuth = FirebaseAuth.getInstance();
     }
 
+    // Method to add a new destination
     public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver, Button button){
         button.setEnabled(false);
         Map<String, Object> data = destinationToMap(destination);
+
+        // Add destination data to Firestore
         instance.collection(Destination.collectioName)
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        // Upload cover image
                         imageRepository.uploadImageCover(uri, documentReference.getId(), imageView, contentResolver, new ImageDataCallback(){
                             @Override
                             public void onSuccess() {
+                                // Upload image gallery
                                 imageRepository.batchUploadImages(listUri, documentReference.getId(), contentResolver, new BatchUploadCallback() {
                                     @Override
                                     public void onSuccess(List<ImageGallery> downloadUrls) {
 
+                                        // Upload image gallery
                                         imageRepository.uploadBatch(downloadUrls);
                                         Messenger.showAlertDialog(context,
                                                 "Tourist Destination",
@@ -116,10 +124,12 @@ public class DestinationRepository {
                 });
     }
 
+    // Method to update a destination
     public void updateDestination(Destination destination, Uri coverUri, Uri newCover,List<Uri> uris, ImageView cover, ContentResolver contentResolver, Button button) {
         button.setEnabled(false);
         Map<String, Object> data = destinationToMap(destination);
 
+        // Update destination data in Firestore
         instance.collection(Destination.collectioName)
                 .document(destination.getDestinationId()) // Use document instead of add for updating
                 .set(data)
@@ -176,7 +186,7 @@ public class DestinationRepository {
                 });
     }
 
-
+    // Method to get all destinations
     public void getDestination(final DestinationDataCallback<Destination> callback){
         List<Destination> list = new ArrayList<>();
 
@@ -207,37 +217,7 @@ public class DestinationRepository {
                 });
     }
 
-    public void getMyDestination(final DestinationDataCallback<Destination> callback){
-        List<Destination> list = new ArrayList<>();
-
-        instance.collection(Destination.collectioName)
-                .whereEqualTo(Destination.userIdField, userAuth.getCurrentUser().getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getString(Destination.nameField));
-                                Destination destination = documentToDestination(document);
-                                list.add(destination);
-                            }
-
-                            if (callback != null) {
-                                callback.onDataLoaded(list);
-                                Log.d(TAG, "success: ", task.getException());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            if (callback != null) {
-                                callback.onDataNotAvailable();
-                            }
-                        }
-                    }
-                });
-    }
-
+    // Method to get destinations based on favorites
     public void getDestination(List<Favorite> favorites, final DestinationDataCallback<Destination> callback) {
         List<Destination> list = new ArrayList<>();
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
@@ -272,6 +252,39 @@ public class DestinationRepository {
                 });
     }
 
+    // Method to get user-specific destinations
+    public void getMyDestination(final DestinationDataCallback<Destination> callback){
+        List<Destination> list = new ArrayList<>();
+
+        instance.collection(Destination.collectioName)
+                .whereEqualTo(Destination.userIdField, userAuth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getString(Destination.nameField));
+                                Destination destination = documentToDestination(document);
+                                list.add(destination);
+                            }
+
+                            if (callback != null) {
+                                callback.onDataLoaded(list);
+                                Log.d(TAG, "success: ", task.getException());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            if (callback != null) {
+                                callback.onDataNotAvailable();
+                            }
+                        }
+                    }
+                });
+    }
+
+    // Method to delete a destination
     public void deleteDestination(String destinationId)
     {
         instance.collection(Destination.collectioName).document(destinationId)
@@ -295,13 +308,10 @@ public class DestinationRepository {
                 });
     }
 
-
-
-
+    // Helper method to convert Destination object to a map
     private Map<String, Object> destinationToMap(Destination destination) {
         Map<String, Object> destinationMap = new HashMap<>();
         destinationMap.put(Destination.userIdField, destination.getUserId());
-
         destinationMap.put(Destination.nameField, destination.getName());
         destinationMap.put(Destination.descriptionField, destination.getDescription());
         destinationMap.put(Destination.addressField, destination.getAddress());
@@ -313,15 +323,16 @@ public class DestinationRepository {
         destinationMap.put(Destination.datePublishedField, destination.getDatePublished());
         destinationMap.put(Destination.lastUpdateField, destination.getLastUpdate());
 
+        // Remove null values from the map
         destinationMap.values().removeAll(Collections.singleton(null));
 
         return destinationMap;
     }
 
+    // Helper method to convert Firestore document to Destination object
     private Destination documentToDestination(QueryDocumentSnapshot document) {
         String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
-
         String name = document.getString(Destination.nameField);
         String description = document.getString(Destination.descriptionField);
         String address = document.getString(Destination.addressField);
@@ -337,6 +348,7 @@ public class DestinationRepository {
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
 
+    // Overloaded method for document conversion
     private Destination documentToDestination(DocumentSnapshot document) {
         String destinationId = document.getId();
         String userId = document.getString(Destination.userIdField);
@@ -354,6 +366,4 @@ public class DestinationRepository {
         return new Destination(destinationId, userId, name, description, address, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
-
-
 }

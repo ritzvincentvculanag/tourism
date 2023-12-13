@@ -32,12 +32,15 @@ public class FavoriteRepository {
     private Context context;
     private FirebaseFirestore instance;
     private FirebaseAuth userAuth;
+
+    // Constructor
     public FavoriteRepository(Context context){
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.userAuth = FirebaseAuth.getInstance();
     }
 
+    // Method to add a new favorite
     public void addFavorite(Favorite favorite) {
         // Create a query to check if the favorite already exists
         Query query = instance.collection(Favorite.collectionName)
@@ -79,6 +82,7 @@ public class FavoriteRepository {
         });
     }
 
+    // Method to remove a favorite
     public void removeFavorite(Favorite favorite) {
         instance.collection(Favorite.collectionName)
                 .whereEqualTo(Favorite.userIdField, favorite.getUserId())
@@ -88,7 +92,6 @@ public class FavoriteRepository {
                     if (task.isSuccessful()) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
-
                             DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                             document.getReference().delete()
                                     .addOnSuccessListener(aVoid -> {
@@ -120,8 +123,7 @@ public class FavoriteRepository {
                 });
     }
 
-
-
+    // Method to get all user favorites
     public void getFavorite(OnFavoriteDataCallback dataCallBack) {
         instance.collection(Favorite.collectionName)
                 .whereEqualTo(Favorite.userIdField, userAuth.getCurrentUser().getUid())
@@ -144,6 +146,7 @@ public class FavoriteRepository {
                 });
     }
 
+    // Method to check if a destination is a favorite for the current user
     public void getFavorite(String destinationId, OnViewFavoriteCallback dataCallBack) {
         instance.collection(Favorite.collectionName)
                 .whereEqualTo(Favorite.userIdField, userAuth.getCurrentUser().getUid())
@@ -157,7 +160,6 @@ public class FavoriteRepository {
                             dataCallBack.onSuccess(favorite);
                         }
                     } else {
-
                         if (dataCallBack != null) {
                             dataCallBack.onFailure();
                         }
@@ -170,8 +172,7 @@ public class FavoriteRepository {
                 });
     }
 
-
-
+    // Helper method to convert Favorite object to a map
     private Map<String, Object> reviewToMap(Favorite favorite){
         Map<String, Object> map = new HashMap<>();
         map.put(Favorite.userIdField, favorite.getUserId());
@@ -179,6 +180,7 @@ public class FavoriteRepository {
         return map;
     }
 
+    // Helper method to convert Firestore document to Favorite object
     private Favorite documentToFavorite(DocumentSnapshot document){
         String uid = document.getId();
         String userId = document.getString(Favorite.userIdField);
