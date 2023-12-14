@@ -81,6 +81,54 @@ public class Destination implements Parcelable {
         this.lastUpdate = lastUpdate;
     }
 
+    protected Destination(Parcel in) {
+        destinationId = in.readString();
+        userId = in.readString();
+        name = in.readString();
+        description = in.readString();
+        address = in.readString();
+        contactNumber = in.readString();
+        websiteUrl = in.readString();
+        facebookPage = in.readString();
+        instagramPage = in.readString();
+        emailAddress = in.readString();
+        datePublished = in.readParcelable(Timestamp.class.getClassLoader());
+        lastUpdate = in.readParcelable(Timestamp.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(destinationId);
+        dest.writeString(userId);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(address);
+        dest.writeString(contactNumber);
+        dest.writeString(websiteUrl);
+        dest.writeString(facebookPage);
+        dest.writeString(instagramPage);
+        dest.writeString(emailAddress);
+        dest.writeParcelable(datePublished, flags);
+        dest.writeParcelable(lastUpdate, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
+        @Override
+        public Destination createFromParcel(Parcel in) {
+            return new Destination(in);
+        }
+
+        @Override
+        public Destination[] newArray(int size) {
+            return new Destination[size];
+        }
+    };
+
     public String getDestinationId() {
         return destinationId;
     }
@@ -175,41 +223,5 @@ public class Destination implements Parcelable {
 
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    // Parcelable creator
-    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
-        @Override
-        public Destination createFromParcel(Parcel in) {
-            return new Destination();
-        }
-
-        @Override
-        public Destination[] newArray(int size) {
-            return new Destination[size];
-        }
-    };
-
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(destinationId);
-        parcel.writeString(userId);
-        parcel.writeString(name);
-        parcel.writeString(description);
-        parcel.writeString(address);
-        parcel.writeString(contactNumber);
-        parcel.writeString(websiteUrl);
-        parcel.writeString(facebookPage);
-        parcel.writeString(instagramPage);
-        parcel.writeString(emailAddress);
-        parcel.writeParcelable(datePublished, i);
-        parcel.writeParcelable(lastUpdate, i);
     }
 }
