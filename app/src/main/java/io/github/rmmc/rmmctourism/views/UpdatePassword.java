@@ -3,14 +3,13 @@ package io.github.rmmc.rmmctourism.views;
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 import static io.github.rmmc.rmmctourism.util.Validator.isValidPassword;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.repository.UpdateUserRepository;
@@ -44,7 +43,7 @@ public class UpdatePassword extends AppCompatActivity {
     }
 
     private void updatePassword(View view) {
-        if(Validator.fieldsAreEmpty(newPassword, confirmPassword ,oldPassword)){
+        if (Validator.fieldsAreEmpty(newPassword, confirmPassword, oldPassword)) {
             showAlertDialog(
                     this,
                     "Change Password",
@@ -53,7 +52,7 @@ public class UpdatePassword extends AppCompatActivity {
             ).show();
             return;
         }
-        if(!isValidPassword(newPassword)){
+        if (!isValidPassword(newPassword)) {
             showAlertDialog(
                     this,
                     getString(R.string.register_dialog_error_title),
@@ -64,7 +63,7 @@ public class UpdatePassword extends AppCompatActivity {
         }
         String newPass = Miner.getString(newPassword);
         String confirmPass = Miner.getString(confirmPassword);
-        if(!newPass.equals(confirmPass)){
+        if (!newPass.equals(confirmPass)) {
             Messenger.showAlertDialog(this,
                     "Change Password",
                     "Password doest not match!",

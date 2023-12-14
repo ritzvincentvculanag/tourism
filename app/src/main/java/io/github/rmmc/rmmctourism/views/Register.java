@@ -7,14 +7,14 @@ import static io.github.rmmc.rmmctourism.util.Validator.isValidEmail;
 import static io.github.rmmc.rmmctourism.util.Validator.isValidName;
 import static io.github.rmmc.rmmctourism.util.Validator.isValidPassword;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -107,7 +107,7 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
     private void register(View view) {
         // Check internet connection
         if (!NetworkUtils.isNetworkConnected(this)) {
-            Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
+            Messenger.showAlertDialog(this, "Internet Connection", "Please connect to the internet before using the application", "Ok").show();
             return;
         }
 
@@ -130,19 +130,19 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             return;
         }
 
-        if(!isValidName(tilRegisterFirstName)){
+        if (!isValidName(tilRegisterFirstName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for first name!", "Ok").show();
             return;
         }
-        if(!isValidName(tilRegisterMiddleName) && !fieldIsEmpty(tilRegisterMiddleName)){
+        if (!isValidName(tilRegisterMiddleName) && !fieldIsEmpty(tilRegisterMiddleName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for middle name!", "Ok").show();
             return;
         }
-        if(!isValidName(tilRegisterLastName)){
+        if (!isValidName(tilRegisterLastName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for last name!", "Ok").show();
@@ -178,7 +178,7 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             return;
         }
 
-        if(!isValidEmail(tilRegisterEmail)){
+        if (!isValidEmail(tilRegisterEmail)) {
             showAlertDialog(
                     this,
                     getString(R.string.register_dialog_error_title),
@@ -188,11 +188,11 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             return;
         }
 
-        if(!isValidPassword(tilRegisterPassword)){
+        if (!isValidPassword(tilRegisterPassword)) {
             showAlertDialog(
                     this,
                     getString(R.string.register_dialog_error_title),
-                    "Invalid password format",
+                    "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.",
                     getString(R.string.register_dialog_error_postive_button)
             ).show();
             return;
@@ -211,7 +211,6 @@ public class Register extends AppCompatActivity implements WidgetInitializer, Ac
             ).show();
             return;
         }
-
 
 
         // Create UserInformation object

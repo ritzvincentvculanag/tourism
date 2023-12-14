@@ -1,19 +1,19 @@
 /**
  * ExploreAdapter is a RecyclerView adapter responsible for displaying destination items
  * in the Explore section of the RMMC Tourism app.
- *
+ * <p>
  * This adapter supports the dynamic loading of destination images, handling favorites,
  * and populating the UI with destination information.
  *
  * @param context The context of the calling activity or fragment.
  * @param list The list of Destination items to be displayed.
  * @param favorites The list of Favorite items representing user favorites.
- *
+ * <p>
  * Usage:
  * // Example with a list of Destination items
  * List<Destination> destinationList = //... populate the list
  * ExploreAdapter adapter = new ExploreAdapter(context, destinationList);
- *
+ * <p>
  * // Example with a list of Destination items and user favorites
  * List<Destination> destinationList = //... populate the list
  * List<Favorite> favoriteList = //... populate the list
@@ -23,7 +23,6 @@ package io.github.rmmc.rmmctourism.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
      * @param context The context of the calling activity or fragment.
      * @param list The list of Destination items to be displayed.
      */
-    public ExploreAdapter(Context context, List<Destination> list){
+    public ExploreAdapter(Context context, List<Destination> list) {
         this.context = context;
         this.list = list;
         imageRepository = new ImageRepository();
@@ -78,7 +77,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
      * @param list The list of Destination items to be displayed.
      * @param favorites The list of Favorite items representing user favorites.
      */
-    public ExploreAdapter(Context context, List<Destination> list, List<Favorite> favorites){
+    public ExploreAdapter(Context context, List<Destination> list, List<Favorite> favorites) {
         this.context = context;
         this.list = new ArrayList<>(list);
         this.favorites = new ArrayList<>(favorites);
@@ -119,27 +118,53 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
 
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.coverImg);
 
-        for (Iterator<Favorite> iterator = favorites.iterator(); iterator.hasNext();) {
-            Favorite favorite = iterator.next();
-
-            if (favorite.getDestinationId().equals(destination.getDestinationId())) {
-                holder.btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
-                holder.btnFavorite.setOnClickListener(e -> {
-                    favoriteRepository.removeFavorite(favorite);
-                    holder.btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
-                    iterator.remove();
-                    notifyDataSetChanged();
-                });
-                return;
+        // Check if the current item is a favorite
+        boolean isFavorite = false;
+        for (Favorite favorite : favorites) {
+            if (favorite.getDestinationId().equals(destination.getDestinationId()) &&
+                    favorite.getUserId().equals(userAuth.getCurrentUser().getUid())) {
+                isFavorite = true;
+                break;
             }
         }
 
-        holder.btnFavorite.setOnClickListener(e ->{
-            favoriteRepository.addFavorite(new Favorite(userAuth.getCurrentUser().getUid(), destination.getDestinationId()));
-            favorites.add(new Favorite(userAuth.getCurrentUser().getUid(), destination.getDestinationId()));
-            notifyDataSetChanged();
+        // Set button color based on whether it is a favorite or not
+        if (isFavorite) {
+            holder.btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
+        } else {
+            holder.btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
+        }
+         final boolean isFav = isFavorite;
+        // Handle button click
+        holder.btnFavorite.setOnClickListener(e -> {
+            if (isFav) {
+                // Remove favorite
+                Favorite favoriteToRemove = findFavorite(destination.getDestinationId());
+                if (favoriteToRemove != null) {
+                    favoriteRepository.removeFavorite(favoriteToRemove);
+                    favorites.remove(favoriteToRemove);
+                    notifyDataSetChanged();
+                }
+            } else {
+                // Add favorite
+                favoriteRepository.addFavorite(new Favorite(userAuth.getCurrentUser().getUid(), destination.getDestinationId()));
+                favorites.add(new Favorite(userAuth.getCurrentUser().getUid(), destination.getDestinationId()));
+                notifyDataSetChanged();
+            }
         });
     }
+
+    // Helper method to find a Favorite in the list
+    private Favorite findFavorite(String destinationId) {
+        for (Favorite favorite : favorites) {
+            if (favorite.getDestinationId().equals(destinationId) &&
+                    favorite.getUserId().equals(userAuth.getCurrentUser().getUid())) {
+                return favorite;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Returns the total number of items that can be displayed by the adapter.

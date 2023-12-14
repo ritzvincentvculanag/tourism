@@ -4,7 +4,7 @@
  *
  * @param reviewList The list of Review items to be displayed in the adapter.
  * @param userInformations The list of UserInformation items associated with the reviews.
- *
+ * <p>
  * Usage:
  * // Example with a list of Review items and UserInformation items
  * List<Review> reviewList = //... populate the list
@@ -43,7 +43,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
      * @param reviewList The list of Review items to be displayed in the adapter.
      * @param userInformations The list of UserInformation items associated with the reviews.
      */
-    public ReviewAdapter(List<Review> reviewList, List<UserInformation> userInformations){
+    public ReviewAdapter(List<Review> reviewList, List<UserInformation> userInformations) {
         this.reviewList = reviewList;
         this.userInformations = userInformations;
     }
@@ -74,8 +74,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         Review review = reviewList.get(position);
         holder.tvDatePublished.setText(formatTimestamp(review.getDatePublished()));
         holder.tvContent.setText(review.getContent());
-        for(UserInformation userInformation: userInformations){
-            if(userInformation.getUID().equals(review.getUserId())){
+        for (UserInformation userInformation : userInformations) {
+            if (userInformation.getUID().equals(review.getUserId())) {
                 holder.tvName.setText(formatName(userInformation));
             }
         }
@@ -89,6 +89,32 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     @Override
     public int getItemCount() {
         return reviewList.size();
+    }
+
+    /**
+     * Formats the name from the given UserInformation.
+     *
+     * @param userInformation The UserInformation instance.
+     * @return The formatted name.
+     */
+    private String formatName(UserInformation userInformation) {
+        return userInformation.getFirstName() + " " + userInformation.getLastName();
+    }
+
+    /**
+     * Formats the timestamp to a readable date and time string.
+     *
+     * @param timestamp The Timestamp instance.
+     * @return The formatted date and time string.
+     */
+    private String formatTimestamp(Timestamp timestamp) {
+        if (timestamp != null) {
+            Date date = timestamp.toDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
+            return dateFormat.format(date);
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -110,32 +136,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             tvName = view.findViewById(R.id.tv_review_name);
             tvContent = view.findViewById(R.id.tv_review_content);
             tvDatePublished = view.findViewById(R.id.tv_review_date_published);
-        }
-    }
-
-    /**
-     * Formats the name from the given UserInformation.
-     *
-     * @param userInformation The UserInformation instance.
-     * @return The formatted name.
-     */
-    private String formatName(UserInformation userInformation){
-        return userInformation.getFirstName() + " " + userInformation.getLastName();
-    }
-
-    /**
-     * Formats the timestamp to a readable date and time string.
-     *
-     * @param timestamp The Timestamp instance.
-     * @return The formatted date and time string.
-     */
-    private String formatTimestamp(Timestamp timestamp) {
-        if (timestamp != null) {
-            Date date = timestamp.toDate();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
-            return dateFormat.format(date);
-        } else {
-            return "";
         }
     }
 }

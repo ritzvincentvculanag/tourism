@@ -30,6 +30,7 @@ import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class DestinationDetail extends AppCompatActivity implements WidgetInitializer, ActionInitializer {
 
+    private static boolean isFavorite = true;
     // UI components
     private TextView tvTitle;
     private TextView tvAddress;
@@ -53,6 +54,13 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         userAuth = FirebaseAuth.getInstance();
         favoriteRepository = new FavoriteRepository(this);
         initializeWidgets();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh data when the activity resumes
+        populateData();
     }
 
     @Override
@@ -145,21 +153,19 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         }
     }
 
-    private static boolean isFavorite = true;
-
     private void favoriteAction(Favorite favorite) {
-        Log.d(TAG, "Fav "+ isFavorite);
+        Log.d(TAG, "Fav " + isFavorite);
 
 
-            btnFavorite.setOnClickListener(e -> {
-                if(isFavorite != true){
-                    favoriteRepository.removeFavorite(favorite);
-                    btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
-                }else{
-                    favoriteRepository.addFavorite(favorite);
-                    btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
-                }
-                isFavorite = !isFavorite;
-            });
+        btnFavorite.setOnClickListener(e -> {
+            if (isFavorite != true) {
+                favoriteRepository.removeFavorite(favorite);
+                btnFavorite.setBackgroundColor(Color.parseColor("#6750a4"));
+            } else {
+                favoriteRepository.addFavorite(favorite);
+                btnFavorite.setBackgroundColor(Color.parseColor("#FF0000"));
+            }
+            isFavorite = !isFavorite;
+        });
     }
 }

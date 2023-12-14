@@ -2,7 +2,6 @@
  * This is an adapter class for updating the gallery in the destination details screen.
  * It provides functionality to display and manage a list of images in a RecyclerView.
  * The adapter includes a ViewHolder for efficient item view management and uses Picasso for image loading.
- *
  */
 package io.github.rmmc.rmmctourism.adapter;
 
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.OnDeleteImageCallback;

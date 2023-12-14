@@ -9,7 +9,7 @@
         android:id="@+id/exploreDestinations"
         android:name="io.github.rmmc.rmmctourism.fragments.Explore"
         android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" >
+        tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_explore_to_detail"
             app:destination="@id/detail" />
@@ -38,7 +38,7 @@
         android:id="@+id/destinations"
         android:name="io.github.rmmc.rmmctourism.fragments.Dashboard"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboard_to_detail"
             app:destination="@id/detail" />

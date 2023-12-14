@@ -6,5 +6,6 @@ import io.github.rmmc.rmmctourism.model.ImageGallery;
 
 public interface BatchUploadCallback {
     void onSuccess(List<ImageGallery> downloadUrls);
+
     void onFailure(Exception exception);
 }

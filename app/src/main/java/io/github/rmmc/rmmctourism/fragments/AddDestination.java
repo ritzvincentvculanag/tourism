@@ -1,8 +1,13 @@
 package io.github.rmmc.rmmctourism.fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -11,14 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
@@ -204,6 +201,21 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
                     "Please provide correct URLs for the social media!",
+                    "Ok").show();
+            return;
+        }
+        if (coverUri == null) {
+            Messenger.showAlertDialog(getContext(),
+                    "Add Destination",
+                    "Please upload a cover photo!",
+                    "Ok").show();
+            return;
+        }
+
+        if (coverUri == null) {
+            Messenger.showAlertDialog(getContext(),
+                    "Add Destination",
+                    "Please upload a image for gallery!",
                     "Ok").show();
             return;
         }

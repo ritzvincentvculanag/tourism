@@ -1,11 +1,11 @@
 package io.github.rmmc.rmmctourism.views;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
-import android.os.Bundle;
 
 import java.util.List;
 
@@ -14,10 +14,7 @@ import io.github.rmmc.rmmctourism.adapter.MyDestinationAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
-import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
-import io.github.rmmc.rmmctourism.util.OnDestinationDelete;
-import io.github.rmmc.rmmctourism.util.OnDestinationUpdate;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class MyDestinations extends AppCompatActivity implements

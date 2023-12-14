@@ -1,12 +1,12 @@
 /**
  * GalleryAdapter is a RecyclerView adapter responsible for displaying a list of
  * Uri images in a gallery for the destination in the RMMC Tourism app.
- *
+ * <p>
  * This adapter provides the ability to delete images from the gallery.
  *
  * @param uris The list of Uri images to be displayed in the gallery.
  * @param context The context of the calling activity or fragment.
- *
+ * <p>
  * Usage:
  * // Example with a list of Uri images and a context
  * List<Uri> uriList = //... populate the list
@@ -74,9 +74,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Uri uri = uris.get(position);
-        Log.d(TAG, "adapter "+uri.toString());
+        Log.d(TAG, "adapter " + uri.toString());
         holder.ivGalleryItem.setImageURI(uri);
-        holder.ivGalleryItem.setOnClickListener(e ->{
+        holder.ivGalleryItem.setOnClickListener(e -> {
             int index = position;
             Messenger.showAlertDialog(context,
                     "Delete Image",

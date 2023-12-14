@@ -31,11 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.fragments.Gallery;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.util.BatchUploadCallback;
 import io.github.rmmc.rmmctourism.util.ImageDataCallback;
@@ -170,6 +167,7 @@ public class ImageRepository {
     // Method to upload a batch of images
     public void uploadBatch(List<ImageGallery> imageGalleries) {
         WriteBatch batch = instance.batch();
+
         for (ImageGallery data : imageGalleries) {
             instance.collection(ImageGallery.collectionName)
                     .whereEqualTo("destinationId", data.getDestinationId())
@@ -189,14 +187,17 @@ public class ImageRepository {
                                         " and url: " + data.getUrl());
                             }
 
-                            // Commit the batch after checking for each document
-                            batch.commit()
-                                    .addOnSuccessListener(aVoid -> {
-                                        Log.d(TAG, "Batch upload successful");
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.d(TAG, "Error uploading batch: " + e.getMessage());
-                                    });
+                            // Check if this is the last document in the loop before committing the batch
+                            if (isLastDocument(data, imageGalleries)) {
+                                // Commit the batch after checking all documents
+                                batch.commit()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Log.d(TAG, "Batch upload successful");
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.d(TAG, "Error uploading batch: " + e.getMessage());
+                                        });
+                            }
                         } else {
                             // Handle errors in the query
                             Log.d(TAG, "Error checking for document existence: " + task.getException().getMessage());
@@ -204,6 +205,12 @@ public class ImageRepository {
                     });
         }
     }
+
+    private boolean isLastDocument(ImageGallery currentDocument, List<ImageGallery> allDocuments) {
+        // Check if the current document is the last one in the list
+        return currentDocument.equals(allDocuments.get(allDocuments.size() - 1));
+    }
+
 
     // Helper method to convert ImageGallery object to a map
     private Map<String, Object> imageGalleryToMap(ImageGallery imageGallery) {

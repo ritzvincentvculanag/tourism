@@ -3,18 +3,17 @@ package io.github.rmmc.rmmctourism.fragments;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ import io.github.rmmc.rmmctourism.repository.UserRepository;
 import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
-import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 /**
  * Fragment for displaying the dashboard with destination cards and user information.

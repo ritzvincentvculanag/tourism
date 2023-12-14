@@ -3,11 +3,6 @@ package io.github.rmmc.rmmctourism.fragments;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,22 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.adapter.ExploreAdapter;
 import io.github.rmmc.rmmctourism.adapter.ExploreSearchAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.DestinationDataCallback;
 import io.github.rmmc.rmmctourism.util.Miner;
-import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
-public class Explore extends Fragment implements ActionInitializer{
+public class Explore extends Fragment implements ActionInitializer {
 
     private RecyclerView rvSearchExplore;
     private DestinationRepository destinationRepository;
@@ -61,7 +58,7 @@ public class Explore extends Fragment implements ActionInitializer{
         return view;
     }
 
-    private void populateData(){
+    private void populateData() {
         // Fetch destinations from the repository
         destinationRepository.getDestination(new DestinationDataCallback<Destination>() {
             @Override

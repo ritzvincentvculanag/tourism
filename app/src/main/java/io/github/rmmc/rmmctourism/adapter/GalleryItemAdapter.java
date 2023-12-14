@@ -2,8 +2,6 @@ package io.github.rmmc.rmmctourism.adapter;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
-import io.github.rmmc.rmmctourism.util.Messenger;
 
 public class GalleryItemAdapter extends RecyclerView.Adapter<GalleryItemAdapter.GalleryItemViewHolder> {
 
@@ -41,7 +38,7 @@ public class GalleryItemAdapter extends RecyclerView.Adapter<GalleryItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull GalleryItemViewHolder holder, int position) {
         ImageGallery url = uris.get(position);
-        Log.d(TAG,  "he "+ uris.toString());
+        Log.d(TAG, "he " + uris.toString());
         Picasso.get()
                 .load(url.getUrl())
                 .placeholder(R.drawable.sample)

@@ -2,25 +2,19 @@ package io.github.rmmc.rmmctourism.fragments;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
-import io.github.rmmc.rmmctourism.adapter.GalleryItemAdapter;
 import io.github.rmmc.rmmctourism.adapter.viewpager.GalleryLoadAdapter;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.ImageGallery;

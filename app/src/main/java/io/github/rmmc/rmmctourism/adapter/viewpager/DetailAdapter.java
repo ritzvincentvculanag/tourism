@@ -1,18 +1,17 @@
 /**
  * DetailAdapter is a ViewPager2 adapter responsible for managing the fragments
  * displayed in the detail view of a destination in the RMMC Tourism app.
- *
+ * <p>
  * This adapter provides fragments for the "About," "Gallery," and "Reviews" sections,
  * allowing users to navigate through different aspects of a destination.
  *
- *
  * @param fragmentActivity The FragmentActivity that hosts the ViewPager2.
  * @param destination The Destination object associated with the detail view.
- *
  */
 package io.github.rmmc.rmmctourism.adapter.viewpager;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -33,7 +32,7 @@ public class DetailAdapter extends FragmentStateAdapter {
      * @param fragmentActivity The FragmentActivity that hosts the ViewPager2.
      * @param destination The Destination object associated with the detail view.
      */
-    public DetailAdapter(@NonNull FragmentActivity  fragmentActivity, Destination destination){
+    public DetailAdapter(@NonNull FragmentActivity fragmentActivity, Destination destination) {
         super(fragmentActivity);
         this.destination = destination;
     }
@@ -58,11 +57,15 @@ public class DetailAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         Bundle bundle = new Bundle();
         switch (position) {
-            case 0: return setFragments(new About(), bundle);
-            case 1: return setFragments(new Gallery(), bundle);
-            case 2: return setFragments(new Reviews(), bundle);
+            case 0:
+                return setFragments(new About(), bundle);
+            case 1:
+                return setFragments(new Gallery(), bundle);
+            case 2:
+                return setFragments(new Reviews(), bundle);
 
-            default: return setFragments(new About(),bundle);
+            default:
+                return setFragments(new About(), bundle);
         }
     }
 
@@ -73,7 +76,7 @@ public class DetailAdapter extends FragmentStateAdapter {
      * @param bundle The Bundle containing arguments to be set.
      * @return The configured Fragment with arguments set.
      */
-    private Fragment setFragments(Fragment fragment, Bundle bundle){
+    private Fragment setFragments(Fragment fragment, Bundle bundle) {
         bundle.putParcelable(Destination.collectioName, destination);
         fragment.setArguments(bundle);
         return fragment;

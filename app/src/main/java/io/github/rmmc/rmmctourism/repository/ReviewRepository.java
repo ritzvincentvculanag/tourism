@@ -1,7 +1,6 @@
 package io.github.rmmc.rmmctourism.repository;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,13 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.rmmc.rmmctourism.model.Destination;
-import io.github.rmmc.rmmctourism.model.Favorite;
 import io.github.rmmc.rmmctourism.model.Review;
 import io.github.rmmc.rmmctourism.model.UserInformation;
-import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.OnReviewDataCallback;
-import io.github.rmmc.rmmctourism.views.DestinationDetail;
 
 public class ReviewRepository {
 
@@ -30,14 +26,14 @@ public class ReviewRepository {
     private FirebaseFirestore instance;
 
     // Constructor
-    public ReviewRepository(Context context){
+    public ReviewRepository(Context context) {
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.userAuth = FirebaseAuth.getInstance();
     }
 
     // Method to add a review
-    public void addReview(Review review){
+    public void addReview(Review review) {
         instance.collection(Review.collectionName).add(reviewToMap(review)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -51,7 +47,7 @@ public class ReviewRepository {
     }
 
     // Method to get reviews for a destination
-    public void getReview(Destination destination, OnReviewDataCallback reviewDataCallback){
+    public void getReview(Destination destination, OnReviewDataCallback reviewDataCallback) {
         instance.collection(Review.collectionName)
                 .whereEqualTo(Review.destinationIdField, destination.getDestinationId())
                 .get()
@@ -73,7 +69,7 @@ public class ReviewRepository {
     }
 
     // Method to get full names
-    public void getFullName(OnReviewDataCallback<UserInformation> onReviewDataCallback){
+    public void getFullName(OnReviewDataCallback<UserInformation> onReviewDataCallback) {
         instance.collection(UserInformation.collectionName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -93,7 +89,7 @@ public class ReviewRepository {
     }
 
     // Helper method to convert Firestore document to UserInformation object
-    private UserInformation documentToUserInformation(QueryDocumentSnapshot queryDocumentSnapshot){
+    private UserInformation documentToUserInformation(QueryDocumentSnapshot queryDocumentSnapshot) {
         UserInformation userInformation = new UserInformation();
         userInformation.setUID(queryDocumentSnapshot.getId());
         userInformation.setFirstName(queryDocumentSnapshot.getString(UserInformation.firstNameField));

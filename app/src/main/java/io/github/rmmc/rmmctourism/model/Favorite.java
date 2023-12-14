@@ -3,13 +3,22 @@ package io.github.rmmc.rmmctourism.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 public class Favorite implements Parcelable {
 
     public static final String collectionName = "Favorite";
     public static final String userIdField = "userId";
     public static final String destinationField = "destinationId";
+    public static final Creator<Favorite> CREATOR = new Creator<Favorite>() {
+        @Override
+        public Favorite createFromParcel(Parcel in) {
+            return new Favorite(in);
+        }
+
+        @Override
+        public Favorite[] newArray(int size) {
+            return new Favorite[size];
+        }
+    };
     private String favoriteId;
     private String userId;
     private String destinationId;
@@ -46,18 +55,6 @@ public class Favorite implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Favorite> CREATOR = new Creator<Favorite>() {
-        @Override
-        public Favorite createFromParcel(Parcel in) {
-            return new Favorite(in);
-        }
-
-        @Override
-        public Favorite[] newArray(int size) {
-            return new Favorite[size];
-        }
-    };
 
     public String getFavoriteId() {
         return favoriteId;

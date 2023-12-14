@@ -1,14 +1,11 @@
 package io.github.rmmc.rmmctourism;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -18,7 +15,6 @@ import io.github.rmmc.rmmctourism.util.NetworkUtils;
 import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 import io.github.rmmc.rmmctourism.views.Hero;
 import io.github.rmmc.rmmctourism.views.Login;
-import io.github.rmmc.rmmctourism.views.Register;
 
 public class MainActivity extends AppCompatActivity implements ActionInitializer, WidgetInitializer {
 
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ActionInitializer
 
     private void login(View view) {
         if (!NetworkUtils.isNetworkConnected(this)) {
-            Messenger.showAlertDialog(this, "Internet Connection","Please connect to the internet before using the application", "Ok").show();
+            Messenger.showAlertDialog(this, "Internet Connection", "Please connect to the internet before using the application", "Ok").show();
             return;
         }
         startActivity(new Intent(this, Login.class));

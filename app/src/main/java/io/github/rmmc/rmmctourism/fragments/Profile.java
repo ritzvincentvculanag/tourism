@@ -1,16 +1,17 @@
 package io.github.rmmc.rmmctourism.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,7 @@ import io.github.rmmc.rmmctourism.views.UpdateUser;
 
 public class Profile extends Fragment implements WidgetInitializer, ActionInitializer {
 
+    private Context context;
     private View view;
 
     private TextView tvFullName;
@@ -98,7 +100,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         btnEditProfile = view.findViewById(R.id.btn_edit_profile);
     }
 
-    public void populateData(){
+    public void populateData() {
         // Fetch user information and populate UI elements
         userRepository.getUserInformation(new DataCallBack<UserInformation>() {
             @Override
@@ -114,7 +116,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
                 tvEmail.setText(userInformation.getEmail());
 
                 // Set up click listener for editing profile
-                btnEditProfile.setOnClickListener(e ->{
+                btnEditProfile.setOnClickListener(e -> {
                     Intent intent = new Intent(getContext(), UpdateUser.class);
                     intent.putExtra(UserInformation.collectionName, userInformation);
                     startActivity(intent);
@@ -133,12 +135,16 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
 
     private void deleteAccount(View view) {
         // Show an alert dialog to confirm account deletion
-        Messenger.showAlertDialog(getContext(), "Logout", "Do you want to delete this account?", "Yes", "No", new DialogInterface.OnClickListener() {
+        Messenger.showAlertDialog(getContext(), "Delete Account", "Do you want to delete this account?", "Yes", "No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Delete the user account and navigate to the main activity
                 userRepository.deleteUserAccount();
-                startActivity(new Intent(getContext(), MainActivity.class));
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                user.signOut();
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                startActivity(intent);
+
             }
         }, new DialogInterface.OnClickListener() {
             @Override
@@ -146,6 +152,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
                 // Handle the case where the user decides not to delete the account
             }
         }).show();
+
     }
 
     private void logout(View view) {
@@ -155,10 +162,12 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Sign out the user and navigate to the main activity
                 FirebaseAuth userAuth = FirebaseAuth.getInstance();
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 startActivity(new Intent(getContext(), MainActivity.class));
                 userAuth.signOut();
             }
-        }, (dialogInterface, i) -> {}).show();
+        }, (dialogInterface, i) -> {
+        }).show();
     }
 
     private void myDestination(View view) {
@@ -172,7 +181,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         String formattedBirthDate = sdf.format(birthDate);
         int age = calculateAge(birthDate);
-        String ageString = "("+age + " years old)";
+        String ageString = "(" + age + " years old)";
         return String.format("%s, %s", ageString, formattedBirthDate);
     }
 
@@ -183,4 +192,5 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         long ageInMillis = diffInMillis;
         return (int) (ageInMillis / (1000 * 60 * 60 * 24 * 365.25));
     }
+
 }

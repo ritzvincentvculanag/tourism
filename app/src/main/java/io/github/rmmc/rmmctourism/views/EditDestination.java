@@ -2,16 +2,6 @@ package io.github.rmmc.rmmctourism.views;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
-
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
@@ -225,7 +223,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
             return;
         }
 
-// Validation: Check if the specified URL fields contain valid URLs
+        // Validation: Check if the specified URL fields contain valid URLs
         if (!Validator.areAllUrlsValid(website, facebook, instagram)) {
             // Show an alert dialog asking the user to provide correct URLs for social media
             Messenger.showAlertDialog(this,
@@ -233,26 +231,27 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
                     "Please provide correct URL for the social media!",
                     "Ok").show();
             // Return from the method as the validation
-
-
-            // Create a Destination object
-            Destination destination = new Destination(
-                    destinationId,
-                    userAuth.getCurrentUser().getUid(),
-                    Miner.getString(name),
-                    Miner.getString(description),
-                    Miner.getString(address),
-                    Miner.getString(phone),
-                    Miner.getString(website),
-                    Miner.getString(facebook),
-                    Miner.getString(instagram),
-                    Miner.getString(email),
-                    Timestamp.now(),
-                    Timestamp.now()
-            );
-
-            // Update the destination in the repository
-            repository.updateDestination(destination, coverUri, newCover, uris, cover, getContentResolver(), updateDestination);
+            return;
         }
+
+        // Create a Destination object
+        Destination destination = new Destination(
+                destinationId,
+                userAuth.getCurrentUser().getUid(),
+                Miner.getString(name),
+                Miner.getString(description),
+                Miner.getString(address),
+                Miner.getString(phone),
+                Miner.getString(website),
+                Miner.getString(facebook),
+                Miner.getString(instagram),
+                Miner.getString(email),
+                Timestamp.now(),
+                Timestamp.now()
+        );
+
+        // Update the destination in the repository
+        repository.updateDestination(destination, coverUri, newCover, uris, cover, getContentResolver(), updateDestination);
+
     }
 }

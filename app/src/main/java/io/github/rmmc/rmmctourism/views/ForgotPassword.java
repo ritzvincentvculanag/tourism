@@ -2,11 +2,11 @@ package io.github.rmmc.rmmctourism.views;
 
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -43,7 +43,7 @@ public class ForgotPassword extends AppCompatActivity implements WidgetInitializ
     }
 
     private void forgotPasswordAction(View view) {
-        if(Validator.fieldIsEmpty(email)){
+        if (Validator.fieldIsEmpty(email)) {
             showAlertDialog(
                     this,
                     "Forget Password",

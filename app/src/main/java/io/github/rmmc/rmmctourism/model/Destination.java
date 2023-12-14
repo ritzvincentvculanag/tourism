@@ -3,8 +3,6 @@ package io.github.rmmc.rmmctourism.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import com.google.firebase.Timestamp;
 
 /**
@@ -26,7 +24,17 @@ public class Destination implements Parcelable {
     public static final String emailAddressField = "emailAddress";
     public static final String datePublishedField = "datePublished";
     public static final String lastUpdateField = "lastUpdate";
+    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
+        @Override
+        public Destination createFromParcel(Parcel in) {
+            return new Destination(in);
+        }
 
+        @Override
+        public Destination[] newArray(int size) {
+            return new Destination[size];
+        }
+    };
     private String destinationId;
     private String userId;
     private String name;
@@ -116,18 +124,6 @@ public class Destination implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
-        @Override
-        public Destination createFromParcel(Parcel in) {
-            return new Destination(in);
-        }
-
-        @Override
-        public Destination[] newArray(int size) {
-            return new Destination[size];
-        }
-    };
 
     public String getDestinationId() {
         return destinationId;

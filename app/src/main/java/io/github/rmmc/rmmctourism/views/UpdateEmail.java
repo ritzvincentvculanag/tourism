@@ -3,10 +3,10 @@ package io.github.rmmc.rmmctourism.views;
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 import static io.github.rmmc.rmmctourism.util.Validator.isValidEmail;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -14,7 +14,6 @@ import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.repository.UpdateUserRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
 import io.github.rmmc.rmmctourism.util.Validator;
-import io.github.rmmc.rmmctourism.util.WidgetInitializer;
 
 public class UpdateEmail extends AppCompatActivity implements ActionInitializer {
 
@@ -40,8 +39,8 @@ public class UpdateEmail extends AppCompatActivity implements ActionInitializer 
     @Override
     public void initializeActions() {
 
-        updateEmail.setOnClickListener(e ->{
-            if(Validator.fieldsAreEmpty(email, password)){
+        updateEmail.setOnClickListener(e -> {
+            if (Validator.fieldsAreEmpty(email, password)) {
                 showAlertDialog(
                         this,
                         "Change Email",
@@ -50,7 +49,7 @@ public class UpdateEmail extends AppCompatActivity implements ActionInitializer 
                 ).show();
                 return;
             }
-            if(!isValidEmail(email)){
+            if (!isValidEmail(email)) {
                 showAlertDialog(
                         this,
                         getString(R.string.register_dialog_error_title),

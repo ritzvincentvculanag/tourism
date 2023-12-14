@@ -1,13 +1,13 @@
 /**
  * ExploreSearchAdapter is a RecyclerView adapter responsible for displaying search results
  * of destination items in the Explore section of the RMMC Tourism app.
- *
+ * <p>
  * This adapter supports the dynamic loading of destination images and provides a button
  * to view the details of a selected destination.
  *
  * @param context The context of the calling activity or fragment.
  * @param list The list of Destination items to be displayed.
- *
+ * <p>
  * Usage:
  * // Example with a list of Destination items
  * List<Destination> destinationList = //... populate the list
@@ -47,7 +47,7 @@ public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdap
      * @param context The context of the calling activity or fragment.
      * @param list The list of Destination items to be displayed.
      */
-    public ExploreSearchAdapter(Context context, List<Destination> list){
+    public ExploreSearchAdapter(Context context, List<Destination> list) {
         this.context = context;
         this.list = new ArrayList<>(list);
         this.imageRepository = new ImageRepository();

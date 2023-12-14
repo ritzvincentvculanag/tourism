@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Button;
@@ -48,14 +47,14 @@ public class DestinationRepository {
     private FirebaseAuth userAuth;
 
     // Default constructor
-    public DestinationRepository(){
+    public DestinationRepository() {
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
         this.userAuth = FirebaseAuth.getInstance();
     }
 
     // Constructor with context
-    public DestinationRepository(Context context){
+    public DestinationRepository(Context context) {
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.imageRepository = new ImageRepository();
@@ -63,7 +62,7 @@ public class DestinationRepository {
     }
 
     // Method to add a new destination
-    public void addDestination(Destination destination, Uri uri, List<Uri> listUri,ImageView imageView, ContentResolver contentResolver, Button button){
+    public void addDestination(Destination destination, Uri uri, List<Uri> listUri, ImageView imageView, ContentResolver contentResolver, Button button) {
         button.setEnabled(false);
         Map<String, Object> data = destinationToMap(destination);
 
@@ -74,7 +73,7 @@ public class DestinationRepository {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Upload cover image
-                        imageRepository.uploadImageCover(uri, documentReference.getId(), imageView, contentResolver, new ImageDataCallback(){
+                        imageRepository.uploadImageCover(uri, documentReference.getId(), imageView, contentResolver, new ImageDataCallback() {
                             @Override
                             public void onSuccess() {
                                 // Upload image gallery
@@ -125,7 +124,7 @@ public class DestinationRepository {
     }
 
     // Method to update a destination
-    public void updateDestination(Destination destination, Uri coverUri, Uri newCover,List<Uri> uris, ImageView cover, ContentResolver contentResolver, Button button) {
+    public void updateDestination(Destination destination, Uri coverUri, Uri newCover, List<Uri> uris, ImageView cover, ContentResolver contentResolver, Button button) {
         button.setEnabled(false);
         Map<String, Object> data = destinationToMap(destination);
 
@@ -137,7 +136,7 @@ public class DestinationRepository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Update cover image
-                        imageRepository.updateCoverImage(newCover, coverUri,destination.getDestinationId(), contentResolver, new ImageDataCallback() {
+                        imageRepository.updateCoverImage(newCover, coverUri, destination.getDestinationId(), contentResolver, new ImageDataCallback() {
                             @Override
                             public void onSuccess() {
                                 // Update image gallery
@@ -187,7 +186,7 @@ public class DestinationRepository {
     }
 
     // Method to get all destinations
-    public void getDestination(final DestinationDataCallback<Destination> callback){
+    public void getDestination(final DestinationDataCallback<Destination> callback) {
         List<Destination> list = new ArrayList<>();
 
         instance.collection(Destination.collectioName)
@@ -253,7 +252,7 @@ public class DestinationRepository {
     }
 
     // Method to get user-specific destinations
-    public void getMyDestination(final DestinationDataCallback<Destination> callback){
+    public void getMyDestination(final DestinationDataCallback<Destination> callback) {
         List<Destination> list = new ArrayList<>();
 
         instance.collection(Destination.collectioName)
@@ -285,8 +284,7 @@ public class DestinationRepository {
     }
 
     // Method to delete a destination
-    public void deleteDestination(String destinationId)
-    {
+    public void deleteDestination(String destinationId) {
         instance.collection(Destination.collectioName).document(destinationId)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

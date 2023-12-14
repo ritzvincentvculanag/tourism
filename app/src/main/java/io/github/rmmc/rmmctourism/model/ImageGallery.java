@@ -10,6 +10,17 @@ public class ImageGallery implements Parcelable {
     public final static String collectionName = "galleryUrl";
     public final static String destinationIdField = "destinationId";
     public final static String urlField = "url";
+    public static final Creator<ImageGallery> CREATOR = new Creator<ImageGallery>() {
+        @Override
+        public ImageGallery createFromParcel(Parcel in) {
+            return new ImageGallery(in);
+        }
+
+        @Override
+        public ImageGallery[] newArray(int size) {
+            return new ImageGallery[size];
+        }
+    };
     private String uid;
     private String destinationId;
     private String url;
@@ -33,18 +44,6 @@ public class ImageGallery implements Parcelable {
         destinationId = in.readString();
         url = in.readString();
     }
-
-    public static final Creator<ImageGallery> CREATOR = new Creator<ImageGallery>() {
-        @Override
-        public ImageGallery createFromParcel(Parcel in) {
-            return new ImageGallery(in);
-        }
-
-        @Override
-        public ImageGallery[] newArray(int size) {
-            return new ImageGallery[size];
-        }
-    };
 
     public String getUid() {
         return uid;

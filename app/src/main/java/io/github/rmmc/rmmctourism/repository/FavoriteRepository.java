@@ -2,12 +2,7 @@ package io.github.rmmc.rmmctourism.repository;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -19,10 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.Favorite;
-import io.github.rmmc.rmmctourism.model.Review;
-import io.github.rmmc.rmmctourism.util.DataCallBack;
 import io.github.rmmc.rmmctourism.util.Messenger;
 import io.github.rmmc.rmmctourism.util.OnFavoriteDataCallback;
 import io.github.rmmc.rmmctourism.util.OnViewFavoriteCallback;
@@ -34,7 +26,7 @@ public class FavoriteRepository {
     private FirebaseAuth userAuth;
 
     // Constructor
-    public FavoriteRepository(Context context){
+    public FavoriteRepository(Context context) {
         this.context = context;
         this.instance = FirebaseFirestore.getInstance();
         this.userAuth = FirebaseAuth.getInstance();
@@ -173,7 +165,7 @@ public class FavoriteRepository {
     }
 
     // Helper method to convert Favorite object to a map
-    private Map<String, Object> reviewToMap(Favorite favorite){
+    private Map<String, Object> reviewToMap(Favorite favorite) {
         Map<String, Object> map = new HashMap<>();
         map.put(Favorite.userIdField, favorite.getUserId());
         map.put(Favorite.destinationField, favorite.getDestinationId());
@@ -181,7 +173,7 @@ public class FavoriteRepository {
     }
 
     // Helper method to convert Firestore document to Favorite object
-    private Favorite documentToFavorite(DocumentSnapshot document){
+    private Favorite documentToFavorite(DocumentSnapshot document) {
         String uid = document.getId();
         String userId = document.getString(Favorite.userIdField);
         String destinationId = document.getString(Favorite.destinationField);

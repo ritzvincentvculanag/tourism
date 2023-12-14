@@ -4,9 +4,6 @@ import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 import static io.github.rmmc.rmmctourism.util.Validator.fieldIsEmpty;
 import static io.github.rmmc.rmmctourism.util.Validator.fieldsAreEmpty;
 import static io.github.rmmc.rmmctourism.util.Validator.isValidName;
-import static io.github.rmmc.rmmctourism.util.Validator.isValidPassword;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -80,24 +79,25 @@ public class UpdateUser extends AppCompatActivity implements WidgetInitializer, 
             return;
         }
 
-        if(!isValidName(firstName)){
+        if (!isValidName(firstName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for first name!", "Ok").show();
             return;
         }
-        if(!isValidName(middleName) && !fieldIsEmpty(middleName)){
+        if (!isValidName(middleName) && !fieldIsEmpty(middleName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for middle name!", "Ok").show();
             return;
         }
-        if(!isValidName(lastName)){
+        if (!isValidName(lastName)) {
             showAlertDialog(this,
                     "Registration Error",
                     "Invalid format for last name!", "Ok").show();
             return;
         }
+
 
         // Birthdate validation
         Timestamp birthDate = null;

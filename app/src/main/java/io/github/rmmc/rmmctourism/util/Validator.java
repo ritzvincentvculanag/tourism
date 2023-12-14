@@ -2,7 +2,6 @@ package io.github.rmmc.rmmctourism.util;
 
 import android.util.Patterns;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;

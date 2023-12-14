@@ -2,14 +2,18 @@
 package io.github.rmmc.rmmctourism.views;
 
 // Import statements
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.Review;

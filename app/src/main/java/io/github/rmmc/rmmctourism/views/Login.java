@@ -3,12 +3,12 @@ package io.github.rmmc.rmmctourism.views;
 import static io.github.rmmc.rmmctourism.util.Messenger.showAlertDialog;
 import static io.github.rmmc.rmmctourism.util.Validator.fieldsAreEmpty;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;

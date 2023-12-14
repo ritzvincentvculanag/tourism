@@ -1,13 +1,12 @@
 /**
  * GalleryLoadAdapter is a RecyclerView adapter responsible for loading and displaying
  * images in the gallery of a destination in the RMMC Tourism app.
- *
+ * <p>
  * This adapter is designed to work with the RecyclerView in the destination detail view
  * and efficiently loads and displays a list of ImageGallery items using the Picasso library.
  *
- *
  * @param list The list of ImageGallery items to be displayed in the gallery.
- *
+ * <p>
  * Usage:
  * // Example with a list of ImageGallery items
  * List<ImageGallery> galleryList = //... populate the list
@@ -17,7 +16,6 @@ package io.github.rmmc.rmmctourism.adapter.viewpager;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,14 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
-import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
 
-public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.GalleryViewHolder>{
+public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.GalleryViewHolder> {
 
     private List<ImageGallery> list;
 
@@ -45,7 +41,7 @@ public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.
      *
      * @param list The list of ImageGallery items to be displayed in the gallery.
      */
-    public GalleryLoadAdapter(List<ImageGallery> list){
+    public GalleryLoadAdapter(List<ImageGallery> list) {
         this.list = list;
     }
 
@@ -61,7 +57,7 @@ public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.
     public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_destination_gallery_item, parent, false);
-        return new  GalleryViewHolder(view);
+        return new GalleryViewHolder(view);
     }
 
     /**
@@ -73,7 +69,7 @@ public class GalleryLoadAdapter extends RecyclerView.Adapter<GalleryLoadAdapter.
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         ImageGallery url = list.get(position);
-        Log.d(TAG,  "he "+ list.toString());
+        Log.d(TAG, "he " + list.toString());
         Picasso.get()
                 .load(url.getUrl())
                 .placeholder(R.drawable.sample)

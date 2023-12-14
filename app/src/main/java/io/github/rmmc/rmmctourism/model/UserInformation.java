@@ -21,9 +21,19 @@ public class UserInformation implements Parcelable {
     public static final String genderField = "gender";
     public static final String emailField = "email";
     public static final String passwordField = "password";
+    // Parcelable creator
+    public static final Creator<UserInformation> CREATOR = new Creator<UserInformation>() {
+        @Override
+        public UserInformation createFromParcel(Parcel in) {
+            return new UserInformation(in);
+        }
 
+        @Override
+        public UserInformation[] newArray(int size) {
+            return new UserInformation[size];
+        }
+    };
     private String UID;  // User ID associated with this information
-
     private String firstName;
     private String lastName;
     private String middleName;
@@ -40,13 +50,13 @@ public class UserInformation implements Parcelable {
     /**
      * Constructor for creating user information.
      *
-     * @param firstName First name of the user.
-     * @param lastName  Last name of the user.
+     * @param firstName  First name of the user.
+     * @param lastName   Last name of the user.
      * @param middleName Middle name of the user.
-     * @param birthDate Timestamp indicating the birth date of the user.
-     * @param gender    Gender of the user.
-     * @param email     Email address of the user.
-     * @param password  Password of the user.
+     * @param birthDate  Timestamp indicating the birth date of the user.
+     * @param gender     Gender of the user.
+     * @param email      Email address of the user.
+     * @param password   Password of the user.
      */
     public UserInformation(
             String firstName,
@@ -79,19 +89,6 @@ public class UserInformation implements Parcelable {
         email = in.readString();
         password = in.readString();
     }
-
-    // Parcelable creator
-    public static final Creator<UserInformation> CREATOR = new Creator<UserInformation>() {
-        @Override
-        public UserInformation createFromParcel(Parcel in) {
-            return new UserInformation(in);
-        }
-
-        @Override
-        public UserInformation[] newArray(int size) {
-            return new UserInformation[size];
-        }
-    };
 
     // Getter and setter methods for each field
 
