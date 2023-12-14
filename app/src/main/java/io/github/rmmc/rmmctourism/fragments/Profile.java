@@ -91,7 +91,7 @@ public class Profile extends Fragment implements WidgetInitializer, ActionInitia
         btnMyDestinations = view.findViewById(R.id.btn_my_destinations);
         btnEditEmail = view.findViewById(R.id.btn_edit_email);
         btnEditPassword = view.findViewById(R.id.btn_edit_password);
-        tvFullName = view.findViewById(R.id.tv_profile_fullname);
+        tvFullName = view.findViewById(R.id.tv_proflle_username);
         tvGender = view.findViewById(R.id.tv_profile_gender);
         tvBirthdate = view.findViewById(R.id.tv_profile_birthdate);
         tvEmail = view.findViewById(R.id.tv_profile_email);
