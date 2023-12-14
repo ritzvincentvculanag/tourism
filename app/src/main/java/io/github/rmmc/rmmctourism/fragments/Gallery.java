@@ -34,7 +34,6 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
     private View view;
 
     private GalleryLoadAdapter galleryAdapter;
-    private GalleryItemAdapter galleryItemAdapter;
     private RecyclerView rvGallery;
     private ImageRepository imageRepository;
 
@@ -76,19 +75,13 @@ public class Gallery extends Fragment implements WidgetInitializer, ActionInitia
 
                     // Create a GalleryLoadAdapter with the loaded image URIs
                     galleryAdapter = new GalleryLoadAdapter(imageUris);
-                    galleryItemAdapter = new GalleryItemAdapter(imageUris);
 
                     // Find the RecyclerView in the layout
                     rvGallery = view.findViewById(R.id.rv_destination_detail_gallery);
 
                     // Set the adapter and layout manager for the RecyclerView
-                    if (imageUris.size() >= 3) {
-                        rvGallery.setAdapter(galleryItemAdapter);
-                        rvGallery.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    } else {
-                        rvGallery.setAdapter(galleryAdapter);
-                        rvGallery.setLayoutManager(new LinearLayoutManager(getContext()));
-                    }
+                    rvGallery.setAdapter(galleryAdapter);
+                    rvGallery.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
 
                 @Override

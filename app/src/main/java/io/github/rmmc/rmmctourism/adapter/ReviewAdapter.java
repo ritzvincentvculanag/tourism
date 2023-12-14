@@ -120,7 +120,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
      * @return The formatted name.
      */
     private String formatName(UserInformation userInformation){
-        return userInformation.getFirstName() + " " + userInformation.getMiddleName().charAt(0) + ". " + userInformation.getLastName();
+        return userInformation.getFirstName() + " " + userInformation.getLastName();
     }
 
     /**

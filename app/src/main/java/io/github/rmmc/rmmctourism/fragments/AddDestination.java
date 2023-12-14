@@ -113,8 +113,6 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
                     });
                     galleryAdapter.refreshUris(imgUris);
                     galleryAdapter.notifyDataSetChanged();
-
-                    tvDestinationGalleryIndicator.setVisibility(View.INVISIBLE);
                 }
         );
 
@@ -129,7 +127,6 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
      */
     @Override
     public void initializeWidgets() {
-        tvDestinationGalleryIndicator = view.findViewById(R.id.tv_destination_gallery_indicator);
 
         ivAddDestinationCover = view.findViewById(R.id.iv_add_destination_cover);
 
