@@ -35,6 +35,18 @@ public class Favorite implements Parcelable {
         destinationId = in.readString();
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(favoriteId);
+        dest.writeString(userId);
+        dest.writeString(destinationId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<Favorite> CREATOR = new Creator<Favorite>() {
         @Override
         public Favorite createFromParcel(Parcel in) {
@@ -69,17 +81,5 @@ public class Favorite implements Parcelable {
 
     public void setDestinationId(String destinationId) {
         this.destinationId = destinationId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(favoriteId);
-        parcel.writeString(userId);
-        parcel.writeString(destinationId);
     }
 }

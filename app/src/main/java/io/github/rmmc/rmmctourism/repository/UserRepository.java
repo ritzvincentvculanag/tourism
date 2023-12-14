@@ -2,7 +2,9 @@ package io.github.rmmc.rmmctourism.repository;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -60,9 +62,18 @@ public class UserRepository {
                                         public void onSuccess(Void unused) {
                                             // Show success message, start login activity, and sign out
                                             Messenger.showAlertDialog(context, "User Register",
-                                                    "You successfully registered!", "Ok").show();
-                                            context.startActivity(new Intent(context, Login.class));
-                                            userAuth.signOut();
+                                                    "You successfully registered!", "Login Now", "Back", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            context.startActivity(new Intent(context, Login.class));
+                                                            userAuth.signOut();
+                                                        }
+                                                    }, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                        }
+                                                    }).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
