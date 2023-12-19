@@ -313,6 +313,8 @@ public class DestinationRepository {
         destinationMap.put(Destination.nameField, destination.getName());
         destinationMap.put(Destination.descriptionField, destination.getDescription());
         destinationMap.put(Destination.addressField, destination.getAddress());
+        destinationMap.put(Destination.cityField, destination.getCity());
+        destinationMap.put(Destination.brgyField, destination.getBrgy());
         destinationMap.put(Destination.contactNumberField, destination.getContactNumber());
         destinationMap.put(Destination.websiteUrlField, destination.getWebsiteUrl());
         destinationMap.put(Destination.facebookPageField, destination.getFacebookPage());
@@ -334,6 +336,8 @@ public class DestinationRepository {
         String name = document.getString(Destination.nameField);
         String description = document.getString(Destination.descriptionField);
         String address = document.getString(Destination.addressField);
+        String city = document.getString(Destination.cityField);
+        String brgy = document.getString(Destination.brgyField);
         String contactNumber = document.getString(Destination.contactNumberField);
         String websiteUrl = document.getString(Destination.websiteUrlField);
         String facebookPage = document.getString(Destination.facebookPageField);
@@ -342,7 +346,7 @@ public class DestinationRepository {
         Timestamp datePublished = document.getTimestamp(Destination.datePublishedField);
         Timestamp lastUpdate = document.getTimestamp(Destination.lastUpdateField);
 
-        return new Destination(destinationId, userId, name, description, address, contactNumber,
+        return new Destination(destinationId, userId, name, description, address, city, brgy, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
 
@@ -353,6 +357,8 @@ public class DestinationRepository {
         String name = document.getString(Destination.nameField);
         String description = document.getString(Destination.descriptionField);
         String address = document.getString(Destination.addressField);
+        String city = document.getString(Destination.cityField);
+        String brgy = document.getString(Destination.brgyField);
         String contactNumber = document.getString(Destination.contactNumberField);
         String websiteUrl = document.getString(Destination.websiteUrlField);
         String facebookPage = document.getString(Destination.facebookPageField);
@@ -361,7 +367,7 @@ public class DestinationRepository {
         Timestamp datePublished = document.getTimestamp(Destination.datePublishedField);
         Timestamp lastUpdate = document.getTimestamp(Destination.lastUpdateField);
 
-        return new Destination(destinationId, userId, name, description, address, contactNumber,
+        return new Destination(destinationId, userId, name, description, address, city, brgy, contactNumber,
                 websiteUrl, facebookPage, instagramPage, emailAddress, datePublished, lastUpdate);
     }
 }

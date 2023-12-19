@@ -2,12 +2,18 @@ package io.github.rmmc.rmmctourism.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,10 +28,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.adapter.GalleryAdapter;
+import io.github.rmmc.rmmctourism.adapter.SpinnerAdapter;
+import io.github.rmmc.rmmctourism.model.CItyBarangayData;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
 import io.github.rmmc.rmmctourism.util.ActionInitializer;
@@ -67,6 +76,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
     private TextInputLayout tilAddDestinationWebsite;
     private TextInputLayout tilAddDestinationFacebook;
     private TextInputLayout tilAddDestinationInstagram;
+    private AutoCompleteTextView actvCity, actvBarangay;
     private DestinationRepository repository;
     private FirebaseAuth userAuth;
 
@@ -84,6 +94,7 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
 
         initializeWidgets();
         initializeActions();
+        initializeSpinner();
         repository = new DestinationRepository(getContext());
         userAuth = FirebaseAuth.getInstance();
         return view;
@@ -139,6 +150,8 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         tilAddDestinationWebsite = view.findViewById(R.id.til_add_destination_website);
         tilAddDestinationFacebook = view.findViewById(R.id.til_add_destination_facebook);
         tilAddDestinationInstagram = view.findViewById(R.id.til_add_destination_instagram);
+        actvCity = view.findViewById(R.id.actv_city);
+        actvBarangay = view.findViewById(R.id.actv_brgy);
 
         initializeDestinationGallery();
     }
@@ -157,11 +170,54 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         gallerySnapHelper.attachToRecyclerView(rvDestinationGallery);
     }
 
-    /**
-     * Handles the process of adding a new destination.
-     *
-     * @param view The view that triggered the action.
-     */
+    private void initializeSpinner() {
+
+        // Set up the city spinner
+        ArrayAdapter<String> cityAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
+                getContext(),
+                com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
+                Arrays.asList(CItyBarangayData.cityList)
+        );
+        actvCity.setAdapter(cityAdapter);
+
+        actvCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                updateBarangaySpinner(actvCity.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void updateBarangaySpinner(String selectedCity) {
+
+        // Get the barangays for the selected city
+        String[] barangays = CItyBarangayData.brgyList().get(selectedCity);
+
+        if(barangays == null){
+            return;
+        }
+
+        actvBarangay.setText("");
+        // Set up the barangay spinner
+        ArrayAdapter<String> brgyAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
+                getContext(),
+                com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
+                Arrays.asList(barangays)
+        );
+        actvBarangay.setAdapter(brgyAdapter);
+
+    }
+
     private void addDestination(View view) {
         TextInputLayout fields[] = {tilAddDestinationName, tilAddDestinationDescription, tilAddDestinationAddress, tilAddDestinationEmail, tilAddDestinationPhone};
 
@@ -176,7 +232,23 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
         if (Validator.fieldsAreEmpty(fields)) {
             Messenger.showAlertDialog(getContext(),
                     "Add Destination",
-                    "Please provide the needed information!",
+                    "Please provide all required details (Name, Description, Address, Email, Phone) to add a destination. This information is necessary for processing.",
+                    "Ok").show();
+            return;
+        }
+
+        if(actvCity.getText().toString().isEmpty()){
+            Messenger.showAlertDialog(getContext(),
+                    "Add Destination",
+                    "Please select the city.",
+                    "Ok").show();
+            return;
+        }
+
+        if(actvBarangay.getText().toString().isEmpty()){
+            Messenger.showAlertDialog(getContext(),
+                    "Add Destination",
+                    "Please select the barangay.",
                     "Ok").show();
             return;
         }
@@ -225,6 +297,8 @@ public class AddDestination extends Fragment implements WidgetInitializer, Actio
                 Miner.getString(tilAddDestinationName),
                 Miner.getString(tilAddDestinationDescription),
                 Miner.getString(tilAddDestinationAddress),
+                actvCity.getText().toString(),
+                actvBarangay.getText().toString(),
                 Miner.getString(tilAddDestinationPhone),
                 Miner.getString(tilAddDestinationWebsite),
                 Miner.getString(tilAddDestinationFacebook),

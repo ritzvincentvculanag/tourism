@@ -44,6 +44,7 @@ import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.Favorite;
 import io.github.rmmc.rmmctourism.repository.FavoriteRepository;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
+import io.github.rmmc.rmmctourism.views.FormatAddress;
 
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreViewHolder> {
@@ -111,9 +112,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
     public void onBindViewHolder(@NonNull ExploreViewHolder holder, int position) {
 
         Destination destination = list.get(position);
-
+        String formatAddress = FormatAddress.setAddress(destination.getCity(), destination.getBrgy(), destination.getAddress());
         holder.tvTitle.setText(destination.getName());
-        holder.tvAddress.setText(destination.getAddress());
+        holder.tvAddress.setText(formatAddress);
         holder.tvDescription.setText(destination.getDescription());
 
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.coverImg);

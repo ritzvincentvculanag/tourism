@@ -130,8 +130,10 @@ public class DestinationDetail extends AppCompatActivity implements WidgetInitia
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Destination.collectioName)) {
             destination = intent.getParcelableExtra(Destination.collectioName);
+            String formatAddress = FormatAddress.setAddress(destination.getCity(), destination.getBrgy(), destination.getAddress());
+
             tvTitle.setText(destination.getName());
-            tvAddress.setText(destination.getAddress());
+            tvAddress.setText(formatAddress);
 
             imageRepository.loadUploadedImage(destination.getDestinationId(), ivDestinationCoverPhoto);
 

@@ -34,6 +34,7 @@ import io.github.rmmc.rmmctourism.R;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.repository.ImageRepository;
 import io.github.rmmc.rmmctourism.views.DestinationDetail;
+import io.github.rmmc.rmmctourism.views.FormatAddress;
 
 public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdapter.MyViewHolder> {
 
@@ -77,9 +78,11 @@ public class ExploreSearchAdapter extends RecyclerView.Adapter<ExploreSearchAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Destination destination = list.get(position);
+        String formatAddress = FormatAddress.setAddress(destination.getCity(), destination.getBrgy(), destination.getAddress());
+
         holder.tvTitle.setText(destination.getName());
         holder.tvDescription.setText(destination.getDescription());
-        holder.tvAddress.setText(destination.getAddress());
+        holder.tvAddress.setText(formatAddress);
         imageRepository.loadUploadedImage(destination.getDestinationId(), holder.ivCoverImg);
         holder.btnViewDestination.setOnClickListener(e -> {
             Intent intent = new Intent(context, DestinationDetail.class);

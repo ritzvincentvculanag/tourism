@@ -3,6 +3,8 @@ package io.github.rmmc.rmmctourism.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 
 /**
@@ -17,6 +19,9 @@ public class Destination implements Parcelable {
     public static final String nameField = "name";
     public static final String descriptionField = "description";
     public static final String addressField = "address";
+
+    public static final String cityField = "city";
+    public static final String brgyField = "brgy";
     public static final String contactNumberField = "contactNumber";
     public static final String websiteUrlField = "websiteUrl";
     public static final String facebookPageField = "facebookPage";
@@ -24,22 +29,13 @@ public class Destination implements Parcelable {
     public static final String emailAddressField = "emailAddress";
     public static final String datePublishedField = "datePublished";
     public static final String lastUpdateField = "lastUpdate";
-    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
-        @Override
-        public Destination createFromParcel(Parcel in) {
-            return new Destination(in);
-        }
-
-        @Override
-        public Destination[] newArray(int size) {
-            return new Destination[size];
-        }
-    };
     private String destinationId;
     private String userId;
     private String name;
     private String description;
     private String address;
+    private String city;
+    private String brgy;
     private String contactNumber;
     private String websiteUrl;
     private String facebookPage;
@@ -49,18 +45,19 @@ public class Destination implements Parcelable {
     private Timestamp lastUpdate;
 
     // Empty constructor required for Firestore
+
+
     public Destination() {
     }
 
-    // Constructor for creating a new destination
-    public Destination(String userId, String name, String description, String address,
-                       String contactNumber, String websiteUrl, String facebookPage,
-                       String instagramPage, String emailAddress, Timestamp datePublished,
-                       Timestamp lastUpdate) {
+    public Destination(String destinationId, String userId, String name, String description, String address, String city, String brgy, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
+        this.destinationId = destinationId;
         this.userId = userId;
         this.name = name;
         this.description = description;
         this.address = address;
+        this.city = city;
+        this.brgy = brgy;
         this.contactNumber = contactNumber;
         this.websiteUrl = websiteUrl;
         this.facebookPage = facebookPage;
@@ -70,16 +67,13 @@ public class Destination implements Parcelable {
         this.lastUpdate = lastUpdate;
     }
 
-    // Constructor for updating an existing destination
-    public Destination(String destinationId, String userId, String name, String description,
-                       String address, String contactNumber, String websiteUrl,
-                       String facebookPage, String instagramPage, String emailAddress,
-                       Timestamp datePublished, Timestamp lastUpdate) {
-        this.destinationId = destinationId;
+    public Destination(String userId, String name, String description, String address, String city, String brgy, String contactNumber, String websiteUrl, String facebookPage, String instagramPage, String emailAddress, Timestamp datePublished, Timestamp lastUpdate) {
         this.userId = userId;
         this.name = name;
         this.description = description;
         this.address = address;
+        this.city = city;
+        this.brgy = brgy;
         this.contactNumber = contactNumber;
         this.websiteUrl = websiteUrl;
         this.facebookPage = facebookPage;
@@ -95,6 +89,8 @@ public class Destination implements Parcelable {
         name = in.readString();
         description = in.readString();
         address = in.readString();
+        city = in.readString();
+        brgy = in.readString();
         contactNumber = in.readString();
         websiteUrl = in.readString();
         facebookPage = in.readString();
@@ -111,6 +107,8 @@ public class Destination implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(address);
+        dest.writeString(city);
+        dest.writeString(brgy);
         dest.writeString(contactNumber);
         dest.writeString(websiteUrl);
         dest.writeString(facebookPage);
@@ -124,6 +122,18 @@ public class Destination implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    public static final Creator<Destination> CREATOR = new Creator<Destination>() {
+        @Override
+        public Destination createFromParcel(Parcel in) {
+            return new Destination(in);
+        }
+
+        @Override
+        public Destination[] newArray(int size) {
+            return new Destination[size];
+        }
+    };
 
     public String getDestinationId() {
         return destinationId;
@@ -163,6 +173,22 @@ public class Destination implements Parcelable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBrgy() {
+        return brgy;
+    }
+
+    public void setBrgy(String brgy) {
+        this.brgy = brgy;
     }
 
     public String getContactNumber() {

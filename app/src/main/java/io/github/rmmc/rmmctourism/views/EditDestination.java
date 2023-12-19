@@ -5,8 +5,12 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -23,10 +27,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.github.rmmc.rmmctourism.R;
+import io.github.rmmc.rmmctourism.adapter.SpinnerAdapter;
 import io.github.rmmc.rmmctourism.adapter.UpdateGalleryAdapter;
+import io.github.rmmc.rmmctourism.model.CItyBarangayData;
 import io.github.rmmc.rmmctourism.model.Destination;
 import io.github.rmmc.rmmctourism.model.ImageGallery;
 import io.github.rmmc.rmmctourism.repository.DestinationRepository;
@@ -56,6 +63,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
     private TextInputLayout website;
     private TextInputLayout facebook;
     private TextInputLayout instagram;
+    private AutoCompleteTextView actvCity;
+    private AutoCompleteTextView actvBrgy;
     private Button uploadCover;
     private Button updateDestination;
     private Button updateGallery;
@@ -118,6 +127,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         name = findViewById(R.id.til_edit_destination_name);
         description = findViewById(R.id.til_edit_destination_description);
         address = findViewById(R.id.til_edit_destination_address);
+        actvCity = findViewById(R.id.actv_edit_city);
+        actvBrgy = findViewById(R.id.actv_edit_brgy);
         email = findViewById(R.id.til_edit_destination_email);
         phone = findViewById(R.id.til_edit_destination_phone);
         website = findViewById(R.id.til_edit_destination_website);
@@ -126,6 +137,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         uploadCover = findViewById(R.id.btn_edit_destination_cover);
         updateDestination = findViewById(R.id.btn_update_destination);
         updateGallery = findViewById(R.id.btn_edit_destination_photos);
+        initializeSpinner();
         populateData();
     }
 
@@ -142,6 +154,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
             setData(website, destination.getWebsiteUrl());
             setData(facebook, destination.getFacebookPage());
             setData(instagram, destination.getInstagramPage());
+            actvCity.setText(destination.getCity(), false);
+            actvBrgy.setText(destination.getBrgy(), false);
             imageRepository.loadUploadedImage(destination.getDestinationId(), cover, new OnLoadCover() {
                 @Override
                 public void OnLoad(Uri uri) {
@@ -171,6 +185,55 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         }
     }
 
+    private void initializeSpinner() {
+
+        // Set up the city spinner
+        ArrayAdapter<String> cityAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
+                this,
+                com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
+                Arrays.asList(CItyBarangayData.cityList)
+        );
+        actvCity.setAdapter(cityAdapter);
+
+        actvCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                updateBarangaySpinner(actvCity.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void updateBarangaySpinner(String selectedCity) {
+
+        // Get the barangays for the selected city
+        String[] barangays = CItyBarangayData.brgyList().get(selectedCity);
+
+        if(barangays == null){
+            return;
+        }
+
+        actvBrgy.setText("");
+        // Set up the barangay spinner
+        ArrayAdapter<String> brgyAdapter = new SpinnerAdapter<String>().GetArrayAdapter(
+                this,
+                com.google.android.material.R.layout.support_simple_spinner_dropdown_item,
+                Arrays.asList(barangays)
+        );
+        actvBrgy.setAdapter(brgyAdapter);
+
+    }
+
+
     private void setData(TextInputLayout tf, String data) {
         if (data != null) {
             tf.getEditText().setText(data);
@@ -184,7 +247,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         TextInputLayout fields[] = {name, description, address, email, phone};
         if (cover.getDrawable() == null) {
             Messenger.showAlertDialog(this,
-                    "Add Destination",
+                    "Update Destination",
                     "Please select the cover photo of the tourist spot!",
                     "Ok").show();
             return;
@@ -192,12 +255,26 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
 
         // Validation: Check if any of the specified fields is empty
         if (Validator.fieldsAreEmpty(fields)) {
-            // Show an alert dialog indicating that the user should provide the needed information
+            Messenger.showAlertDialog(this,
+                    "Update Destination",
+                    "Please provide all required details (Name, Description, Address, Email, Phone) to add a destination. This information is necessary for processing.",
+                    "Ok").show();
+            return;
+        }
+
+        if(actvCity.getText().toString().isEmpty()){
             Messenger.showAlertDialog(this,
                     "Add Destination",
-                    "Please provide the needed information!",
+                    "Please select the city.",
                     "Ok").show();
-            // Return from the method as the validation failed
+            return;
+        }
+
+        if(actvBrgy.getText().toString().isEmpty()){
+            Messenger.showAlertDialog(this,
+                    "Add Destination",
+                    "Please select the barangay.",
+                    "Ok").show();
             return;
         }
 
@@ -205,7 +282,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         if (!Validator.isValidEmail(email)) {
             // Show an alert dialog asking the user to provide a valid email
             Messenger.showAlertDialog(this,
-                    "Add Destination",
+                    "Update Destination",
                     "Please provide a valid email!",
                     "Ok").show();
             // Return from the method as the validation failed
@@ -216,7 +293,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         if (!Validator.isPhoneNumberValid(phone)) {
             // Show an alert dialog asking the user to provide a valid number
             Messenger.showAlertDialog(this,
-                    "Add Destination",
+                    "Update Destination",
                     "Please provide a valid number!",
                     "Ok").show();
             // Return from the method as the validation failed
@@ -227,7 +304,7 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
         if (!Validator.areAllUrlsValid(website, facebook, instagram)) {
             // Show an alert dialog asking the user to provide correct URLs for social media
             Messenger.showAlertDialog(this,
-                    "Add Destination",
+                    "Update Destination",
                     "Please provide correct URL for the social media!",
                     "Ok").show();
             // Return from the method as the validation
@@ -241,6 +318,8 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
                 Miner.getString(name),
                 Miner.getString(description),
                 Miner.getString(address),
+                actvCity.getText().toString(),
+                actvBrgy.getText().toString(),
                 Miner.getString(phone),
                 Miner.getString(website),
                 Miner.getString(facebook),
@@ -250,7 +329,6 @@ public class EditDestination extends AppCompatActivity implements WidgetInitiali
                 Timestamp.now()
         );
 
-        // Update the destination in the repository
         repository.updateDestination(destination, coverUri, newCover, uris, cover, getContentResolver(), updateDestination);
 
     }
